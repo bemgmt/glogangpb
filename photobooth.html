@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Photobooth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <style>
+    :root{
+      --bg:#0f1115; --panel:#171a21; --muted:#8b93a7; --text:#f6f7fb;
+      --accent:#ffd100; --ink:#121212; --ok:#2ecc71; --warn:#ff5a5f;
+      --ring:rgba(255,209,0,.35); --stroke:rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      overflow:hidden;
+    }
+    header{
+      position:sticky; top:0; z-index:5;
+      background:linear-gradient(180deg, rgba(15,17,21,.95), rgba(15,17,21,.6));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px}
+    .brand{font-weight:900}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      background:#1e212a; color:var(--text); border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:12px 16px; font-weight:800; text-decoration:none; cursor:pointer;
+      -webkit-tap-highlight-color:transparent; user-select:none;
+      box-shadow:0 6px 0 #000; transition:transform .06s ease, box-shadow .06s ease, background .06s;
+    }
+    .btn:active{ transform:translateY(2px); box-shadow:0 3px 0 #000 }
+    .btn.accent{ background:var(--accent); color:var(--ink); border-color:transparent }
+    .btn.ok{ background:var(--ok); color:#062610; border:none }
+    .btn.warn{ background:var(--warn); color:#300; border:none }
+    .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.14) }
+    .pill{ padding:6px 10px; border-radius:999px; background:#0e1320; border:1px solid rgba(255,255,255,.14); color:var(--muted); font-size:12px; font-weight:800 }
+
+    .wrap{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; padding:16px; height:calc(100% - 74px); }
+    @media (max-width: 1080px){ .wrap{ grid-template-columns: 1fr; height:auto; overflow:visible } }
+
+    .stage-card, .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.08);
+      border-radius:20px; padding:16px; box-shadow:0 12px 24px var(--stroke);
+    }
+
+    /* Stage */
+    .stage{
+      position:relative;
+      border-radius:18px; overflow:hidden;
+      background:#0b0f16; border:1px solid rgba(255,255,255,.08);
+      aspect-ratio: 3 / 4; /* typical iPad front cam; adjust via selector below if you want */
+      max-height: 72vh;
+    }
+    .stage video{
+      width:100%; height:100%; object-fit:cover;
+      transform: scaleX(-1); /* mirrored selfie preview (front cam look) */
+    }
+    .stage.mirror-off video{ transform:none; }
+
+    .overlay-img{
+      position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none;
+    }
+    .stickers{
+      position:absolute; inset:0; touch-action:none;
+    }
+    .sticker{
+      position:absolute; left:0; top:0; width:220px; user-select:none; touch-action:none;
+      transform-origin:center center; cursor:grab;
+      filter: drop-shadow(0 2px 0 rgba(0,0,0,.6));
+    }
+    .sticker:active{ cursor:grabbing }
+    .sticker.selected{ outline:3px dashed rgba(255,255,255,.35); outline-offset:2px; border-radius:10px }
+
+    .countdown{
+      position:absolute; inset:0; display:grid; place-items:center;
+      font-weight:1000; font-size:min(22vw, 22vh); letter-spacing:.02em;
+      color:#fff; text-shadow:0 12px 30px rgba(0,0,0,.8);
+      background:radial-gradient(600px 400px at 50% -10%, rgba(0,0,0,.2), transparent);
+      pointer-events:none; opacity:0; transition:opacity .2s ease;
+    }
+    .countdown.show{ opacity:1 }
+
+    .row{ display:flex; gap:12px; flex-wrap:wrap; align-items:center }
+    .muted{ color:var(--muted) }
+    .card h3{ margin:0 0 10px }
+
+    .controls{ display:grid; grid-template-columns: 1fr; gap:12px; margin-top:12px }
+    .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px }
+    @media (max-width: 680px){ .grid2{ grid-template-columns:1fr } }
+
+    .thumbs{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px,1fr)); gap:10px }
+    .thumb{ background:#0f1320; border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; padding:6px; display:grid; place-items:center }
+    .thumb img{ width:100%; height:70px; object-fit:contain; display:block }
+
+    /* Preview dialog */
+    dialog#preview{ border:none; padding:0; background:transparent; }
+    .preview-wrap{
+      background:#0b0f16; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:10px;
+      box-shadow:0 20px 40px rgba(0,0,0,.7); max-width:95vw;
+    }
+    .preview-wrap img{ max-width:86vw; max-height:70vh; display:block; border-radius:12px }
+
+    .note{ color:var(--muted); font-size:12px }
+    .btn:focus-visible, input:focus-visible, select:focus-visible{ outline:4px solid var(--ring) }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="brand">Photobooth</div>
+      <div class="row">
+        <a href="index.html" class="btn ghost">← Home</a>
+        <a href="settings.html" class="btn ghost">Settings</a>
+        <button class="btn warn" id="endSessionBtn">End Session</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Left: Camera Stage -->
+    <section class="stage-card">
+      <div class="stage mirror-on" id="stage">
+        <video id="cam" playsinline muted></video>
+        <img id="overlayImg" class="overlay-img" alt="" />
+        <div id="stickers" class="stickers"></div>
+        <div id="countdown" class="countdown">3</div>
+      </div>
+
+      <div class="controls">
+        <div class="row">
+          <button class="btn accent" id="captureBtn">Capture</button>
+          <button class="btn" id="switchBtn">Switch Camera</button>
+          <button class="btn" id="mirrorBtn">Mirror: On</button>
+          <span class="pill" id="aspectPill">Aspect: 3:4</span>
+        </div>
+        <div class="row">
+          <label class="btn ghost" for="aspectSel">Aspect</label>
+          <select id="aspectSel" class="btn ghost" style="appearance:none; padding-right:24px;">
+            <option value="3:4" selected>3:4 (portrait)</option>
+            <option value="1:1">1:1 (square)</option>
+            <option value="9:16">9:16 (portrait)</option>
+          </select>
+          <span class="note">Use mirror for selfie-style preview; capture honors mirror setting.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Overlays & Props -->
+    <section class="card">
+      <div class="grid2">
+        <!-- Overlays -->
+        <div class="card">
+          <h3>Overlays</h3>
+          <p class="muted">Full-frame PNGs drawn on top of the photo.</p>
+          <div class="row" style="margin-bottom:8px">
+            <button class="btn" id="overlayNone">None</button>
+            <label class="btn" for="overlayFile">Load Overlay</label>
+            <input id="overlayFile" type="file" accept="image/png,image/webp,image/svg+xml" style="display:none" />
+          </div>
+          <div class="thumbs" id="overlayThumbs"></div>
+          <div class="note" style="margin-top:8px">Put your templates in <code>img/overlays/</code>. Presets listed below.</div>
+        </div>
+
+        <!-- Props -->
+        <div class="card">
+          <h3>Digital Props</h3>
+          <p class="muted">Tap to add. Drag, pinch to zoom/rotate. Select &amp; delete.</p>
+          <div class="row" style="margin-bottom:8px">
+            <label class="btn" for="propFile">Add Prop</label>
+            <input id="propFile" type="file" accept="image/*" style="display:none" />
+            <button class="btn warn" id="deletePropBtn">Delete Selected</button>
+          </div>
+          <div class="thumbs" id="propThumbs"></div>
+          <div class="note" style="margin-top:8px">Place props in <code>img/props/</code> for presets.</div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Hidden canvas for compositing -->
+  <canvas id="compose" style="display:none"></canvas>
+
+  <!-- Preview Modal -->
+  <dialog id="preview">
+    <div class="preview-wrap">
+      <img id="previewImg" alt="Captured" />
+      <div class="row" style="justify-content:space-between; margin-top:8px">
+        <div class="row">
+          <button class="btn" id="retakeBtn">Retake</button>
+          <button class="btn ok" id="saveBtn">Save</button>
+          <button class="btn" id="shareBtn">Share</button>
+        </div>
+        <div class="muted" id="previewNote"></div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // ---------------------------
+    // Config: add your presets
+    // ---------------------------
+    const PRESET_OVERLAYS = [
+      { name:'GG Frame', src:'img/overlays/gg_frame.png' },
+      { name:'Drip',     src:'img/overlays/drip.png' },
+      { name:'Starburst',src:'img/overlays/starburst.png' },
+    ];
+    const PRESET_PROPS = [
+      { name:'Sunglasses', src:'img/props/sunglasses.png' },
+      { name:'Crown',      src:'img/props/crown.png' },
+      { name:'Chain',      src:'img/props/chain.png' },
+    ];
+
+    // ---------------------------
+    // Element refs
+    // ---------------------------
+    const $ = (s, r=document)=>r.querySelector(s);
+    const stage = $('#stage');
+    const video = $('#cam');
+    const overlayImg = $('#overlayImg');
+    const stickersLayer = $('#stickers');
+    const countdownEl = $('#countdown');
+    const captureBtn = $('#captureBtn');
+    const switchBtn = $('#switchBtn');
+    const mirrorBtn = $('#mirrorBtn');
+    const aspectSel = $('#aspectSel');
+    const aspectPill = $('#aspectPill');
+    const overlayThumbs = $('#overlayThumbs');
+    const overlayFile = $('#overlayFile');
+    const overlayNone = $('#overlayNone');
+    const propThumbs = $('#propThumbs');
+    const propFile = $('#propFile');
+    const delPropBtn = $('#deletePropBtn');
+    const compose = $('#compose');
+    const preview = $('#preview');
+    const previewImg = $('#previewImg');
+    const previewNote = $('#previewNote');
+    const saveBtn = $('#saveBtn');
+    const shareBtn = $('#shareBtn');
+    const retakeBtn = $('#retakeBtn');
+    const endSessionBtn = $('#endSessionBtn');
+
+    // ---------------------------
+    // Camera
+    // ---------------------------
+    let stream = null;
+    let facingMode = 'user';       // 'user' (front) | 'environment' (back)
+    let mirror = true;             // preview and capture mirrored?
+    let currentAspect = '3:4';     // '3:4' | '1:1' | '9:16'
+
+    async function startCamera(){
+      stopCamera();
+      try{
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode,
+            width: { ideal: 1920 },
+            height:{ ideal: 2560 }
+          },
+          audio:false
+        });
+        video.srcObject = stream;
+        await video.play();
+      }catch(err){
+        alert('Camera error. Use HTTPS and grant camera permissions.');
+        console.error(err);
+      }
+    }
+    function stopCamera(){
+      if (stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
+      video.srcObject = null;
+    }
+    switchBtn.addEventListener('click', async ()=>{
+      facingMode = (facingMode==='user') ? 'environment' : 'user';
+      // Toggle mirror automatically for selfie look
+      mirror = (facingMode === 'user');
+      updateMirrorUI();
+      await startCamera();
+    });
+
+    function updateMirrorUI(){
+      if (mirror){ stage.classList.remove('mirror-off'); mirrorBtn.textContent = 'Mirror: On'; }
+      else { stage.classList.add('mirror-off'); mirrorBtn.textContent = 'Mirror: Off'; }
+    }
+    mirrorBtn.addEventListener('click', ()=>{
+      mirror = !mirror; updateMirrorUI();
+    });
+
+    // Aspect ratio control changes CSS aspect-ratio
+    aspectSel.addEventListener('change', ()=>{
+      currentAspect = aspectSel.value;
+      stage.style.aspectRatio = currentAspect.replace(':',' / ');
+      aspectPill.textContent = 'Aspect: ' + currentAspect;
+    });
+
+    // End session button
+    endSessionBtn?.addEventListener('click', () => {
+    if (!confirm('End current session?')) return;
+    sessionStorage.removeItem('session');
+    sessionStorage.removeItem('pendingSession');
+    location.href = 'login.html';
+    });
+
+    // ---------------------------
+    // Overlays
+    // ---------------------------
+    function renderOverlayThumbs(){
+      overlayThumbs.innerHTML = '';
+      PRESET_OVERLAYS.forEach(p=>{
+        const d = document.createElement('button');
+        d.className = 'thumb';
+        d.title = p.name;
+        d.innerHTML = `<img src="${p.src}" alt="${p.name}">`;
+        d.addEventListener('click', ()=> setOverlay(p.src));
+        overlayThumbs.appendChild(d);
+      });
+    }
+    function setOverlay(src){
+      overlayImg.src = src || '';
+    }
+    overlayNone.addEventListener('click', ()=> setOverlay(''));
+    overlayFile.addEventListener('change', e=>{
+      const f = e.target.files?.[0]; if(!f) return;
+      const url = URL.createObjectURL(f);
+      setOverlay(url);
+      overlayFile.value = '';
+    });
+
+    // ---------------------------
+    // Props (stickers)
+    // ---------------------------
+    let stickers = []; // [{id,src,x,y,scale,rot,el}]
+    let selectedId = null;
+
+    function renderPropThumbs(){
+      propThumbs.innerHTML = '';
+      PRESET_PROPS.forEach(p=>{
+        const b = document.createElement('button');
+        b.className = 'thumb';
+        b.title = p.name;
+        b.innerHTML = `<img src="${p.src}" alt="${p.name}">`;
+        b.addEventListener('click', ()=> addSticker(p.src));
+        propThumbs.appendChild(b);
+      });
+    }
+
+    propFile.addEventListener('change', e=>{
+      const f = e.target.files?.[0]; if(!f) return;
+      const url = URL.createObjectURL(f);
+      addSticker(url);
+      // Keep the URL — it will be drawn during capture; browser revokes on reload
+      propFile.value = '';
+    });
+
+    function addSticker(src){
+      const id = crypto.randomUUID();
+      const rect = stage.getBoundingClientRect();
+      const el = document.createElement('img');
+      el.src = src; el.draggable=false; el.className='sticker'; el.setAttribute('data-id', id);
+      stickersLayer.appendChild(el);
+
+      const st = { id, src, x: rect.width/2, y: rect.height/2, scale: 1.0, rot: 0, el };
+      stickers.push(st);
+      selectSticker(id);
+      updateStickerTransform(st);
+    }
+
+    function selectSticker(id){
+      selectedId = id;
+      stickers.forEach(s=> s.el.classList.toggle('selected', s.id===selectedId));
+    }
+
+    delPropBtn.addEventListener('click', ()=>{
+      if (!selectedId) return;
+      const idx = stickers.findIndex(s=>s.id===selectedId);
+      if (idx>-1){
+        stickers[idx].el.remove();
+        stickers.splice(idx,1);
+        selectedId = null;
+      }
+    });
+
+    function updateStickerTransform(st){
+      st.el.style.transform = `translate(${st.x}px, ${st.y}px) translate(-50%, -50%) rotate(${st.rot}rad) scale(${st.scale})`;
+    }
+
+    // Pointer gesture handling (drag / pinch / rotate)
+    const active = new Map(); // pointerId -> {x,y}
+    let gestureTarget = null; // sticker under gesture
+    let base = null;          // {x,y,scale,rot}
+    let start = null;         // {cx,cy,dist,angle}
+
+    stickersLayer.addEventListener('pointerdown', (e)=>{
+      const t = e.target.closest('.sticker');
+      if (!t) return;
+      e.preventDefault();
+      t.setPointerCapture(e.pointerId);
+      active.set(e.pointerId, {x:e.clientX, y:e.clientY});
+
+      const id = t.getAttribute('data-id');
+      gestureTarget = stickers.find(s=>s.id===id);
+      selectSticker(id);
+      base = { x: gestureTarget.x, y: gestureTarget.y, scale: gestureTarget.scale, rot: gestureTarget.rot };
+      start = computeGesture(active.values());
+    });
+    stickersLayer.addEventListener('pointermove', (e)=>{
+      if (!gestureTarget) return;
+      if (!active.has(e.pointerId)) return;
+      active.set(e.pointerId, {x:e.clientX, y:e.clientY});
+      const g = computeGesture(active.values());
+      if (!g) return;
+
+      if (g.count===1){
+        gestureTarget.x = base.x + (g.cx - start.cx);
+        gestureTarget.y = base.y + (g.cy - start.cy);
+      } else {
+        const scaleMul = g.dist / (start.dist || g.dist);
+        const rotDelta = g.angle - start.angle;
+        gestureTarget.x = base.x + (g.cx - start.cx);
+        gestureTarget.y = base.y + (g.cy - start.cy);
+        gestureTarget.scale = Math.max(0.2, Math.min(4, base.scale * scaleMul));
+        gestureTarget.rot = base.rot + rotDelta;
+      }
+      updateStickerTransform(gestureTarget);
+    });
+    stickersLayer.addEventListener('pointerup', (e)=>{
+      if (active.has(e.pointerId)) active.delete(e.pointerId);
+      if (active.size===0){ gestureTarget=null; base=null; start=null; }
+      else { start = computeGesture(active.values()); base = { x: gestureTarget.x, y: gestureTarget.y, scale: gestureTarget.scale, rot: gestureTarget.rot }; }
+    });
+    stickersLayer.addEventListener('pointercancel', e=>{ active.clear(); gestureTarget=null; base=null; start=null; });
+
+    stickersLayer.addEventListener('click', (e)=>{
+      const t = e.target.closest('.sticker');
+      if (t){ selectSticker(t.getAttribute('data-id')); }
+      else { selectSticker(null); }
+    });
+
+    function computeGesture(iter){
+      const pts = Array.from(iter);
+      if (!pts.length) return null;
+      if (pts.length===1){
+        return { count:1, cx:pts[0].x, cy:pts[0].y, dist:0, angle:0 };
+      }
+      // centroid
+      const cx = (pts[0].x + pts[1].x)/2;
+      const cy = (pts[0].y + pts[1].y)/2;
+      const dx = pts[1].x - pts[0].x;
+      const dy = pts[1].y - pts[0].y;
+      const dist = Math.hypot(dx,dy);
+      const angle = Math.atan2(dy,dx);
+      return { count:2, cx, cy, dist, angle };
+    }
+
+    // ---------------------------
+    // Capture flow
+    // ---------------------------
+    captureBtn.addEventListener('click', async ()=>{
+      // 3-2-1 countdown
+      await runCountdown(3);
+      const dataURL = await captureComposite();
+      showPreview(dataURL);
+    });
+
+    function runCountdown(n){
+      return new Promise(res=>{
+        let c = n;
+        countdownEl.textContent = c;
+        countdownEl.classList.add('show');
+        const iv = setInterval(()=>{
+          c--;
+          if (c<=0){
+            clearInterval(iv);
+            countdownEl.classList.remove('show');
+            res();
+          } else {
+            countdownEl.textContent = c;
+          }
+        }, 800);
+      });
+    }
+
+    async function captureComposite(){
+      // Ensure video frame is ready
+      const vw = video.videoWidth, vh = video.videoHeight;
+      if (!vw || !vh){ throw new Error('Camera not ready'); }
+
+      // Fit chosen aspect into the video frame
+      const [arW, arH] = currentAspect.split(':').map(Number);
+      const targetAR = arW/arH;
+      let cropW = vw, cropH = Math.round(vw / targetAR);
+      if (cropH > vh){ cropH = vh; cropW = Math.round(vh * targetAR); }
+
+      const sx = Math.floor((vw - cropW)/2);
+      const sy = Math.floor((vh - cropH)/2);
+
+      // Compose at crop size
+      compose.width = cropW;
+      compose.height = cropH;
+      const ctx = compose.getContext('2d');
+
+      ctx.save();
+      if (mirror){
+        ctx.translate(cropW, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(video, sx, sy, cropW, cropH, 0, 0, cropW, cropH);
+      ctx.restore();
+
+      // Draw overlay (scaled to canvas)
+      if (overlayImg.src){
+        const ov = await ensureImage(overlayImg.src);
+        ctx.drawImage(ov, 0, 0, cropW, cropH);
+      }
+
+      // Draw stickers in order
+      for (const st of stickers){
+        const img = await ensureImage(st.src);
+        // Sticker base width is image natural width @ scale factor relative to preview size.
+        // We use the on-screen stage size to map to canvas coordinates.
+        const rect = stage.getBoundingClientRect();
+        const scaleX = cropW / rect.width;
+        const scaleY = cropH / rect.height;
+
+        const cx = st.x * scaleX;
+        const cy = st.y * scaleY;
+        const s = st.scale * (220 * scaleX) / img.width; // 220px base preview width
+
+        ctx.save();
+        ctx.translate(cx, cy);
+        ctx.rotate(st.rot);
+        ctx.scale(s, s);
+        ctx.drawImage(img, -img.width/2, -img.height/2);
+        ctx.restore();
+      }
+
+      return compose.toDataURL('image/png'); // keep alpha from overlays/props if needed, but final over video is opaque
+    }
+
+    function ensureImage(src){
+      return new Promise((res, rej)=>{
+        const im = new Image();
+        im.onload = ()=>res(im);
+        im.onerror = rej;
+        im.src = src;
+      });
+    }
+
+    function showPreview(dataURL){
+      previewImg.src = dataURL;
+      previewNote.textContent = new Date().toLocaleString();
+      preview.showModal();
+    }
+    retakeBtn.addEventListener('click', ()=> preview.close());
+
+    // Save to localStorage photos[]
+    saveBtn.addEventListener('click', ()=>{
+      try{
+        const list = JSON.parse(localStorage.getItem('photos')||'[]');
+        const id = crypto.randomUUID();
+        const name = `booth-${new Date().toISOString().replace(/[:.]/g,'-')}.png`;
+        list.push({ id, name, dataURL: previewImg.src, createdAt: Date.now() });
+        localStorage.setItem('photos', JSON.stringify(list));
+        alert('Saved to device library.');
+      }catch(e){
+        alert('Could not save (storage full or disabled).');
+      }
+    });
+
+    // Share via Web Share API (AirDrop/Bluetooth in iPad share sheet)
+    shareBtn.addEventListener('click', async ()=>{
+      const file = dataURLtoFile(previewImg.src, 'photobooth.png');
+      if (navigator.canShare && navigator.canShare({ files:[file] })){
+        try{ await navigator.share({ files:[file], title:'Photobooth' }); }
+        catch(e){ /* user canceled */ }
+      }else if (navigator.share){
+        // Fallback: share URL blob
+        const url = URL.createObjectURL(file);
+        try{ await navigator.share({ url, title:'Photobooth' }); }
+        catch(e){ /* ignore */ }
+        finally{ URL.revokeObjectURL(url); }
+      }else{
+        // Final fallback: download
+        const a = document.createElement('a');
+        a.href = previewImg.src; a.download = 'photobooth.png';
+        document.body.appendChild(a); a.click(); a.remove();
+      }
+    });
+
+    function dataURLtoFile(dataURL, filename='photo.png'){
+      const [meta, b64] = dataURL.split(',');
+      const mime = (meta.match(/data:(.*?);base64/)||[])[1] || 'image/png';
+      const bin = atob(b64); const len = bin.length; const u8 = new Uint8Array(len);
+      for (let i=0;i<len;i++) u8[i] = bin.charCodeAt(i);
+      return new File([u8], filename, { type: mime });
+    }
+
+    // ---------------------------
+    // Boot
+    // ---------------------------
+    function init(){
+      renderOverlayThumbs();
+      renderPropThumbs();
+      updateMirrorUI();
+      stage.style.aspectRatio = currentAspect.replace(':',' / ');
+      startCamera();
+    }
+    window.addEventListener('pageshow', init, { once:true });
+    window.addEventListener('beforeunload', stopCamera);
+  </script>
+</body>
+</html>

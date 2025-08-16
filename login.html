@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Login / Payment</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <style>
+    :root{
+      --bg:#0f1115; --panel:#171a21; --muted:#8b93a7; --text:#f6f7fb;
+      --accent:#ffd100; --ink:#121212; --ok:#2ecc71; --warn:#ff5a5f;
+      --ring:rgba(255,209,0,.35); --stroke:rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    header{position:sticky; top:0; z-index:5; background:linear-gradient(180deg, rgba(15,17,21,.95), rgba(15,17,21,.6)); border-bottom:1px solid rgba(255,255,255,.06)}
+    .bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px}
+    .brand{font-weight:900}
+    .tabs{display:flex; gap:8px; padding:10px 16px}
+    .tab{
+      flex:1; text-align:center; padding:12px 14px; font-weight:800; border-radius:14px;
+      background:#1c202a; border:1px solid rgba(255,255,255,.08);
+      box-shadow:0 6px 0 #000; user-select:none; -webkit-tap-highlight-color:transparent;
+      transition:transform .06s ease, box-shadow .06s ease;
+    }
+    .tab.active{ background:var(--accent); color:var(--ink); border-color:transparent }
+    .tab:active{ transform:translateY(2px); box-shadow:0 3px 0 #000 }
+    .wrap{padding:16px; display:grid; gap:16px}
+    .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.08); border-radius:20px; padding:16px;
+      box-shadow:0 12px 24px var(--stroke);
+    }
+    .card h2{margin:0 0 10px}
+    .muted{color:var(--muted)}
+    .row{display:flex; gap:12px; flex-wrap:wrap; align-items:center}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      background:#1e212a; color:var(--text); border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:12px 16px; font-weight:800; text-decoration:none;
+      -webkit-tap-highlight-color:transparent; user-select:none; cursor:pointer;
+      box-shadow:0 6px 0 #000; transition:transform .06s ease, box-shadow .06s ease, background .06s;
+    }
+    .btn:active{ transform:translateY(2px); box-shadow:0 3px 0 #000 }
+    .btn.accent{ background:var(--accent); color:var(--ink); border-color:transparent }
+    .btn.ok{ background:var(--ok); color:#062610; border:none }
+    .btn.warn{ background:var(--warn); color:#300; border:none }
+    .field{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      background:#11151b; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:10px 12px;
+    }
+    .field input{ appearance:none; background:transparent; border:none; outline:none; color:var(--text); font-size:16px; padding:6px; min-width:200px; flex:1 }
+    .pill{ padding:6px 10px; border-radius:999px; background:#0e1320; border:1px solid rgba(255,255,255,.14); color:var(--muted); font-size:12px; font-weight:800 }
+    .grid2{ display:grid; grid-template-columns: 1fr 1fr; gap:16px }
+    @media (max-width: 960px){ .grid2{ grid-template-columns: 1fr } }
+    /* Scanner */
+    .scan-box{ display:grid; grid-template-rows:auto 1fr auto; gap:12px }
+    .video-wrap{
+      position:relative; border-radius:18px; overflow:hidden; background:#0b0f16;
+      border:1px solid rgba(255,255,255,.08);
+    }
+    video{ width:100%; height:70vh; object-fit:cover; transform:scaleX(-1); /* mirror for front cam */ }
+    canvas{ display:none }
+    .scan-overlay{
+      position:absolute; inset:0; pointer-events:none;
+      box-shadow: inset 0 0 0 4px rgba(255,255,255,.12);
+    }
+    .result{ padding:10px 12px; border-radius:12px; background:#0e1320; border:1px solid rgba(255,255,255,.1); font-size:14px }
+    /* Toast */
+    .toast{
+      position:fixed; left:50%; bottom:6vh; transform:translateX(-50%);
+      background:#12161f; border:1px solid rgba(255,255,255,.12); color:#fff; padding:12px 16px; border-radius:12px;
+      box-shadow:0 14px 34px rgba(0,0,0,.5); z-index:50; display:none; font-weight:800;
+    }
+    .toast.ok{ background:#0f2715; border-color:#1f6f39 }
+    .toast.warn{ background:#2c1214; border-color:#7a2e31 }
+    .btn:focus-visible, input:focus-visible{ outline:4px solid var(--ring) }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="brand">Access</div>
+      <a href="index.html" class="btn">← Back</a>
+    </div>
+    <div class="tabs">
+      <button class="tab active" id="tabScan">Scan</button>
+      <button class="tab" id="tabPay">Pay</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section id="paneScan" class="card scan-box" aria-live="polite">
+      <h2>Scan Approved QR</h2>
+      <div class="video-wrap">
+        <video id="video" playsinline muted></video>
+        <div class="scan-overlay"></div>
+      </div>
+      <div class="row">
+        <button class="btn accent" id="startScanBtn">Start Camera</button>
+        <button class="btn" id="stopScanBtn">Stop</button>
+        <span class="pill">Front camera</span>
+      </div>
+      <div class="result" id="scanResult">Waiting…</div>
+
+      <div class="grid2">
+        <div class="card">
+          <strong class="muted">If camera scanning isn’t supported:</strong>
+          <div class="row" style="margin-top:8px">
+            <div class="field"><input id="manualCode" placeholder="Enter QR code text" inputmode="text" /></div>
+            <button class="btn" id="manualVerify">Verify</button>
+          </div>
+          <div class="muted" style="margin-top:8px; font-size:12px">Approved codes are stored in <code>localStorage</code> under <code>approved_codes</code> (newline separated).</div>
+        </div>
+        <div class="card">
+          <strong>Sample approved codes</strong>
+          <div class="muted" style="margin-top:6px; font-size:14px">
+            GG-TEST-2025<br/>VIP-1234
+          </div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" id="loadSamples">Load to Device</button>
+          </div>
+        </div>
+      </div>
+
+      <canvas id="frame"></canvas>
+    </section>
+
+    <section id="panePay" class="card" hidden aria-live="polite">
+      <h2>Choose your session</h2>
+      <div class="grid2">
+        <div class="card">
+          <h3>Free (Test)</h3>
+          <p class="muted">Use this during setup and testing. No charge.</p>
+          <button class="btn ok" id="freeBtn">Start Free Session</button>
+        </div>
+
+        <div class="card">
+          <h3>1 Session — $1.00</h3>
+          <p class="muted">Pay securely with Square on this iPad.</p>
+          <div class="row">
+            <button class="btn accent" id="paySquareBtn">Pay with Square</button>
+          </div>
+          <div class="muted" style="font-size:12px; margin-top:8px">
+            After payment, you’ll return here and continue automatically.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script>
+    // =========================
+    // ==== CONFIGURE ME!  =====
+    // =========================
+
+    // A) Payment Link (simplest): paste your Square Payment Link URL here,
+    // e.g. https://square.link/u/abcdEF12
+    const SQUARE_PAYMENT_LINK_URL = ""; // <-- put your Payment Link here (optional)
+
+    // B) Square Point of Sale deep link (opens Square app on iPad and returns)
+    // Fill these if you prefer POS deep link over Payment Link:
+    const SQUARE_APP_ID = ""; // e.g. "sq0idp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    const POS_AMOUNT_CENTS = 100; // $1.00
+    const POS_CURRENCY = "USD";
+    // Use current page as return target and mark success with #paid=1
+    const RETURN_URL = location.origin + location.pathname + "#paid=1";
+
+    // Approved QR codes (fallback defaults). You can override by setting
+    // localStorage.setItem('approved_codes', 'CODE1\nCODE2\nCODE3');
+    const DEFAULT_APPROVED = ["GG-TEST-2025", "VIP-1234"];
+
+    // =========================
+    // ====== UI wiring ========
+    // =========================
+    const $ = (s, r=document)=>r.querySelector(s);
+    const showToast = (msg, kind='')=>{
+      const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + (kind||''); t.style.display='block';
+      setTimeout(()=>{ t.style.display='none'; }, 2200);
+    };
+
+    // Tabs
+    const tabScan = $('#tabScan'), tabPay = $('#tabPay');
+    const paneScan = $('#paneScan'), panePay = $('#panePay');
+
+    tabScan.addEventListener('click', ()=>{ tabScan.classList.add('active'); tabPay.classList.remove('active'); paneScan.hidden=false; panePay.hidden=true; });
+    tabPay.addEventListener('click', ()=>{ tabPay.classList.add('active'); tabScan.classList.remove('active'); panePay.hidden=false; paneScan.hidden=true; stopScan(); });
+
+    // =========================
+    // ======= Scanner =========
+    // =========================
+    const video = $('#video');
+    const frame = $('#frame');
+    const resultEl = $('#scanResult');
+    const startBtn = $('#startScanBtn');
+    const stopBtn = $('#stopScanBtn');
+    let stream = null, raf = null, detector = null, lastCode = "";
+
+    const getApprovedList = ()=>{
+      const raw = localStorage.getItem('approved_codes');
+      if (raw && raw.trim()) return raw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
+      return DEFAULT_APPROVED.slice();
+    };
+
+    $('#loadSamples').addEventListener('click', ()=>{
+      localStorage.setItem('approved_codes', DEFAULT_APPROVED.join('\n'));
+      showToast('Sample codes saved to device', 'ok');
+    });
+
+    async function startScan(){
+      try{
+        // Request front camera
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user", width: {ideal: 1920}, height: {ideal: 1080} },
+          audio: false
+        });
+        video.srcObject = stream;
+        await video.play();
+        resultEl.textContent = "Camera started. Hold QR in view…";
+
+        // Prefer built-in detector
+        if ('BarcodeDetector' in window) {
+          detector = new BarcodeDetector({ formats: ['qr_code'] });
+          loopDetect();
+        } else {
+          resultEl.innerHTML = "Live scan not supported on this browser. Use manual entry below.";
+        }
+      }catch(err){
+        console.error(err);
+        resultEl.textContent = "Camera error. Ensure HTTPS and allow camera access.";
+        showToast('Camera permission needed', 'warn');
+      }
+    }
+
+    function stopScan(){
+      cancelAnimationFrame(raf);
+      raf = null;
+      detector = null;
+      if (stream){
+        stream.getTracks().forEach(t=>t.stop());
+        stream = null;
+      }
+      video.srcObject = null;
+    }
+
+    async function loopDetect(){
+      if (!detector || !video.videoWidth){ raf = requestAnimationFrame(loopDetect); return; }
+      try{
+        const codes = await detector.detect(video);
+        if (codes && codes.length){
+          const code = codes[0].rawValue || codes[0].rawValue === "" ? codes[0].rawValue : (codes[0].rawValue ?? codes[0].rawValue);
+          if (code && code !== lastCode){
+            lastCode = code;
+            handleScan(code);
+          }
+        }
+      }catch(e){ /* ignore intermittent detector errors */ }
+      raf = requestAnimationFrame(loopDetect);
+    }
+
+    function handleScan(text){
+      resultEl.textContent = `Detected: ${text}`;
+      const approved = getApprovedList();
+      const ok = approved.includes(text);
+      if (ok){
+        showToast('QR approved ✓', 'ok');
+        stopScan();
+        setTimeout(()=>goPhotobooth(), 700);
+      }else{
+        showToast('QR not approved ✕', 'warn');
+      }
+    }
+
+    startBtn.addEventListener('click', startScan);
+    stopBtn.addEventListener('click', stopScan);
+
+    // Manual verify
+    $('#manualVerify').addEventListener('click', ()=>{
+      const code = ($('#manualCode').value||'').trim();
+      if (!code) return showToast('Enter a code', 'warn');
+      handleScan(code);
+    });
+
+    // =========================
+    // ======= Payments ========
+    // =========================
+    const freeBtn = $('#freeBtn');
+    const paySquareBtn = $('#paySquareBtn');
+
+    freeBtn.addEventListener('click', ()=>{
+      // Free test session = immediate success
+      showToast('Free session started ✓','ok');
+      setTimeout(()=>goPhotobooth(), 600);
+    });
+
+    paySquareBtn.addEventListener('click', ()=>{
+      // Prefer Payment Link if provided
+      if (SQUARE_PAYMENT_LINK_URL){
+        // Open the link in the same tab; Square will provide a "Return to merchant" link.
+        // You can configure the "Return to" URL in the payment link settings. Set it to this page with #paid=1.
+        location.href = SQUARE_PAYMENT_LINK_URL;
+        return;
+      }
+
+      // Otherwise use Square Point of Sale deep link to open Square app on iPad.
+      if (!SQUARE_APP_ID){
+        showToast('Configure Square credentials', 'warn');
+        return;
+      }
+      const params = new URLSearchParams({
+        'amount_money[amount]': String(POS_AMOUNT_CENTS),
+        'amount_money[currency_code]': POS_CURRENCY,
+        callback_url: RETURN_URL,
+        client_id: SQUARE_APP_ID,
+        version: '1.3',
+        state: 'photo-session-1',
+        notes: 'Photobooth Session'
+      });
+      const deepLink = `square-commerce-v1://payment/create?${params.toString()}`;
+      location.href = deepLink;
+    });
+
+    // If Square returned here after payment, continue
+    function checkPaidFlag(){
+      if (location.hash.includes('paid=1') || new URLSearchParams(location.search).get('paid') === '1'){
+        showToast('Payment successful ✓','ok');
+        // clear the flag so we don’t loop
+        history.replaceState(null, '', location.pathname);
+        setTimeout(()=>goPhotobooth(), 700);
+      }
+    }
+    window.addEventListener('focus', checkPaidFlag);
+    document.addEventListener('visibilitychange', ()=>{ if (!document.hidden) checkPaidFlag(); });
+    checkPaidFlag();
+
+    // Respect settings toggle: if payment is disabled, you can auto-open Pay → Free
+    const paymentEnabled = localStorage.getItem('payment_enabled') !== 'false'; // default true
+    if (!paymentEnabled){
+      // If payments are disabled, jump to Scan tab by default (or even skip this page).
+      // Here we keep the page but default to Scan to let staff QR users through.
+      tabScan.click();
+    }
+
+    function goPhotobooth(){
+      location.href = 'photobooth.html';
+    }
+  </script>
+</body>
+</html>
