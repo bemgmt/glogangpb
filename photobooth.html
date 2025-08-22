@@ -42,8 +42,14 @@
     .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.14) }
     .pill{ padding:6px 10px; border-radius:999px; background:#0e1320; border:1px solid rgba(255,255,255,.14); color:var(--muted); font-size:12px; font-weight:800 }
 
+    /* Two-pane layout that stays side-by-side on iPad */
     .wrap{ display:grid; grid-template-columns: 1.2fr .8fr; gap:16px; padding:16px; height:calc(100% - 74px); }
-    @media (max-width: 1080px){ .wrap{ grid-template-columns: 1fr; height:auto; overflow:visible } }
+    /* Allow grid children to scroll internally */
+    .wrap > *{ min-height:0; }
+    /* Collapse to one column only on small phones */
+    @media (max-width: 820px){
+      .wrap{ grid-template-columns: 1fr; height:auto; overflow:visible }
+    }
 
     .stage-card, .card{
       background:var(--panel); border:1px solid rgba(255,255,255,.08);
@@ -55,12 +61,12 @@
       position:relative;
       border-radius:18px; overflow:hidden;
       background:#0b0f16; border:1px solid rgba(255,255,255,.08);
-      aspect-ratio: 3 / 4; /* typical iPad front cam; adjust via selector below if you want */
+      aspect-ratio: 3 / 4;
       max-height: 72vh;
     }
     .stage video{
       width:100%; height:100%; object-fit:cover;
-      transform: scaleX(-1); /* mirrored selfie preview (front cam look) */
+      transform: scaleX(-1);
     }
     .stage.mirror-off video{ transform:none; }
 
@@ -99,6 +105,12 @@
     .thumb{ background:#0f1320; border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; padding:6px; display:grid; place-items:center }
     .thumb img{ width:100%; height:70px; object-fit:contain; display:block }
 
+    /* Make the right panel scrollable next to the camera */
+    .sidepanel{
+      overflow:auto;           /* scroll within this panel */
+      max-height:100%;         /* fill available grid height */
+    }
+
     /* Preview dialog */
     dialog#preview{ border:none; padding:0; background:transparent; }
     .preview-wrap{
@@ -108,7 +120,7 @@
     .preview-wrap img{ max-width:86vw; max-height:70vh; display:block; border-radius:12px }
 
     .note{ color:var(--muted); font-size:12px }
-    .btn:focus-visible, input:focus-visible, select:focus-visible{ outline:4px solid var(--ring) }
+    .btn:focus-visible, input:focus-visible, select:focus-visible{ outline:4px solid (var(--ring)) }
   </style>
 </head>
 <body>
@@ -152,8 +164,8 @@
       </div>
     </section>
 
-    <!-- Right: Overlays & Props -->
-    <section class="card">
+    <!-- Right: Overlays & Props (now scrollable, stays beside camera on iPad) -->
+    <section class="card sidepanel">
       <div class="grid2">
         <!-- Overlays -->
         <div class="card">
@@ -256,9 +268,9 @@
     // Camera
     // ---------------------------
     let stream = null;
-    let facingMode = 'user';       // 'user' (front) | 'environment' (back)
-    let mirror = true;             // preview and capture mirrored?
-    let currentAspect = '3:4';     // '3:4' | '1:1' | '9:16'
+    let facingMode = 'user';
+    let mirror = true;
+    let currentAspect = '3:4';
 
     async function startCamera(){
       stopCamera();
@@ -284,7 +296,6 @@
     }
     switchBtn.addEventListener('click', async ()=>{
       facingMode = (facingMode==='user') ? 'environment' : 'user';
-      // Toggle mirror automatically for selfie look
       mirror = (facingMode === 'user');
       updateMirrorUI();
       await startCamera();
@@ -307,10 +318,10 @@
 
     // End session button
     endSessionBtn?.addEventListener('click', () => {
-    if (!confirm('End current session?')) return;
-    sessionStorage.removeItem('session');
-    sessionStorage.removeItem('pendingSession');
-    location.href = 'login.html';
+      if (!confirm('End current session?')) return;
+      sessionStorage.removeItem('session');
+      sessionStorage.removeItem('pendingSession');
+      location.href = 'login.html';
     });
 
     // ---------------------------
@@ -360,7 +371,6 @@
       const f = e.target.files?.[0]; if(!f) return;
       const url = URL.createObjectURL(f);
       addSticker(url);
-      // Keep the URL — it will be drawn during capture; browser revokes on reload
       propFile.value = '';
     });
 
@@ -454,7 +464,6 @@
       if (pts.length===1){
         return { count:1, cx:pts[0].x, cy:pts[0].y, dist:0, angle:0 };
       }
-      // centroid
       const cx = (pts[0].x + pts[1].x)/2;
       const cy = (pts[0].y + pts[1].y)/2;
       const dx = pts[1].x - pts[0].x;
@@ -468,7 +477,6 @@
     // Capture flow
     // ---------------------------
     captureBtn.addEventListener('click', async ()=>{
-      // 3-2-1 countdown
       await runCountdown(3);
       const dataURL = await captureComposite();
       showPreview(dataURL);
@@ -493,11 +501,9 @@
     }
 
     async function captureComposite(){
-      // Ensure video frame is ready
       const vw = video.videoWidth, vh = video.videoHeight;
       if (!vw || !vh){ throw new Error('Camera not ready'); }
 
-      // Fit chosen aspect into the video frame
       const [arW, arH] = currentAspect.split(':').map(Number);
       const targetAR = arW/arH;
       let cropW = vw, cropH = Math.round(vw / targetAR);
@@ -506,7 +512,6 @@
       const sx = Math.floor((vw - cropW)/2);
       const sy = Math.floor((vh - cropH)/2);
 
-      // Compose at crop size
       compose.width = cropW;
       compose.height = cropH;
       const ctx = compose.getContext('2d');
@@ -519,24 +524,20 @@
       ctx.drawImage(video, sx, sy, cropW, cropH, 0, 0, cropW, cropH);
       ctx.restore();
 
-      // Draw overlay (scaled to canvas)
       if (overlayImg.src){
         const ov = await ensureImage(overlayImg.src);
         ctx.drawImage(ov, 0, 0, cropW, cropH);
       }
 
-      // Draw stickers in order
       for (const st of stickers){
         const img = await ensureImage(st.src);
-        // Sticker base width is image natural width @ scale factor relative to preview size.
-        // We use the on-screen stage size to map to canvas coordinates.
         const rect = stage.getBoundingClientRect();
         const scaleX = cropW / rect.width;
         const scaleY = cropH / rect.height;
 
         const cx = st.x * scaleX;
         const cy = st.y * scaleY;
-        const s = st.scale * (220 * scaleX) / img.width; // 220px base preview width
+        const s = st.scale * (220 * scaleX) / img.width;
 
         ctx.save();
         ctx.translate(cx, cy);
@@ -546,7 +547,7 @@
         ctx.restore();
       }
 
-      return compose.toDataURL('image/png'); // keep alpha from overlays/props if needed, but final over video is opaque
+      return compose.toDataURL('image/png');
     }
 
     function ensureImage(src){
@@ -579,20 +580,18 @@
       }
     });
 
-    // Share via Web Share API (AirDrop/Bluetooth in iPad share sheet)
+    // Share via Web Share API
     shareBtn.addEventListener('click', async ()=>{
       const file = dataURLtoFile(previewImg.src, 'photobooth.png');
       if (navigator.canShare && navigator.canShare({ files:[file] })){
         try{ await navigator.share({ files:[file], title:'Photobooth' }); }
         catch(e){ /* user canceled */ }
       }else if (navigator.share){
-        // Fallback: share URL blob
         const url = URL.createObjectURL(file);
-        try{ await navigator.share({ url, title:'Photobooth' }); }
-        catch(e){ /* ignore */ }
+        try{ await navigator.share({ url, title:'Photobooth' });
+        }catch(e){ /* ignore */ }
         finally{ URL.revokeObjectURL(url); }
       }else{
-        // Final fallback: download
         const a = document.createElement('a');
         a.href = previewImg.src; a.download = 'photobooth.png';
         document.body.appendChild(a); a.click(); a.remove();
@@ -622,4 +621,6 @@
   </script>
 </body>
 </html>
+
+
 
