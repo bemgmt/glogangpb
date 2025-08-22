@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Help - GLO GANG Photobooth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <style>
+    :root{
+      --bg:#0f1115; --panel:#171a21; --muted:#8b93a7; --text:#f6f7fb;
+      --accent:#ffd100; --ink:#121212; --ok:#2ecc71; --warn:#ff5a5f;
+      --ring:rgba(255,209,0,.35); --stroke:rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased;
+      padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    header{
+      position:sticky; top:0; z-index:5;
+      background:linear-gradient(180deg, rgba(15,17,21,.95), rgba(15,17,21,.6));
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .bar{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px}
+    .brand{font-weight:900}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      background:#1e212a; color:var(--text); border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:12px 16px; font-weight:800; text-decoration:none; cursor:pointer;
+      -webkit-tap-highlight-color:transparent; user-select:none;
+      box-shadow:0 6px 0 #000; transition:transform .06s ease, box-shadow .06s ease, background .06s;
+    }
+    .btn:active{ transform:translateY(2px); box-shadow:0 3px 0 #000 }
+    .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.14) }
+    .content{padding:16px; max-width:800px; margin:0 auto}
+    .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.08);
+      border-radius:20px; padding:20px; margin-bottom:16px;
+      box-shadow:0 12px 24px var(--stroke);
+    }
+    h1{margin:0 0 16px; font-size:28px; color:var(--accent)}
+    h2{margin:0 0 12px; font-size:20px; color:var(--text)}
+    h3{margin:0 0 8px; font-size:16px; color:var(--text)}
+    p{margin:0 0 12px; line-height:1.5; color:var(--muted)}
+    .step{margin-bottom:16px}
+    .step-number{
+      display:inline-flex; align-items:center; justify-content:center;
+      width:24px; height:24px; border-radius:50%; background:var(--accent);
+      color:var(--ink); font-weight:900; font-size:14px; margin-right:8px;
+    }
+    .feature{
+      display:flex; align-items:flex-start; gap:12px; margin-bottom:12px;
+    }
+    .feature-icon{
+      width:20px; height:20px; border-radius:4px; background:var(--accent);
+      flex-shrink:0; margin-top:2px;
+    }
+    .troubleshoot{background:#2a1f1f; border-color:#4a2f2f}
+    .tip{background:#1f2a1f; border-color:#2f4a2f}
+    code{
+      background:rgba(255,255,255,.1); padding:2px 6px; border-radius:4px;
+      font-family:monospace; font-size:14px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="brand">Help & Support</div>
+      <a href="index.html" class="btn ghost" aria-label="Back to Home">← Back</a>
+    </div>
+  </header>
+
+  <main class="content">
+    <div class="card">
+      <h1>GLO GANG Photobooth Help</h1>
+      <p>Welcome to the GLO GANG Photobooth! This guide will help you get started and troubleshoot common issues.</p>
+    </div>
+
+    <div class="card">
+      <h2>Getting Started</h2>
+      <div class="step">
+        <span class="step-number">1</span>
+        <strong>Access the Photobooth</strong>
+        <p>Click "Click here to start" on the home page to begin your session.</p>
+      </div>
+      <div class="step">
+        <span class="step-number">2</span>
+        <strong>Authentication</strong>
+        <p>Choose between QR code scanning or payment options to access the photobooth.</p>
+      </div>
+      <div class="step">
+        <span class="step-number">3</span>
+        <strong>Take Photos</strong>
+        <p>Use the camera interface to capture photos with overlays and digital props.</p>
+      </div>
+      <div class="step">
+        <span class="step-number">4</span>
+        <strong>Save & Share</strong>
+        <p>Save your photos to the device or share them via AirDrop, Bluetooth, or other sharing options.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Features</h2>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <div>
+          <h3>Camera Controls</h3>
+          <p>Switch between front and back cameras, toggle mirror mode, and adjust aspect ratios (3:4, 1:1, 9:16).</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <div>
+          <h3>Overlays</h3>
+          <p>Add full-frame overlays like frames and effects to your photos. Upload custom overlays or use presets.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <div>
+          <h3>Digital Props</h3>
+          <p>Add interactive stickers and props. Drag to move, pinch to resize and rotate. Tap to select and delete.</p>
+        </div>
+      </div>
+      <div class="feature">
+        <div class="feature-icon"></div>
+        <div>
+          <h3>QR Code Access</h3>
+          <p>Scan approved QR codes for quick access, or enter codes manually if camera scanning isn't available.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card troubleshoot">
+      <h2>Troubleshooting</h2>
+      <h3>Camera Issues</h3>
+      <p><strong>Camera not working:</strong> Ensure you've granted camera permissions and are using HTTPS. Try refreshing the page.</p>
+      <p><strong>Poor image quality:</strong> Make sure you have good lighting and the camera lens is clean.</p>
+      
+      <h3>QR Code Scanning</h3>
+      <p><strong>QR code not scanning:</strong> Ensure good lighting, hold the code steady, and try manual entry if scanning fails.</p>
+      <p><strong>Code not recognized:</strong> Verify the QR code is approved. Contact staff if you believe it should work.</p>
+      
+      <h3>Photo Saving</h3>
+      <p><strong>Can't save photos:</strong> Check if your device has sufficient storage space. Clear browser data if needed.</p>
+      <p><strong>Sharing not working:</strong> Ensure your device supports the Web Share API or try downloading the photo instead.</p>
+    </div>
+
+    <div class="card tip">
+      <h2>Tips for Best Results</h2>
+      <p><strong>Lighting:</strong> Use good lighting for the best photo quality. Avoid backlighting.</p>
+      <p><strong>Positioning:</strong> Center yourself in the frame and maintain a comfortable distance from the camera.</p>
+      <p><strong>Props:</strong> Experiment with different combinations of overlays and props for creative effects.</p>
+      <p><strong>Aspect Ratios:</strong> Choose the right aspect ratio for your intended use (social media, printing, etc.).</p>
+    </div>
+
+    <div class="card">
+      <h2>Staff Settings</h2>
+      <p>Staff can access advanced settings by clicking the settings icon on the home page. The default PIN is <code>1234</code>.</p>
+      <p><strong>Available settings:</strong></p>
+      <ul style="color:var(--muted); margin:8px 0 0 20px">
+        <li>Enable/disable payment requirements</li>
+        <li>Manage photo gallery</li>
+        <li>Adjust account credits</li>
+        <li>Change settings PIN</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Browser Compatibility</h2>
+      <p>For the best experience, use a modern browser with camera and JavaScript support:</p>
+      <ul style="color:var(--muted); margin:8px 0 0 20px">
+        <li><strong>Recommended:</strong> Chrome, Safari, Firefox, Edge (latest versions)</li>
+        <li><strong>Required:</strong> Camera access, JavaScript enabled</li>
+        <li><strong>Optional:</strong> Web Share API for enhanced sharing features</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Privacy & Data</h2>
+      <p>Your privacy is important to us:</p>
+      <ul style="color:var(--muted); margin:8px 0 0 20px">
+        <li>Photos are stored locally on your device</li>
+        <li>No photos are uploaded to external servers</li>
+        <li>Clear browser data to remove all stored photos</li>
+        <li>Session data expires automatically for security</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h2>Need More Help?</h2>
+      <p>If you're still experiencing issues, please contact the event staff or technical support.</p>
+      <p>For technical issues, please note your browser type and version, device model, and a description of the problem.</p>
+    </div>
+  </main>
+
+  <!-- Toast notification -->
+  <div class="toast" id="toast" style="display:none"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script>
+    // Initialize help page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add keyboard navigation
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          window.location.href = 'index.html';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

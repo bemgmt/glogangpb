@@ -106,12 +106,50 @@
       <a class="cta" href="login.html" id="startBtn">Click here to start</a>
     </div>
   </main>
+  <!-- Toast notification -->
+  <div class="toast" id="toast" style="display:none"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/session.js"></script>
   <script>
-    document.addEventListener('keydown', (e) => {
-      const key = e.key.toLowerCase();
-      if (key === 'enter' || key === ' ') {
-        const start = document.getElementById('startBtn');
-        if (start) start.click();
+    // Initialize index page
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize session manager
+      Session.init();
+
+      // Add keyboard navigation with accessibility
+      document.addEventListener('keydown', (e) => {
+        const key = e.key.toLowerCase();
+        if (key === 'enter' || key === ' ') {
+          e.preventDefault();
+          const start = Utils.$('#startBtn');
+          if (start) {
+            start.click();
+            start.focus();
+          }
+        }
+      });
+
+      // Add loading state for start button
+      const startBtn = Utils.$('#startBtn');
+      if (startBtn) {
+        startBtn.addEventListener('click', (e) => {
+          e.preventDefault();
+          startBtn.textContent = 'Loading...';
+          startBtn.style.pointerEvents = 'none';
+
+          // Simulate loading delay then navigate
+          setTimeout(() => {
+            window.location.href = 'login.html';
+          }, 500);
+        });
+      }
+
+      // Check for any existing session and show appropriate message
+      if (Session.isAuthenticated()) {
+        Utils.showToast('You have an active session', 'ok');
       }
     });
   </script>

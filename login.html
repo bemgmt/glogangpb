@@ -157,177 +157,256 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- Toast notification -->
+  <div class="toast" id="toast" style="display:none"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/session.js"></script>
+  <script src="js/qr-scanner.js"></script>
   <script>
-    // =========================
-    // ==== CONFIGURE ME!  =====
-    // =========================
+    // Login page controller
+    class LoginController {
+      constructor() {
+        this.qrScanner = new QRScanner();
+        this.currentTab = 'scan';
+        this.init();
+      }
 
-    // A) Payment Link (simplest): paste your Square Payment Link URL here,
-    // e.g. https://square.link/u/abcdEF12
-    const SQUARE_PAYMENT_LINK_URL = ""; // <-- put your Payment Link here (optional)
+      init() {
+        // Initialize session manager
+        Session.init();
 
-    // B) Square Point of Sale deep link (opens Square app on iPad and returns)
-    // Fill these if you prefer POS deep link over Payment Link:
-    const SQUARE_APP_ID = ""; // e.g. "sq0idp-xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-    const POS_AMOUNT_CENTS = 100; // $1.00
-    const POS_CURRENCY = "USD";
-    // Use current page as return target and mark success with #paid=1
-    const RETURN_URL = location.origin + location.pathname + "#paid=1";
+        // Initialize UI elements
+        this.initElements();
+        this.initEventListeners();
 
-    // Approved QR codes (fallback defaults). You can override by setting
-    // localStorage.setItem('approved_codes', 'CODE1\nCODE2\nCODE3');
-    const DEFAULT_APPROVED = ["GG-TEST-2025", "VIP-1234"];
+        // Check for payment completion
+        this.checkPaymentCompletion();
 
-    // =========================
-    // ====== UI wiring ========
-    // =========================
-    const $ = (s, r=document)=>r.querySelector(s);
-    const showToast = (msg, kind='')=>{
-      const t = $('#toast'); t.textContent = msg; t.className = 'toast ' + (kind||''); t.style.display='block';
-      setTimeout(()=>{ t.style.display='none'; }, 2200);
-    };
+        // Set default tab based on payment settings
+        this.setDefaultTab();
+      }
 
-    // Tabs
-    const tabScan = $('#tabScan'), tabPay = $('#tabPay');
-    const paneScan = $('#paneScan'), panePay = $('#panePay');
+      initElements() {
+        this.elements = {
+          tabScan: Utils.$('#tabScan'),
+          tabPay: Utils.$('#tabPay'),
+          paneScan: Utils.$('#paneScan'),
+          panePay: Utils.$('#panePay'),
+          video: Utils.$('#video'),
+          scanResult: Utils.$('#scanResult'),
+          startScanBtn: Utils.$('#startScanBtn'),
+          stopScanBtn: Utils.$('#stopScanBtn'),
+          manualCode: Utils.$('#manualCode'),
+          manualVerify: Utils.$('#manualVerify'),
+          loadSamples: Utils.$('#loadSamples'),
+          freeBtn: Utils.$('#freeBtn'),
+          paySquareBtn: Utils.$('#paySquareBtn')
+        };
+      }
 
-    tabScan.addEventListener('click', ()=>{ tabScan.classList.add('active'); tabPay.classList.remove('active'); paneScan.hidden=false; panePay.hidden=true; });
-    tabPay.addEventListener('click', ()=>{ tabPay.classList.add('active'); tabScan.classList.remove('active'); panePay.hidden=false; paneScan.hidden=true; stopScan(); });
+      initEventListeners() {
+        // Tab switching
+        if (this.elements.tabScan) {
+          this.elements.tabScan.addEventListener('click', () => this.switchTab('scan'));
+        }
+        if (this.elements.tabPay) {
+          this.elements.tabPay.addEventListener('click', () => this.switchTab('pay'));
+        }
 
-    // =========================
-    // ======= Scanner =========
-    // =========================
-    const video = $('#video');
-    const frame = $('#frame');
-    const resultEl = $('#scanResult');
-    const startBtn = $('#startScanBtn');
-    const stopBtn = $('#stopScanBtn');
-    let stream = null, raf = null, detector = null, lastCode = "";
+        // QR Scanner controls
+        if (this.elements.startScanBtn) {
+          this.elements.startScanBtn.addEventListener('click', () => this.startScanning());
+        }
+        if (this.elements.stopScanBtn) {
+          this.elements.stopScanBtn.addEventListener('click', () => this.stopScanning());
+        }
 
-    const getApprovedList = ()=>{
-      const raw = localStorage.getItem('approved_codes');
-      if (raw && raw.trim()) return raw.split(/\r?\n/).map(s=>s.trim()).filter(Boolean);
-      return DEFAULT_APPROVED.slice();
-    };
+        // Manual verification
+        if (this.elements.manualVerify) {
+          this.elements.manualVerify.addEventListener('click', () => this.verifyManualCode());
+        }
+        if (this.elements.manualCode) {
+          this.elements.manualCode.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') this.verifyManualCode();
+          });
+        }
 
-    $('#loadSamples').addEventListener('click', ()=>{
-      localStorage.setItem('approved_codes', DEFAULT_APPROVED.join('\n'));
-      showToast('Sample codes saved to device', 'ok');
-    });
+        // Sample codes
+        if (this.elements.loadSamples) {
+          this.elements.loadSamples.addEventListener('click', () => this.loadSampleCodes());
+        }
 
-    async function startScan(){
-      try{
-        // Request front camera
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user", width: {ideal: 1920}, height: {ideal: 1080} },
-          audio: false
-        });
-        video.srcObject = stream;
-        await video.play();
-        resultEl.textContent = "Camera started. Hold QR in view…";
+        // Payment buttons
+        if (this.elements.freeBtn) {
+          this.elements.freeBtn.addEventListener('click', () => this.startFreeSession());
+        }
+        if (this.elements.paySquareBtn) {
+          this.elements.paySquareBtn.addEventListener('click', () => this.processPayment());
+        }
+      }
 
-        // Prefer built-in detector
-        if ('BarcodeDetector' in window) {
-          detector = new BarcodeDetector({ formats: ['qr_code'] });
-          loopDetect();
+      switchTab(tab) {
+        this.currentTab = tab;
+
+        if (tab === 'scan') {
+          this.elements.tabScan?.classList.add('active');
+          this.elements.tabPay?.classList.remove('active');
+          if (this.elements.paneScan) this.elements.paneScan.hidden = false;
+          if (this.elements.panePay) this.elements.panePay.hidden = true;
         } else {
-          resultEl.innerHTML = "Live scan not supported on this browser. Use manual entry below.";
+          this.elements.tabPay?.classList.add('active');
+          this.elements.tabScan?.classList.remove('active');
+          if (this.elements.panePay) this.elements.panePay.hidden = false;
+          if (this.elements.paneScan) this.elements.paneScan.hidden = true;
+          this.stopScanning();
         }
-      }catch(err){
-        console.error(err);
-        resultEl.textContent = "Camera error. Ensure HTTPS and allow camera access.";
-        showToast('Camera permission needed', 'warn');
       }
-    }
 
-    function stopScan(){
-      cancelAnimationFrame(raf);
-      raf = null;
-      detector = null;
-      if (stream){
-        stream.getTracks().forEach(t=>t.stop());
-        stream = null;
-      }
-      video.srcObject = null;
-    }
+      async startScanning() {
+        try {
+          Utils.setTextContent(this.elements.scanResult, 'Starting camera...');
 
-    async function loopDetect(){
-      if (!detector || !video.videoWidth){ raf = requestAnimationFrame(loopDetect); return; }
-      try{
-        const codes = await detector.detect(video);
-        if (codes && codes.length){
-          const code = codes[0].rawValue || codes[0].rawValue === "" ? codes[0].rawValue : (codes[0].rawValue ?? codes[0].rawValue);
-          if (code && code !== lastCode){
-            lastCode = code;
-            handleScan(code);
-          }
+          this.qrScanner.init(this.elements.video, (code, isApproved) => {
+            this.handleScanResult(code, isApproved);
+          });
+
+          await this.qrScanner.startScanning();
+          Utils.setTextContent(this.elements.scanResult, 'Camera started. Hold QR in view...');
+        } catch (error) {
+          Utils.setTextContent(this.elements.scanResult, error.message);
+          Utils.showToast(error.message, 'warn');
         }
-      }catch(e){ /* ignore intermittent detector errors */ }
-      raf = requestAnimationFrame(loopDetect);
-    }
+      }
 
-    function handleScan(text){
-      resultEl.textContent = `Detected: ${text}`;
-      const approved = getApprovedList();
-      const ok = approved.includes(text);
-      if (ok){
-        showToast('QR approved ✓', 'ok');
-        stopScan();
-        setTimeout(()=>goPhotobooth(), 700);
-      }else{
-        showToast('QR not approved ✕', 'warn');
+      stopScanning() {
+        this.qrScanner.stopScanning();
+        Utils.setTextContent(this.elements.scanResult, 'Camera stopped');
+      }
+
+      handleScanResult(code, isApproved) {
+        Utils.setTextContent(this.elements.scanResult, `Detected: ${code}`);
+
+        if (isApproved) {
+          Utils.showToast('QR approved ✓', 'ok');
+          this.createQRSession(code);
+        } else {
+          Utils.showToast('QR not approved ✕', 'warn');
+        }
+      }
+
+      verifyManualCode() {
+        const code = this.elements.manualCode?.value?.trim();
+        if (!code) {
+          Utils.showToast('Enter a code', 'warn');
+          return;
+        }
+
+        const result = this.qrScanner.verifyManualCode(code);
+        if (!result.valid) {
+          Utils.showToast(result.error, 'warn');
+          return;
+        }
+
+        this.handleScanResult(result.code, result.approved);
+        if (this.elements.manualCode) this.elements.manualCode.value = '';
+      }
+
+      loadSampleCodes() {
+        this.qrScanner.loadSampleCodes();
+      }
+
+      startFreeSession() {
+        Utils.showToast('Free session started ✓', 'ok');
+        const session = Session.createSession('free', { type: 'test' });
+        setTimeout(() => this.goToPhotobooth(), 600);
+      }
+
+      processPayment() {
+        // Check if payment link is configured
+        if (CONFIG.PAYMENT.PAYMENT_LINK_URL) {
+          window.location.href = CONFIG.PAYMENT.PAYMENT_LINK_URL;
+          return;
+        }
+
+        // Use Square Point of Sale deep link
+        if (!CONFIG.PAYMENT.SQUARE_APP_ID) {
+          Utils.showToast('Payment not configured', 'warn');
+          return;
+        }
+
+        const params = new URLSearchParams({
+          'amount_money[amount]': String(CONFIG.PAYMENT.AMOUNT_CENTS),
+          'amount_money[currency_code]': CONFIG.PAYMENT.CURRENCY,
+          callback_url: `${location.origin}${location.pathname}#paid=1`,
+          client_id: CONFIG.PAYMENT.SQUARE_APP_ID,
+          version: '1.3',
+          state: 'photo-session-1',
+          notes: 'Photobooth Session'
+        });
+
+        const deepLink = `square-commerce-v1://payment/create?${params.toString()}`;
+        window.location.href = deepLink;
+      }
+
+      createQRSession(code) {
+        const session = Session.createSession('qr', { code: code });
+        setTimeout(() => this.goToPhotobooth(), 700);
+      }
+
+      checkPaymentCompletion() {
+        if (Session.handlePaymentComplete()) {
+          Utils.showToast('Payment successful ✓', 'ok');
+          setTimeout(() => this.goToPhotobooth(), 700);
+        }
+      }
+
+      setDefaultTab() {
+        const paymentEnabled = Storage.getPaymentEnabled();
+        if (!paymentEnabled) {
+          this.switchTab('scan');
+        }
+      }
+
+      goToPhotobooth() {
+        window.location.href = 'photobooth.html';
+      }
+
+      destroy() {
+        this.qrScanner.destroy();
       }
     }
 
-    startBtn.addEventListener('click', startScan);
-    stopBtn.addEventListener('click', stopScan);
+    // Initialize login controller when page loads
+    let loginController;
 
-    // Manual verify
-    $('#manualVerify').addEventListener('click', ()=>{
-      const code = ($('#manualCode').value||'').trim();
-      if (!code) return showToast('Enter a code', 'warn');
-      handleScan(code);
+    document.addEventListener('DOMContentLoaded', () => {
+      loginController = new LoginController();
     });
 
-    // =========================
-    // ======= Payments ========
-    // =========================
-    const freeBtn = $('#freeBtn');
-    const paySquareBtn = $('#paySquareBtn');
-
-    freeBtn.addEventListener('click', ()=>{
-      // Free test session = immediate success
-      showToast('Free session started ✓','ok');
-      setTimeout(()=>goPhotobooth(), 600);
-    });
-
-    paySquareBtn.addEventListener('click', ()=>{
-      // Prefer Payment Link if provided
-      if (SQUARE_PAYMENT_LINK_URL){
-        // Open the link in the same tab; Square will provide a "Return to merchant" link.
-        // You can configure the "Return to" URL in the payment link settings. Set it to this page with #paid=1.
-        location.href = SQUARE_PAYMENT_LINK_URL;
-        return;
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+      if (loginController) {
+        loginController.destroy();
       }
-
-      // Otherwise use Square Point of Sale deep link to open Square app on iPad.
-      if (!SQUARE_APP_ID){
-        showToast('Configure Square credentials', 'warn');
-        return;
-      }
-      const params = new URLSearchParams({
-        'amount_money[amount]': String(POS_AMOUNT_CENTS),
-        'amount_money[currency_code]': POS_CURRENCY,
-        callback_url: RETURN_URL,
-        client_id: SQUARE_APP_ID,
-        version: '1.3',
-        state: 'photo-session-1',
-        notes: 'Photobooth Session'
-      });
-      const deepLink = `square-commerce-v1://payment/create?${params.toString()}`;
-      location.href = deepLink;
     });
 
+    // Handle visibility changes for payment completion
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && loginController) {
+        loginController.checkPaymentCompletion();
+      }
+    });
+
+    window.addEventListener('focus', () => {
+      if (loginController) {
+        loginController.checkPaymentCompletion();
+      }
+    });
+
+    // Legacy code - will be removed by controller
     // If Square returned here after payment, continue
     function checkPaidFlag(){
       if (location.hash.includes('paid=1') || new URLSearchParams(location.search).get('paid') === '1'){
