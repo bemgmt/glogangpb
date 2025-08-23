@@ -6,6 +6,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <!-- iOS Safari Compatibility Fixes -->
+  <link rel="stylesheet" href="css/ios-fixes.css">
+
   <style>
     :root{
       --bg:#0f1115; --panel:#171a21; --muted:#8b93a7; --text:#f6f7fb;
@@ -98,6 +101,33 @@
     .thumbs{ display:grid; grid-template-columns:repeat(auto-fill, minmax(90px,1fr)); gap:10px }
     .thumb{ background:#0f1320; border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; padding:6px; display:grid; place-items:center }
     .thumb img{ width:100%; height:70px; object-fit:contain; display:block }
+
+    /* iPad Desktop Mode Emergency Fix */
+    @media screen and (min-width: 768px) {
+      .wrap {
+        display: flex !important;
+        flex-direction: row !important;
+      }
+
+      .grid2 {
+        display: flex !important;
+        flex-direction: column !important;
+      }
+
+      #overlayThumbs, #propThumbs, .thumbs {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        min-height: 100px !important;
+        background: rgba(255,0,0,0.1) !important;
+        border: 2px dashed red !important;
+      }
+
+      .card {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+      }
+    }
 
     /* Preview dialog */
     dialog#preview{ border:none; padding:0; background:transparent; }
@@ -201,6 +231,11 @@
       </div>
     </div>
   </dialog>
+
+  <!-- iOS Safari Diagnostics and Fixes -->
+  <script src="js/ios-diagnostics.js"></script>
+  <!-- iPad Desktop Mode Fixes -->
+  <script src="js/desktop-mode-fixes.js"></script>
 
   <script>
     // ---------------------------
@@ -602,16 +637,106 @@
     }
 
     // ---------------------------
+    // iOS Safari Compatibility Helpers
+    // ---------------------------
+    function ensureContainersVisible() {
+      // Force visibility of containers that might be hidden on iOS Safari
+      const containers = [overlayThumbs, propThumbs];
+      containers.forEach(container => {
+        if (container) {
+          container.style.display = 'flex';
+          container.style.visibility = 'visible';
+          container.style.opacity = '1';
+          container.style.minHeight = '100px';
+        }
+      });
+
+      // Ensure parent containers are also visible
+      const parentContainers = document.querySelectorAll('.card, .grid2');
+      parentContainers.forEach(container => {
+        container.style.display = 'block';
+        container.style.visibility = 'visible';
+        container.style.opacity = '1';
+      });
+    }
+
+    function debugContainers() {
+      // Debug function to check container visibility
+      console.log('=== Container Debug Info ===');
+      const containers = [
+        { name: 'overlayThumbs', element: overlayThumbs },
+        { name: 'propThumbs', element: propThumbs },
+        { name: 'grid2', element: document.querySelector('.grid2') },
+        { name: 'right card', element: document.querySelector('.wrap > .card') }
+      ];
+
+      containers.forEach(({ name, element }) => {
+        if (element) {
+          const rect = element.getBoundingClientRect();
+          const styles = window.getComputedStyle(element);
+          console.log(`${name}:`, {
+            dimensions: `${rect.width}x${rect.height}`,
+            position: `${rect.left},${rect.top}`,
+            display: styles.display,
+            visibility: styles.visibility,
+            opacity: styles.opacity
+          });
+        } else {
+          console.log(`${name}: NOT FOUND`);
+        }
+      });
+    }
+
+    // ---------------------------
     // Boot
     // ---------------------------
     function init(){
+      console.log('Initializing photobooth...');
+
+      // Ensure containers are visible (iOS Safari fix)
+      ensureContainersVisible();
+
       renderOverlayThumbs();
       renderPropThumbs();
       updateMirrorUI();
-      stage.style.aspectRatio = currentAspect.replace(':',' / ');
+
+      // Fallback for aspect-ratio property
+      if (stage) {
+        if (CSS.supports('aspect-ratio', '3 / 4')) {
+          stage.style.aspectRatio = currentAspect.replace(':',' / ');
+        } else {
+          // Fallback for older browsers
+          const [w, h] = currentAspect.split(':');
+          const ratio = parseInt(h) / parseInt(w);
+          stage.style.paddingBottom = `${ratio * 100}%`;
+          stage.style.height = '0';
+          stage.style.position = 'relative';
+        }
+      }
+
       startCamera();
+
+      // Debug containers after initialization
+      setTimeout(() => {
+        debugContainers();
+        ensureContainersVisible(); // Double-check visibility
+      }, 1000);
+
+      console.log('Photobooth initialization complete');
     }
+
+    // Multiple initialization methods for better compatibility
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+
     window.addEventListener('pageshow', init, { once:true });
+
+    // Expose debug function globally for testing
+    window.debugPhotobooth = debugContainers;
+    window.fixContainers = ensureContainersVisible;
     window.addEventListener('beforeunload', stopCamera);
   </script>
 </body>
