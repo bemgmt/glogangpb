@@ -58,7 +58,7 @@
       position:relative;
       border-radius:18px; overflow:hidden;
       background:#0b0f16; border:1px solid rgba(255,255,255,.08);
-      aspect-ratio: 3 / 4; /* typical iPad front cam; adjust via selector below if you want */
+      aspect-ratio: 9 / 16; /* default to 9:16 for social media */
       max-height: 72vh;
     }
     .stage video{
@@ -102,11 +102,13 @@
     .thumb{ background:#0f1320; border:1px solid rgba(255,255,255,.08); border-radius:12px; overflow:hidden; padding:6px; display:grid; place-items:center }
     .thumb img{ width:100%; height:70px; object-fit:contain; display:block }
 
-    /* iPad Desktop Mode Emergency Fix */
+    /* iPad Desktop Mode Fix - Clean Version */
     @media screen and (min-width: 768px) {
       .wrap {
         display: flex !important;
         flex-direction: row !important;
+        overflow-y: auto !important;
+        max-height: 100vh !important;
       }
 
       .grid2 {
@@ -118,8 +120,6 @@
         display: flex !important;
         flex-wrap: wrap !important;
         min-height: 100px !important;
-        background: rgba(255,0,0,0.1) !important;
-        border: 2px dashed red !important;
       }
 
       .card {
@@ -127,6 +127,17 @@
         visibility: visible !important;
         opacity: 1 !important;
       }
+    }
+
+    /* Scrolling support for long pages */
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    .wrap {
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
 
     /* Preview dialog */
@@ -168,14 +179,14 @@
           <button class="btn accent" id="captureBtn">Capture</button>
           <button class="btn" id="switchBtn">Switch Camera</button>
           <button class="btn" id="mirrorBtn">Mirror: On</button>
-          <span class="pill" id="aspectPill">Aspect: 3:4</span>
+          <span class="pill" id="aspectPill">Aspect: 9:16</span>
         </div>
         <div class="row">
           <label class="btn ghost" for="aspectSel">Aspect</label>
           <select id="aspectSel" class="btn ghost" style="appearance:none; padding-right:24px;">
-            <option value="3:4" selected>3:4 (portrait)</option>
+            <option value="3:4">3:4 (portrait)</option>
             <option value="1:1">1:1 (square)</option>
-            <option value="9:16">9:16 (portrait)</option>
+            <option value="9:16" selected>9:16 (portrait)</option>
           </select>
           <span class="note">Use mirror for selfie-style preview; capture honors mirror setting.</span>
         </div>
@@ -242,14 +253,19 @@
     // Config: add your presets
     // ---------------------------
     const PRESET_OVERLAYS = [
-      { name:'GG Frame', src:'img/overlays/gg_frame.png' },
-      { name:'Drip',     src:'img/overlays/drip.png' },
-      { name:'Starburst',src:'img/overlays/starburst.png' },
+      { name:'GLO GANG Frame', src:'img/overlays/gg_frame.png' },
+      { name:'Drip Effect',     src:'img/overlays/drip.png' },
+      { name:'Starburst',       src:'img/overlays/starburst.png' },
+      { name:'Neon Glow',       src:'img/overlays/neon_glow.png' },
+      { name:'VIP Border',      src:'img/overlays/vip_border.png' },
     ];
     const PRESET_PROPS = [
-      { name:'Sunglasses', src:'img/props/sunglasses.png' },
-      { name:'Crown',      src:'img/props/crown.png' },
-      { name:'Chain',      src:'img/props/chain.png' },
+      { name:'Cool Shades',    src:'img/props/sunglasses.png' },
+      { name:'Gold Crown',     src:'img/props/crown.png' },
+      { name:'Bling Chain',    src:'img/props/chain.png' },
+      { name:'Diamond Grill',  src:'img/props/grill.png' },
+      { name:'Money Stack',    src:'img/props/money.png' },
+      { name:'Mic Drop',       src:'img/props/microphone.png' },
     ];
 
     // ---------------------------
@@ -287,7 +303,7 @@
     let stream = null;
     let facingMode = 'user';       // 'user' (front) | 'environment' (back)
     let mirror = true;             // preview and capture mirrored?
-    let currentAspect = '3:4';     // '3:4' | '1:1' | '9:16'
+    let currentAspect = '9:16';     // '3:4' | '1:1' | '9:16'
 
     async function startCamera(){
       stopCamera();
