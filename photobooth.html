@@ -70,6 +70,11 @@
     .overlay-img{
       position:absolute; inset:0; width:100%; height:100%; object-fit:cover; pointer-events:none;
     }
+    /* Face Filters overlay canvas */
+    #face-filters-canvas.overlay-canvas{
+      position:absolute; inset:0; width:100%; height:100%; pointer-events:none;
+      display:block;
+    }
     .stickers{
       position:absolute; inset:0; touch-action:none;
     }
@@ -171,6 +176,7 @@
     <section class="stage-card">
       <div class="stage mirror-on" id="stage">
         <video id="cam" playsinline muted></video>
+        <canvas id="face-filters-canvas" class="overlay-canvas"></canvas>
         <img id="overlayImg" class="overlay-img" alt="" />
         <div id="stickers" class="stickers"></div>
         <div id="countdown" class="countdown">3</div>
@@ -244,6 +250,15 @@
       </div>
     </div>
   </dialog>
+  <!-- Optional THREE globals for Face Filters (renderer auto-falls back if absent) -->
+  <script src="https://unpkg.com/three@0.160.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.160.0/examples/js/loaders/GLTFLoader.js"></script>
+
+  <!-- Face Filters scaffolding -->
+  <script src="face-filters/tracker.js"></script>
+  <script src="face-filters/renderer.js"></script>
+  <script src="face-filters/index.js"></script>
+
 
   <!-- iOS Safari Diagnostics and Fixes -->
   <script src="js/ios-diagnostics.js"></script>
@@ -288,6 +303,25 @@
     const mirrorBtn = $('#mirrorBtn');
     const aspectSel = $('#aspectSel');
     const aspectPill = $('#aspectPill');
+    // Face Filters
+    const faceFiltersCanvas = document.getElementById('face-filters-canvas');
+    let faceFilters = null;
+    let faceFiltersReady = false;
+    async function initFaceFilters(){
+      try{
+        if (!window.FaceFilters || !faceFiltersCanvas) return;
+        if (faceFiltersReady) return;
+        faceFilters = new FaceFilters();
+        const ok = await faceFilters.init({ videoEl: video, canvasEl: faceFiltersCanvas });
+        if (ok){
+          await faceFilters.setFilter('public/filters/glo_face.glb');
+          await faceFilters.enable();
+          faceFiltersReady = true;
+          console.log('Face Filters enabled');
+        }
+      }catch(e){ console.warn('Face Filters init failed', e); }
+    }
+
     const overlayThumbs = $('#overlayThumbs');
     const overlayFile = $('#overlayFile');
     const overlayNone = $('#overlayNone');
@@ -332,6 +366,7 @@
     function stopCamera(){
       if (stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
       video.srcObject = null;
+      try{ if (faceFilters){ faceFilters.disable(); faceFilters.destroy(); faceFilters=null; faceFiltersReady=false; } }catch(e){ /* ignore */ }
     }
     switchBtn.addEventListener('click', async ()=>{
       facingMode = (facingMode==='user') ? 'environment' : 'user';
@@ -704,6 +739,9 @@
             opacity: styles.opacity
           });
         } else {
+      // Initialize Face Filters when video starts playing
+      video.addEventListener('playing', ()=>{ setTimeout(initFaceFilters, 50); }, { once:true });
+
           console.log(`${name}: NOT FOUND`);
         }
       });

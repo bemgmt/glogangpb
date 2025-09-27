@@ -133,7 +133,11 @@
     renderFrame(pose){
       try{
         if(this._usingThree && this._renderer && this._scene && this._camera){
-          // TODO: Map pose to this._root transform (position/quaternion)
+          // Basic mapping: if pose has Euler angles (pitch,yaw,roll), apply to root
+          if (pose && pose.head && this._root){
+            const { pitch=0, yaw=0, roll=0 } = pose.head;
+            this._root.rotation.set(pitch, yaw, roll);
+          }
           this._renderer.render(this._scene, this._camera);
           return;
         }

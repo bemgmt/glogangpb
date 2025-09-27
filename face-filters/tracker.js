@@ -87,6 +87,25 @@
       }catch(err){ U.logError('destroy failed', err); }
     }
 
+    // Minimal head pose estimation from landmarks (heuristic, image space)
+    _estimateHead(lm, vw, vh){
+      // Use FaceMesh-like indices: 33 (left eye outer), 263 (right eye outer), 1 (nose tip)
+      const L = lm[33], R = lm[263], N = lm[1] || {x:0.5,y:0.5};
+      if(!L || !R){ return { position:{x:0,y:0,z:0}, pitch:0, yaw:0, roll:0 }; }
+      const dx = (R.x - L.x); const dy = (R.y - L.y);
+      const roll = Math.atan2(dy, dx); // in radians
+      // Yaw approximation: nose offset from mid-eye x
+      const midX = (L.x + R.x)/2;
+      const yaw = (midX - N.x) * 2.0; // scale factor heuristic
+      // Pitch approximation: vertical nose vs mid-eye
+      const midY = (L.y + R.y)/2;
+      const pitch = (N.y - midY) * 2.0; // scale heuristic
+      // Center position normalized
+      const cx = (midX - 0.5);
+      const cy = (midY - 0.5);
+      return { position:{ x: cx, y: cy, z: 0 }, pitch, yaw, roll };
+    }
+
     _tick(videoEl){
       if(!this._running) return;
       this._raf = requestAnimationFrame(()=>this._tick(videoEl));
@@ -96,7 +115,8 @@
           const res = this._landmarker.detectForVideo(videoEl, ts);
           if(res && Array.isArray(res.faceLandmarks) && res.faceLandmarks.length){
             const lm = res.faceLandmarks[0];
-            const pose = { landmarks: lm, timestamp: Date.now() };
+            const head = this._estimateHead(lm, videoEl.videoWidth, videoEl.videoHeight);
+            const pose = { head, landmarks: lm, timestamp: Date.now() };
             this._onPose?.(pose);
           } else {
             this._onPose?.(null);
