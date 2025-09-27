@@ -7,6 +7,11 @@
     showToast: (msg)=>console.log('[Toast]', msg)
   };
 
+  const DEFAULTS = {
+    wasmBase: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm',
+    modelURL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+  };
+
   class FaceTracker {
     constructor(){
       this._running = false;
@@ -14,22 +19,42 @@
       this._tick = this._tick.bind(this);
       this._raf = 0;
       this._provider = 'placeholder';
-      this._mp = null; // MediaPipe namespace (if present globally)
+      this._mp = null; // MediaPipe namespace
       this._landmarker = null;
+      this._lastTs = 0;
+    }
+
+    _injectScript(src){
+      return new Promise((resolve,reject)=>{
+        const s = document.createElement('script'); s.src = src; s.async = true;
+        s.onload = ()=>resolve(true); s.onerror = ()=>reject(new Error('load failed: '+src));
+        document.head.appendChild(s);
+      });
+    }
+
+    async _ensureMediaPipe(){
+      if(typeof window !== 'undefined' && window.FaceLandmarker && window.FilesetResolver) return true;
+      try{
+        await this._injectScript('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js');
+        return !!(window.FaceLandmarker && window.FilesetResolver);
+      }catch(e){ U.logError('Failed to load MediaPipe bundle', e); return false; }
     }
 
     async init(){
       try{
-        // Begin optional MediaPipe wiring if available globally (browser script include)
-        // This avoids bundling and keeps graceful fallback.
-        if(typeof window !== 'undefined' && window.FaceLandmarker && window.FilesetResolver){
-          this._provider = 'mediapipe-global';
-          this._mp = { FaceLandmarker: window.FaceLandmarker, FilesetResolver: window.FilesetResolver };
-          U.log('MediaPipe globals detected; tracker will attempt to use them.');
-          // TODO: actually instantiate with models and options
-        } else {
-          U.log('MediaPipe not found; running placeholder mode.');
-        }
+        const ok = await this._ensureMediaPipe();
+        if(!ok){ U.log('MediaPipe not available; tracker in placeholder mode'); return true; }
+        this._provider = 'mediapipe-cdn';
+        this._mp = { FaceLandmarker: window.FaceLandmarker, FilesetResolver: window.FilesetResolver };
+
+        const fileset = await this._mp.FilesetResolver.forVisionTasks(DEFAULTS.wasmBase);
+        // Create landmarker
+        this._landmarker = await this._mp.FaceLandmarker.createFromOptions(fileset, {
+          baseOptions: { modelAssetPath: DEFAULTS.modelURL },
+          runningMode: 'VIDEO',
+          numFaces: 1
+        });
+        U.log('MediaPipe FaceLandmarker initialized');
         return true;
       }catch(err){ U.logError('init failed', err); return false; }
     }
@@ -56,7 +81,7 @@
     async destroy(){
       try{
         await this.stop();
-        // TODO: release MediaPipe resources
+        this._landmarker?.close?.();
         this._landmarker = null; this._mp = null;
         U.log('FaceTracker destroyed');
       }catch(err){ U.logError('destroy failed', err); }
@@ -66,9 +91,19 @@
       if(!this._running) return;
       this._raf = requestAnimationFrame(()=>this._tick(videoEl));
       try{
-        // TODO: If mediapipe available, run landmarker on video frame and emit pose
-        const fakePose = null; // placeholder
-        if(this._onPose) this._onPose(fakePose);
+        if(this._landmarker && videoEl && videoEl.readyState >= 2){
+          const ts = performance.now();
+          const res = this._landmarker.detectForVideo(videoEl, ts);
+          if(res && Array.isArray(res.faceLandmarks) && res.faceLandmarks.length){
+            const lm = res.faceLandmarks[0];
+            const pose = { landmarks: lm, timestamp: Date.now() };
+            this._onPose?.(pose);
+          } else {
+            this._onPose?.(null);
+          }
+        } else {
+          this._onPose?.(null);
+        }
       }catch(err){ U.logError('tick error', err); }
     }
   }

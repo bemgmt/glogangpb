@@ -20,6 +20,7 @@
       this._scene = null;
       this._camera = null;
       this._root = null; // anchor root for face
+      this._currentModel = null;
     }
 
     async init(canvasEl){
@@ -46,12 +47,12 @@
 
           // tiny debug cube so we see something rendered
           const cube = new Mesh(new BoxGeometry(0.05,0.05,0.05), new MeshBasicMaterial({ color: 0xffd100 }));
+          cube.name = 'debug-cube';
           this._root.add(cube);
 
           this._usingThree = true;
           U.log('FaceRenderer init: using Three.js (global)');
 
-          // handle resize
           const onResize = ()=>{
             const w = this.canvas.clientWidth || this.canvas.width;
             const h = this.canvas.clientHeight || this.canvas.height;
@@ -70,13 +71,58 @@
       }catch(err){ U.logError('init failed', err); return false; }
     }
 
+    _ensureGLTFLoader(){
+      return new Promise((resolve)=>{
+        if(!this._usingThree || !this._three) return resolve(false);
+        if(this._three.GLTFLoader) return resolve(true);
+        // attempt to load from CDN matching current THREE revision
+        const rev = this._three.REVISION; // e.g., 160
+        const ver = `0.${rev}.0`;
+        const src = `https://unpkg.com/three@${ver}/examples/js/loaders/GLTFLoader.js`;
+        const s = document.createElement('script'); s.src = src; s.async = true;
+        s.onload = ()=> resolve(!!this._three.GLTFLoader);
+        s.onerror = ()=> { U.logError('Failed to load GLTFLoader from CDN'); resolve(false); };
+        document.head.appendChild(s);
+      });
+    }
+
+    _disposeObject(obj){
+      if(!obj) return;
+      obj.traverse((n)=>{
+        if(n.geometry){ n.geometry.dispose?.(); }
+        if(n.material){
+          if(Array.isArray(n.material)) n.material.forEach(m=>m.dispose?.());
+          else n.material.dispose?.();
+        }
+      });
+      obj.parent?.remove(obj);
+    }
+
     async loadFilter(glbPath){
       try{
         this._filterPath = glbPath;
-        if(this._usingThree && this._three && this._three.GLTFLoader){
-          // If GLTFLoader is available globally, we could load now (optional)
-          U.log('Three.js GLTFLoader detected, ready to load:', glbPath);
-          // TODO: implement model loading and attach to this._root
+        if(this._usingThree && this._three){
+          const ok = await this._ensureGLTFLoader();
+          if(ok){
+            try{
+              const loader = new this._three.GLTFLoader();
+              loader.load(glbPath, (gltf)=>{
+                // remove previous
+                if(this._currentModel){ this._disposeObject(this._currentModel); this._currentModel = null; }
+                // remove debug cube if present
+                const dbg = this._root.getObjectByName('debug-cube'); if(dbg) this._root.remove(dbg);
+                this._currentModel = gltf.scene;
+                this._currentModel.scale.set(0.8,0.8,0.8);
+                this._root.add(this._currentModel);
+                U.showToast('Face filter model loaded');
+              }, undefined, (e)=>{
+                U.logError('GLB load error', e);
+                U.showToast('Failed to load filter model');
+              });
+            }catch(e){ U.logError('GLTFLoader usage failed', e); }
+          } else {
+            U.log('GLTFLoader not available; keeping placeholder');
+          }
         } else {
           U.log('Filter queued (placeholder):', glbPath);
         }
@@ -92,7 +138,6 @@
           return;
         }
         if(!this.ctx) return;
-        // Placeholder: clear + tiny cue
         this.ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
         this.ctx.fillStyle = 'rgba(255,209,0,0.15)';
         this.ctx.fillRect(0,0,20,20);
@@ -101,6 +146,7 @@
 
     async destroy(){
       try{
+        if(this._currentModel){ this._disposeObject(this._currentModel); this._currentModel = null; }
         if(this._renderer) { this._renderer.dispose?.(); }
         this.canvas = null; this.ctx = null; this._filterPath = null;
         this._renderer = null; this._scene = null; this._camera = null; this._root = null; this._three = null;
