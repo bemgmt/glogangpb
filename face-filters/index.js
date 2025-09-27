@@ -83,8 +83,14 @@
 
     async setFilter(glbPath){
       try{
+        if(!glbPath){
+          this.currentFilter = null;
+          if(this.renderer && this.renderer.clearFilter) await this.renderer.clearFilter();
+          U.showToast('Filter cleared');
+          return true;
+        }
         this.currentFilter = glbPath;
-        if(this.renderer && glbPath){ await this.renderer.loadFilter(glbPath); }
+        if(this.renderer){ await this.renderer.loadFilter(glbPath); }
         U.showToast('Filter set');
         return true;
       }catch(err){ U.logError('setFilter failed', err); return false; }

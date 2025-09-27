@@ -98,6 +98,27 @@
       obj.parent?.remove(obj);
     }
 
+	    _ensureDebugCube(){
+	      if(!this._usingThree || !this._root || !this._three) return;
+	      const existing = this._root.getObjectByName('debug-cube');
+	      if(existing) return;
+	      const { BoxGeometry, MeshBasicMaterial, Mesh } = this._three;
+	      const cube = new Mesh(new BoxGeometry(0.05,0.05,0.05), new MeshBasicMaterial({ color: 0xffd100 }));
+	      cube.name = 'debug-cube';
+	      this._root.add(cube);
+	    }
+
+	    clearFilter(){
+	      try{
+	        if(this._currentModel){ this._disposeObject(this._currentModel); this._currentModel = null; }
+	        this._filterPath = null;
+	        this._ensureDebugCube();
+	        U.showToast('Face filter cleared');
+	        return true;
+	      }catch(err){ U.logError('clearFilter failed', err); return false; }
+	    }
+
+
     async loadFilter(glbPath){
       try{
         this._filterPath = glbPath;

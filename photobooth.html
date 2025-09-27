@@ -201,8 +201,23 @@
       </div>
     </section>
 
+
     <!-- Right: Overlays & Props -->
     <section class="card">
+          <!-- Face Filters -->
+          <div class="card">
+            <h3>Face Filters</h3>
+            <p class="muted">Choose a 3D filter (.glb) to overlay.</p>
+            <div class="row" style="margin-bottom:8px">
+              <select id="filterSel" class="btn ghost" style="appearance:none; padding-right:24px;">
+                <option value="">None</option>
+                <option value="public/filters/glo_face.glb">Glo Face</option>
+              </select>
+              <label class="btn" for="filterFile">Load .glb</label>
+              <input id="filterFile" type="file" accept=".glb,model/gltf-binary" style="display:none" />
+            </div>
+          </div>
+
       <div class="grid2">
         <!-- Overlays -->
         <div class="card">
@@ -306,6 +321,22 @@
     // Face Filters
     const faceFiltersCanvas = document.getElementById('face-filters-canvas');
     let faceFilters = null;
+
+    // Face Filters UI wiring
+    const filterSel = $('#filterSel');
+    const filterFile = $('#filterFile');
+    filterSel?.addEventListener('change', async ()=>{
+      try{ if(!faceFilters) return; const v = filterSel.value; await faceFilters.setFilter(v || null); }catch(e){}
+    });
+    filterFile?.addEventListener('change', async (e)=>{
+      try{
+        const f = e.target.files?.[0]; if(!f || !faceFilters) return;
+        const url = URL.createObjectURL(f);
+        await faceFilters.setFilter(url);
+        filterSel.value = '';
+      }finally{ filterFile.value=''; }
+    });
+
     let faceFiltersReady = false;
     async function initFaceFilters(){
       try{

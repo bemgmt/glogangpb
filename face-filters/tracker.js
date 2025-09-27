@@ -8,7 +8,7 @@
   };
 
   const DEFAULTS = {
-    wasmBase: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/wasm',
+    wasmBase: 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.7/wasm',
     modelURL: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
   };
 
@@ -22,6 +22,9 @@
       this._mp = null; // MediaPipe namespace
       this._landmarker = null;
       this._lastTs = 0;
+      // smoothing state
+      this._smooth = { yaw:0, pitch:0, roll:0, init:false };
+      this._alpha = 0.15; // low-pass filter factor
     }
 
     _injectScript(src){
@@ -35,7 +38,7 @@
     async _ensureMediaPipe(){
       if(typeof window !== 'undefined' && window.FaceLandmarker && window.FilesetResolver) return true;
       try{
-        await this._injectScript('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@latest/vision_bundle.js');
+        await this._injectScript('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.7/vision_bundle.js');
         return !!(window.FaceLandmarker && window.FilesetResolver);
       }catch(e){ U.logError('Failed to load MediaPipe bundle', e); return false; }
     }
@@ -93,17 +96,32 @@
       const L = lm[33], R = lm[263], N = lm[1] || {x:0.5,y:0.5};
       if(!L || !R){ return { position:{x:0,y:0,z:0}, pitch:0, yaw:0, roll:0 }; }
       const dx = (R.x - L.x); const dy = (R.y - L.y);
+      const d = Math.hypot(dx, dy) + 1e-6;
       const roll = Math.atan2(dy, dx); // in radians
-      // Yaw approximation: nose offset from mid-eye x
+      // Yaw approximation: nose offset from mid-eye x, normalized by eye distance
       const midX = (L.x + R.x)/2;
-      const yaw = (midX - N.x) * 2.0; // scale factor heuristic
-      // Pitch approximation: vertical nose vs mid-eye
+      let yaw = ((midX - N.x) / d) * 1.8;
+      // Pitch approximation: vertical nose vs mid-eye, normalized
       const midY = (L.y + R.y)/2;
-      const pitch = (N.y - midY) * 2.0; // scale heuristic
-      // Center position normalized
+      let pitch = ((N.y - midY) / d) * 1.8;
+      // Clamp for stability
+      const clamp = (v, min, max)=> Math.max(min, Math.min(max, v));
+      yaw = clamp(yaw, -0.9, 0.9);
+      pitch = clamp(pitch, -0.9, 0.9);
+      // Center position normalized (rough)
       const cx = (midX - 0.5);
       const cy = (midY - 0.5);
       return { position:{ x: cx, y: cy, z: 0 }, pitch, yaw, roll };
+    }
+
+    _smoothHead(head){
+      if(!head) return null;
+      if(!this._smooth.init){ this._smooth = { yaw:head.yaw, pitch:head.pitch, roll:head.roll, init:true }; return { ...head }; }
+      const a = this._alpha;
+      this._smooth.yaw   = this._smooth.yaw   + a*(head.yaw   - this._smooth.yaw);
+      this._smooth.pitch = this._smooth.pitch + a*(head.pitch - this._smooth.pitch);
+      this._smooth.roll  = this._smooth.roll  + a*(head.roll  - this._smooth.roll);
+      return { ...head, yaw:this._smooth.yaw, pitch:this._smooth.pitch, roll:this._smooth.roll };
     }
 
     _tick(videoEl){
@@ -115,7 +133,8 @@
           const res = this._landmarker.detectForVideo(videoEl, ts);
           if(res && Array.isArray(res.faceLandmarks) && res.faceLandmarks.length){
             const lm = res.faceLandmarks[0];
-            const head = this._estimateHead(lm, videoEl.videoWidth, videoEl.videoHeight);
+            let head = this._estimateHead(lm, videoEl.videoWidth, videoEl.videoHeight);
+            head = this._smoothHead(head);
             const pose = { head, landmarks: lm, timestamp: Date.now() };
             this._onPose?.(pose);
           } else {
