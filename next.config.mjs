@@ -8,6 +8,14 @@ const nextConfig = {
     NEXT_PUBLIC_APP_VERSION:
       process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 8) ||
       Date.now().toString(36),
+    NEXT_PUBLIC_SANITY_PROJECT_ID:
+      process.env.NEXT_PUBLIC_SANITY_PROJECT_ID || 'placeholder-sanity-id',
+    NEXT_PUBLIC_SANITY_DATASET:
+      process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
+    NEXT_PUBLIC_SUPABASE_URL:
+      process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder-project.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY:
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key',
   },
   typescript: {
     ignoreBuildErrors: true,
