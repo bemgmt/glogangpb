@@ -5,15 +5,35 @@ import { createClient } from '@supabase/supabase-js'
 // ---------------------------------------------------------------------------
 // Clients
 // ---------------------------------------------------------------------------
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: '2025-04-30.basil',
-})
+let stripeInstance: Stripe | null = null
+let supabaseInstance: ReturnType<typeof createClient> | null = null
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } },
-)
+function getStripe(): Stripe {
+  if (!stripeInstance) {
+    const key = process.env.STRIPE_SECRET_KEY
+    if (!key) {
+      throw new Error('STRIPE_SECRET_KEY is missing')
+    }
+    stripeInstance = new Stripe(key, {
+      apiVersion: '2025-04-30.basil',
+    })
+  }
+  return stripeInstance
+}
+
+function getSupabase() {
+  if (!supabaseInstance) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!url || !key) {
+      throw new Error('Supabase environment variables are missing')
+    }
+    supabaseInstance = createClient(url, key, {
+      auth: { persistSession: false },
+    })
+  }
+  return supabaseInstance
+}
 
 // ---------------------------------------------------------------------------
 // Tier mapping: Stripe Price ID → membership tier name
@@ -42,7 +62,7 @@ export async function POST(request: Request) {
   let event: Stripe.Event
 
   try {
-    event = stripe.webhooks.constructEvent(
+    event = getStripe().webhooks.constructEvent(
       body,
       signature,
       process.env.STRIPE_WEBHOOK_SECRET!,
@@ -128,14 +148,14 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
   }
 
   // Determine tier from the line items / price
-  const lineItems = await stripe.checkout.sessions.listLineItems(session.id, {
+  const lineItems = await getStripe().checkout.sessions.listLineItems(session.id, {
     limit: 5,
   })
 
   const priceId = lineItems.data[0]?.price?.id
   const tier = priceId ? (PRICE_TO_TIER[priceId] ?? 'glo-fan') : 'glo-fan'
 
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('profiles')
     .update({
       membership_tier: tier,
@@ -165,10 +185,10 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
   const tier = priceId ? (PRICE_TO_TIER[priceId] ?? 'glo-fan') : 'glo-fan'
 
   // Look up customer email
-  const customer = await stripe.customers.retrieve(customerId)
+  const customer = await getStripe().customers.retrieve(customerId)
   if (customer.deleted || !('email' in customer) || !customer.email) return
 
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('profiles')
     .update({
       membership_tier: membershipStatus === 'active' ? tier : 'free',
@@ -185,10 +205,10 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
   const customerId = subscription.customer as string
 
-  const customer = await stripe.customers.retrieve(customerId)
+  const customer = await getStripe().customers.retrieve(customerId)
   if (customer.deleted || !('email' in customer) || !customer.email) return
 
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('profiles')
     .update({
       membership_tier: 'free',
