@@ -1,0 +1,272 @@
+/**
+ * iOS Safari Compatibility Fixes
+ * Specific fixes for iPad and iPhone Safari rendering issues
+ */
+
+/* Fix for CSS Grid issues on Safari iOS */
+.wrap {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  gap: 16px;
+  padding: 16px;
+  /* Fallback height calculation for Safari iOS */
+  height: -webkit-calc(100vh - 74px);
+  height: -moz-calc(100vh - 74px);
+  height: calc(100vh - 74px);
+  min-height: 600px; /* Ensure minimum height */
+}
+
+/* Safari iOS Grid fallback */
+@supports not (display: grid) {
+  .wrap {
+    display: -webkit-flex;
+    display: flex;
+  }
+  
+  .wrap > .stage-card {
+    -webkit-flex: 1.2;
+    -ms-flex: 1.2;
+    flex: 1.2;
+  }
+  
+  .wrap > .card {
+    -webkit-flex: 0.8;
+    -ms-flex: 0.8;
+    flex: 0.8;
+  }
+}
+
+/* Fix grid2 layout for Safari iOS */
+.grid2 {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Safari iOS specific media queries */
+@media screen and (max-width: 1080px) {
+  .wrap {
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    height: auto;
+    overflow: visible;
+  }
+  
+  .wrap > .stage-card,
+  .wrap > .card {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
+/* iPad specific fixes */
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+  .grid2 {
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+  }
+  
+  .grid2 > .card {
+    -webkit-flex: 1;
+    -ms-flex: 1;
+    flex: 1;
+  }
+}
+
+/* Fix for inset property not supported in older Safari */
+.overlay-img,
+.stickers,
+.countdown {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  /* Fallback for inset: 0 */
+}
+
+/* Fix place-items for Safari iOS */
+.countdown {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+}
+
+/* Fix thumbs grid for Safari iOS */
+.thumbs {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.thumb {
+  -webkit-flex: 0 0 90px;
+  -ms-flex: 0 0 90px;
+  flex: 0 0 90px;
+  min-width: 90px;
+  height: 90px;
+}
+
+/* Safari iOS viewport fixes */
+@supports (-webkit-touch-callout: none) {
+  /* iOS Safari specific styles */
+  .wrap {
+    height: -webkit-calc(100vh - 74px - env(safe-area-inset-bottom));
+    height: calc(100vh - 74px - env(safe-area-inset-bottom));
+  }
+  
+  /* Fix for Safari iOS address bar height changes */
+  @media screen and (max-height: 700px) {
+    .wrap {
+      height: auto;
+      min-height: 500px;
+    }
+  }
+}
+
+/* Ensure containers are visible */
+.card {
+  min-height: 200px;
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Debug styles for troubleshooting (remove in production) */
+.debug .card {
+  border: 2px solid red !important;
+  background: rgba(255, 0, 0, 0.1) !important;
+}
+
+.debug .grid2 {
+  border: 2px solid blue !important;
+  background: rgba(0, 0, 255, 0.1) !important;
+}
+
+.debug .thumbs {
+  border: 2px solid green !important;
+  background: rgba(0, 255, 0, 0.1) !important;
+  min-height: 100px !important;
+}
+
+/* Force visibility for debugging */
+.force-visible {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 999 !important;
+}
+
+/* iOS Safari touch improvements */
+.btn,
+.thumb {
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0.1);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Ensure proper stacking context */
+.stage-card {
+  position: relative;
+  z-index: 1;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+}
+
+/* Fix for potential transform issues */
+.stage video {
+  -webkit-transform: scaleX(-1);
+  -moz-transform: scaleX(-1);
+  -ms-transform: scaleX(-1);
+  -o-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+
+.stage.mirror-off video {
+  -webkit-transform: none;
+  -moz-transform: none;
+  -ms-transform: none;
+  -o-transform: none;
+  transform: none;
+}
+
+/* Ensure proper box-sizing */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* iOS Safari scrolling fixes */
+.wrap {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Prevent zoom on input focus (iOS Safari) */
+input[type="file"] {
+  font-size: 16px;
+}
+
+/* Fix for potential CSS custom property issues */
+:root {
+  --bg: #0f1115;
+  --panel: #171a21;
+  --muted: #8b93a7;
+  --text: #f6f7fb;
+  --accent: #ffd100;
+  --ink: #121212;
+  --ok: #2ecc71;
+  --warn: #ff5a5f;
+  --ring: rgba(255, 209, 0, 0.35);
+  --stroke: rgba(0, 0, 0, 0.35);
+}
+
+/* Ensure variables work on older Safari */
+.card {
+  background: #171a21; /* Fallback */
+  background: var(--panel);
+  color: #f6f7fb; /* Fallback */
+  color: var(--text);
+}
+
+.muted {
+  color: #8b93a7; /* Fallback */
+  color: var(--muted);
+}
