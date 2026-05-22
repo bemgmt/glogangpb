@@ -38,6 +38,36 @@ export async function middleware(request: NextRequest) {
       loginUrl.searchParams.set('redirectTo', pathname)
       return NextResponse.redirect(loginUrl)
     }
+
+    // Tier Gatekeeping
+    if (pathname.startsWith('/member/vault') || pathname.startsWith('/member/early-access')) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('current_tier, role')
+        .eq('id', user.id)
+        .single()
+      
+      const tier = profile?.current_tier || 'the_block'
+      const role = profile?.role || 'user'
+      
+      if (role !== 'admin') {
+        if (pathname.startsWith('/member/vault') && tier !== 'glory_circle') {
+          return NextResponse.redirect(new URL('/member/dashboard?error=tier_required', request.url))
+        }
+        if (pathname.startsWith('/member/early-access') && tier !== 'frontline' && tier !== 'glory_circle') {
+          return NextResponse.redirect(new URL('/member/dashboard?error=tier_required', request.url))
+        }
+      }
+      
+      // Log vault access
+      if (pathname.startsWith('/member/vault')) {
+        await supabase.from('vault_access_logs').insert({
+          profile_id: user.id,
+          ip_address: request.headers.get('x-forwarded-for') || 'unknown',
+          action_taken: 'page_view'
+        })
+      }
+    }
   }
 
   // ─── /admin/* — requires role = 'admin' ─────────────────────────

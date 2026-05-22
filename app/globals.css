@@ -21,6 +21,14 @@
   --glow-gold:   rgba(255, 209, 0, 0.18);
   --glow-red:    rgba(225, 38, 38, 0.15);
 
+  /* Tier Accents */
+  --tier-the-block: #9ca3af;
+  --tier-frontline: #3b82f6;
+  --tier-glory-circle: #a855f7;
+  --tier-the-block-glow: rgba(156, 163, 175, 0.2);
+  --tier-frontline-glow: rgba(59, 130, 246, 0.2);
+  --tier-glory-circle-glow: rgba(168, 85, 247, 0.2);
+
   /* Text */
   --text:        #f6f7fb;
   --text-muted:  #8b93a7;

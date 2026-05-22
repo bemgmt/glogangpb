@@ -15,7 +15,7 @@ function getStripe(): Stripe {
       throw new Error('STRIPE_SECRET_KEY is missing')
     }
     stripeInstance = new Stripe(key, {
-      apiVersion: '2025-04-30.basil',
+      apiVersion: '2025-02-24.acacia',
     })
   }
   return stripeInstance
@@ -157,6 +157,7 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session) {
 
   const { error } = await getSupabase()
     .from('profiles')
+    // @ts-ignore
     .update({
       membership_tier: tier,
       membership_status: 'active',
@@ -190,6 +191,7 @@ async function handleSubscriptionUpdated(subscription: Stripe.Subscription) {
 
   const { error } = await getSupabase()
     .from('profiles')
+    // @ts-ignore
     .update({
       membership_tier: membershipStatus === 'active' ? tier : 'free',
       membership_status: membershipStatus,
@@ -210,6 +212,7 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription) {
 
   const { error } = await getSupabase()
     .from('profiles')
+    // @ts-ignore
     .update({
       membership_tier: 'free',
       membership_status: 'inactive',

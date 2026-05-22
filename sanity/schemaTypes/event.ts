@@ -24,6 +24,19 @@ export const event = defineType({
       validation: (Rule) => Rule.required(),
     }),
     defineField({
+      name: 'eventType',
+      title: 'Event Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Live Show / Concert', value: 'show' },
+          { title: 'Merch Drop', value: 'drop' },
+          { title: 'Listening Party', value: 'listening_party' }
+        ]
+      },
+      initialValue: 'show'
+    }),
+    defineField({
       name: 'venue',
       title: 'Venue',
       type: 'string',

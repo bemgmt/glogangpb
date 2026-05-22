@@ -95,7 +95,7 @@ export async function POST(request: Request) {
         query_embedding: embedding,
         match_threshold: 0.3,
         match_count: 10,
-      },
+      } as any,
     )
 
     if (searchError) {
@@ -111,7 +111,7 @@ export async function POST(request: Request) {
     await getSupabase().from('search_logs').insert({
       query,
       results_count: searchResults.length,
-    })
+    } as any)
 
     // -----------------------------------------------------------------------
     // 4. Return results

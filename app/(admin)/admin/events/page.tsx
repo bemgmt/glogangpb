@@ -141,7 +141,7 @@ export default async function AdminEventsPage() {
             </tr>
           </thead>
           <tbody>
-            {events.map((event) => (
+            {events.map((event: any) => (
               <tr key={event._id}>
                 <td>
                   <span style={{ fontWeight: 700, fontSize: '1rem' }}>{event.title}</span>

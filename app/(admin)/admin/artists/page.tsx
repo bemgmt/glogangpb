@@ -112,7 +112,7 @@ export default async function AdminArtistsPage() {
             </tr>
           </thead>
           <tbody>
-            {artists.map((artist) => (
+            {artists.map((artist: any) => (
               <tr key={artist._id}>
                 <td>
                   <span style={{ fontWeight: 700, fontSize: '1rem' }}>{artist.name}</span>

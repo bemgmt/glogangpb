@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Settings (Staff)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <style>
+    :root{
+      --bg:#0f1115;
+      --panel:#171a21;
+      --muted:#8b93a7;
+      --text:#f6f7fb;
+      --accent:#ffd100;
+      --accent-ink:#1a1a1a;
+      --danger:#ff5a5f;
+      --ok:#28c76f;
+      --stroke:rgba(0,0,0,.35);
+      --ring:rgba(255,209,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:var(--bg); color:var(--text);
+      font-family: ui-rounded, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      -webkit-font-smoothing:antialiased; padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+    }
+    header{
+      position:sticky; top:0; z-index:3;
+      background:linear-gradient(180deg, rgba(15,17,21,.95), rgba(15,17,21,.65));
+      backdrop-filter: blur(6px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .bar{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      padding:14px 16px;
+    }
+    .brand{font-weight:900; letter-spacing:.3px}
+    .muted{color:var(--muted)}
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:16px;
+      padding:16px;
+    }
+    @media (max-width: 980px){
+      .grid{ grid-template-columns: 1fr; }
+    }
+    .card{
+      background:var(--panel); border:1px solid rgba(255,255,255,.06);
+      border-radius:20px; padding:16px;
+      box-shadow:0 12px 24px var(--stroke);
+    }
+    .card h2{
+      margin:0 0 10px; font-size:20px; letter-spacing:.2px;
+    }
+    .card .desc{margin:0 0 14px; color:var(--muted); font-size:14px}
+    .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+    .spacer{height:10px}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:8px;
+      background:#1e212a; color:var(--text); border:1px solid rgba(255,255,255,.12);
+      border-radius:14px; padding:12px 16px; font-weight:700; text-decoration:none;
+      -webkit-tap-highlight-color:transparent; user-select:none;
+      box-shadow:0 6px 0 #000;
+      transition:transform .06s ease, box-shadow .06s ease, filter .06s ease;
+    }
+    .btn:active{ transform:translateY(2px); box-shadow:0 3px 0 #000 }
+    .btn.ok{ background:var(--ok); color:#07230f; border-color:transparent; }
+    .btn.warn{ background:var(--danger); color:#300; border-color:transparent; }
+    .btn.accent{ background:var(--accent); color:var(--accent-ink); border-color:transparent; }
+    .btn.ghost{ background:transparent; border:1px solid rgba(255,255,255,.14) }
+    label.switch{
+      display:inline-flex; align-items:center; gap:12px; font-weight:700;
+      padding:8px 0;
+    }
+    .switch input{ display:none }
+    .toggle{
+      width:62px; height:36px; border-radius:18px; position:relative;
+      background:#2a2f3a; border:1px solid rgba(255,255,255,.1);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04);
+      transition:background .15s ease;
+    }
+    .dot{
+      position:absolute; top:50%; left:6px; transform:translateY(-50%);
+      width:26px; height:26px; border-radius:50%;
+      background:#fff; box-shadow:0 2px 6px rgba(0,0,0,.4);
+      transition:left .15s ease;
+    }
+    input:checked + .toggle{ background:#ffe37a; border-color:#ffe37a44 }
+    input:checked + .toggle .dot{ left:30px }
+    .field{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+      background:#11151b; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:10px 12px;
+    }
+    .field input, .field select{
+      appearance:none; border:none; outline:none; background:transparent; color:var(--text);
+      font-size:16px; padding:8px 6px; min-width:160px; flex:1;
+    }
+    .pill{
+      padding:6px 10px; border-radius:999px; font-weight:800; font-size:12px;
+      background:#0f1320; border:1px solid rgba(255,255,255,.12); color:var(--muted);
+    }
+    .thumbs{
+      display:grid; grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+      gap:12px; margin-top:12px;
+    }
+    .thumb{
+      background:#0f1320; border:1px solid rgba(255,255,255,.08); border-radius:14px; overflow:hidden; position:relative;
+    }
+    .thumb img{ width:100%; height:120px; object-fit:cover; display:block }
+    .thumb .cap{ padding:8px 10px; font-size:12px; color:var(--muted); display:flex; justify-content:space-between; align-items:center; gap:6px }
+    .thumb .actions{ position:absolute; top:8px; right:8px; display:flex; gap:6px }
+    .thumb .actions .btn{ padding:6px 8px; font-size:12px; box-shadow:none }
+    .divider{ border-top:1px solid rgba(255,255,255,.08); margin:12px 0 }
+    .note{ color:var(--muted); font-size:12px }
+
+    /* Lock screen */
+    .lock{
+      position:fixed; inset:0; background:radial-gradient(1200px 600px at 50% -10%, rgba(255,209,0,.08), transparent), var(--bg);
+      display:grid; place-items:center; z-index:10;
+    }
+    .lock .panel{
+      width:min(92vw, 520px); background:var(--panel); border:1px solid rgba(255,255,255,.08);
+      border-radius:22px; padding:18px; box-shadow:0 16px 40px rgba(0,0,0,.5);
+    }
+    .lock h1{ margin:6px 0 8px; font-size:22px }
+    .pinrow{ display:flex; gap:10px }
+    .pinrow input{
+      width:22%; text-align:center; font-size:28px; font-weight:900;
+      padding:14px 8px; border-radius:16px; border:1px solid rgba(255,255,255,.12);
+      background:#0f1320; color:var(--text);
+    }
+    .ring{ box-shadow:0 0 0 6px var(--ring) }
+    .footer{ display:flex; gap:10px; justify-content:space-between; align-items:center; margin-top:10px }
+    .hint{ color:var(--muted); font-size:12px }
+
+    /* Focus ring for kiosk taps */
+    .btn:focus-visible, input:focus-visible, select:focus-visible{ outline:4px solid var(--ring) }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="bar">
+      <div class="brand">Settings</div>
+      <a href="index.html" class="btn ghost" aria-label="Back to Home">← Back</a>
+    </div>
+  </header>
+
+  <main class="grid" aria-live="polite">
+    <!-- Payments -->
+    <section class="card" style="grid-column: span 12;">
+      <h2>Payments</h2>
+      <p class="desc">Require users to complete payment before continuing.</p>
+      <label class="switch">
+        <input type="checkbox" id="paymentToggle" />
+        <span class="toggle"><span class="dot"></span></span>
+        <span>Payment required</span>
+        <span class="pill" id="paymentStatus">Off</span>
+      </label>
+      <div class="note">Stores <code>payment_enabled</code> in <code>localStorage</code>.</div>
+    </section>
+
+    <!-- Photos -->
+    <section class="card" style="grid-column: span 12;">
+      <h2>Photos</h2>
+      <p class="desc">Open the photo gallery to select images, view them here, share (AirDrop, Bluetooth, etc.), or manage saved photos.</p>
+
+      <div class="row">
+        <label class="btn accent" for="photoPicker">Open Photo Gallery</label>
+        <input id="photoPicker" type="file" accept="image/*" multiple style="display:none" />
+        <button class="btn" id="shareSelectedBtn">Share Selected</button>
+        <button class="btn warn" id="deleteSelectedBtn">Delete Selected (Saved only)</button>
+        <span class="pill" id="photoCount">0 items</span>
+      </div>
+
+      <div class="thumbs" id="thumbs" aria-label="Photo thumbnails"></div>
+      <div class="divider"></div>
+      <div class="note">
+        <strong>Saved</strong> photos live in this browser’s <code>localStorage</code>. Clearing site data will remove them.
+        Photos chosen via <em>Open Photo Gallery</em> appear here for this session and aren’t auto-saved.
+      </div>
+    </section>
+
+    <!-- Credits -->
+    <section class="card" style="grid-column: span 12;">
+      <h2>Account Credits</h2>
+      <p class="desc">Adjust credits for a specific account (e.g., email or member ID).</p>
+      <div class="row">
+        <div class="field" style="flex:1; min-width:260px">
+          <input id="acctId" placeholder="Account ID or Email" autocomplete="off" />
+          <button class="btn" id="loadAcctBtn">Load</button>
+        </div>
+        <div class="field" style="min-width:220px">
+          <strong>Credits:</strong> <span id="creditsValue">0</span>
+        </div>
+      </div>
+      <div class="spacer"></div>
+      <div class="row">
+        <button class="btn" data-delta="1">+1</button>
+        <button class="btn" data-delta="5">+5</button>
+        <button class="btn ghost" data-delta="-1">-1</button>
+        <button class="btn ghost" data-delta="-5">-5</button>
+        <button class="btn ok" id="saveCreditsBtn">Save</button>
+      </div>
+      <div class="divider"></div>
+      <div class="note">Stored as <code>credits:&lt;ACCOUNT_ID&gt;</code> in <code>localStorage</code>.</div>
+    </section>
+
+    <!-- PIN -->
+    <section class="card" style="grid-column: span 12;">
+      <h2>PIN Security</h2>
+      <p class="desc">Change the 4-digit settings PIN (default: <code>1234</code>).</p>
+      <div class="row">
+        <div class="field"><input id="oldPin" inputmode="numeric" maxlength="4" placeholder="Current PIN"></div>
+        <div class="field"><input id="newPin" inputmode="numeric" maxlength="4" placeholder="New PIN (4 digits)"></div>
+        <div class="field"><input id="newPin2" inputmode="numeric" maxlength="4" placeholder="Confirm New PIN"></div>
+        <button class="btn ok" id="savePinBtn">Update PIN</button>
+      </div>
+      <div class="divider"></div>
+      <div class="note">PIN is saved locally on this device as <code>settings_pin</code>.</div>
+    </section>
+  </main>
+
+  <!-- Lock overlay -->
+  <div class="lock" id="lock">
+    <div class="panel">
+      <h1>Enter Staff PIN</h1>
+      <p class="muted" style="margin-top:0">This screen is restricted to authorized employees.</p>
+      <div class="pinrow" id="pinRow">
+        <input type="password" maxlength="1" inputmode="numeric" aria-label="PIN digit 1">
+        <input type="password" maxlength="1" inputmode="numeric" aria-label="PIN digit 2">
+        <input type="password" maxlength="1" inputmode="numeric" aria-label="PIN digit 3">
+        <input type="password" maxlength="1" inputmode="numeric" aria-label="PIN digit 4">
+      </div>
+      <div class="footer">
+        <button class="btn accent" id="unlockBtn">Unlock</button>
+        <div class="hint">Default PIN: <code>1234</code></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image viewer modal -->
+  <dialog id="viewer" style="border:none; padding:0; background:transparent; max-width:95vw;">
+    <div style="background:#0b0f16; border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:10px; box-shadow:0 20px 40px rgba(0,0,0,.7)">
+      <img id="viewerImg" alt="Preview" style="max-width:86vw; max-height:70vh; display:block; border-radius:12px" />
+      <div class="row" style="justify-content:space-between; margin-top:8px">
+        <div class="muted" id="viewerName"></div>
+        <div class="row">
+          <button id="viewerShare" class="btn">Share</button>
+          <button class="btn ghost" id="viewerClose">Close</button>
+        </div>
+      </div>
+    </div>
+  </dialog>
+
+  <script>
+    // ---------- Helpers ----------
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const getPin = () => localStorage.getItem('settings_pin') || '1234';
+    const setPin = (pin) => localStorage.setItem('settings_pin', pin);
+    const getPayment = () => localStorage.getItem('payment_enabled') === 'true';
+    const setPayment = (v) => localStorage.setItem('payment_enabled', v ? 'true' : 'false');
+
+    const getSavedPhotos = () => {
+      try { return JSON.parse(localStorage.getItem('photos') || '[]'); }
+      catch { return []; }
+    };
+    const setSavedPhotos = (arr) => localStorage.setItem('photos', JSON.stringify(arr));
+    const fmtCount = (n) => `${n} item${n===1?'':'s'}`;
+    const dataURLtoFile = (dataURL, filename='photo.png') => {
+      const [meta, b64] = dataURL.split(',');
+      const mime = (meta.match(/data:(.*?);base64/)||[])[1] || 'image/png';
+      const bin = atob(b64); const len = bin.length; const u8 = new Uint8Array(len);
+      for (let i=0;i<len;i++) u8[i] = bin.charCodeAt(i);
+      return new File([u8], filename, { type: mime });
+    };
+
+    // ---------- PIN Lock ----------
+    (function pinLock(){
+      const lock = $('#lock');
+      const inputs = $$('#pinRow input');
+      const goNext = (i) => { if(i < inputs.length-1) inputs[i+1].focus(); };
+      inputs.forEach((inp, i) => {
+        inp.addEventListener('input', e => {
+          e.target.value = e.target.value.replace(/\D/g,'').slice(0,1);
+          if(e.target.value) goNext(i);
+        });
+        inp.addEventListener('keydown', e => {
+          if(e.key==='Backspace' && !e.target.value && i>0) inputs[i-1].focus();
+        });
+      });
+      const tryUnlock = () => {
+        const typed = inputs.map(x=>x.value).join('');
+        if(typed.length !== 4) { ring(); return; }
+        if(typed === getPin()){
+          lock.style.display='none';
+          setTimeout(()=> inputs.forEach(i=>i.value=''), 300);
+        } else {
+          ring();
+        }
+      };
+      const ring = () => {
+        $('#pinRow').classList.add('ring');
+        setTimeout(()=>$('#pinRow').classList.remove('ring'), 400);
+        inputs.forEach(i=>i.value='');
+        inputs[0].focus();
+      }
+      $('#unlockBtn').addEventListener('click', tryUnlock);
+      lock.addEventListener('keydown', e => { if(e.key==='Enter') tryUnlock(); });
+      setTimeout(()=>inputs[0].focus(), 200);
+    })();
+
+    // ---------- Payments ----------
+    (function payments(){
+      const toggle = $('#paymentToggle');
+      const status = $('#paymentStatus');
+      const render = () => {
+        toggle.checked = getPayment();
+        status.textContent = toggle.checked ? 'On' : 'Off';
+        status.style.background = toggle.checked ? '#1b2a10' : '#2a2f3a';
+        status.style.color = toggle.checked ? '#9ae6b4' : '#b9bfd1';
+      };
+      toggle.addEventListener('change', () => { setPayment(toggle.checked); render(); });
+      render();
+    })();
+
+    // ---------- Photos (Gallery + Saved) ----------
+    (function photos(){
+      const picker = $('#photoPicker');
+      const thumbs = $('#thumbs');
+      const count = $('#photoCount');
+      const shareSelectedBtn = $('#shareSelectedBtn');
+      const deleteSelectedBtn = $('#deleteSelectedBtn');
+      const viewer = $('#viewer');
+      const viewerImg = $('#viewerImg');
+      const viewerName = $('#viewerName');
+      const viewerShare = $('#viewerShare');
+      const viewerClose = $('#viewerClose');
+
+      // Session selections from Photos app (not auto-saved)
+      let sessionPhotos = []; // [{id, name, file, url, createdAt}]
+      let viewerCtx = null;   // {type, id}
+
+      const render = () => {
+        const saved = getSavedPhotos().map(p => ({...p, type:'saved'}));
+        const picked = sessionPhotos.map(p => ({...p, type:'picked'}));
+        const all = [...picked, ...saved];
+
+        count.textContent = fmtCount(all.length);
+        thumbs.innerHTML = '';
+
+        all.forEach(ph => {
+          const el = document.createElement('div');
+          el.className = 'thumb';
+          const src = ph.type === 'saved' ? ph.dataURL : ph.url;
+          const origin = ph.type === 'saved' ? 'Saved' : 'Picked';
+          el.innerHTML = `
+            <div class="actions">
+              <button class="btn" data-view="${ph.type}:${ph.id}" title="View">👁</button>
+              <button class="btn" data-share="${ph.type}:${ph.id}" title="Share">⤴︎</button>
+              ${ph.type==='saved'
+                ? `<button class="btn warn" data-del="saved:${ph.id}" title="Delete">✕</button>`
+                : `<button class="btn ghost" data-remove="picked:${ph.id}" title="Remove">—</button>`
+              }
+            </div>
+            <img src="${src}" alt="${ph.name}"/>
+            <div class="cap">
+              <span>${ph.name}</span>
+              <span class="pill">${origin}</span>
+              <label class="row" style="gap:6px; margin-left:auto;">
+                <input type="checkbox" data-chk="${ph.type}:${ph.id}" /> Select
+              </label>
+            </div>
+          `;
+          thumbs.appendChild(el);
+        });
+      };
+
+      // Open Photos (file picker)
+      picker.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files || []);
+        if (!files.length) return;
+        files.forEach(f => {
+          const url = URL.createObjectURL(f);
+          sessionPhotos.push({ id: crypto.randomUUID(), name: f.name, file: f, url, createdAt: Date.now() });
+        });
+        render();
+        picker.value = '';
+      });
+
+      // Delegated actions on thumbnails
+      thumbs.addEventListener('click', async (e) => {
+        const t = e.target;
+        const getCtx = (attr) => (t.getAttribute(attr)||'').split(':'); // [type,id]
+        if (t.hasAttribute('data-view')) {
+          const [type, id] = getCtx('data-view');
+          const ph = (type==='saved'
+            ? getSavedPhotos().find(x=>x.id===id)
+            : sessionPhotos.find(x=>x.id===id));
+          if (!ph) return;
+          viewerCtx = {type,id};
+          viewerImg.src = type==='saved' ? ph.dataURL : ph.url;
+          viewerName.textContent = ph.name;
+          viewer.showModal();
+        } else if (t.hasAttribute('data-share')) {
+          const [type, id] = getCtx('data-share');
+          shareOne(type, id);
+        } else if (t.hasAttribute('data-del')) {
+          const [, id] = getCtx('data-del');
+          const saved = getSavedPhotos();
+          const ph = saved.find(x=>x.id===id);
+          if (!ph) return;
+          if (confirm(`Delete "${ph.name}" from saved photos?`)) {
+            setSavedPhotos(saved.filter(x=>x.id!==id)); render();
+          }
+        } else if (t.hasAttribute('data-remove')) {
+          const [, id] = getCtx('data-remove');
+          const idx = sessionPhotos.findIndex(x=>x.id===id);
+          if (idx>-1) {
+            URL.revokeObjectURL(sessionPhotos[idx].url);
+            sessionPhotos.splice(idx,1);
+            render();
+          }
+        }
+      });
+
+      // Viewer actions
+      viewerClose.addEventListener('click', ()=> viewer.close());
+      viewerShare.addEventListener('click', () => {
+        if (!viewerCtx) return;
+        shareOne(viewerCtx.type, viewerCtx.id);
+      });
+
+      // Share selected
+      shareSelectedBtn.addEventListener('click', async () => {
+        const ids = $$('#thumbs input[type="checkbox"]:checked').map(c=>c.getAttribute('data-chk'));
+        if (!ids.length) return alert('No items selected.');
+        const files = await Promise.all(ids.map(id => ctxToFile(...id.split(':'))));
+        shareFiles(files);
+      });
+
+      // Delete selected (saved only)
+      deleteSelectedBtn.addEventListener('click', () => {
+        const ids = $$('#thumbs input[type="checkbox"]:checked')
+          .map(c=>c.getAttribute('data-chk'))
+          .filter(s => s.startsWith('saved:'))
+          .map(s => s.split(':')[1]);
+        if (!ids.length) return alert('No saved items selected.');
+        if(!confirm(`Delete ${ids.length} saved photo(s)?`)) return;
+        const remaining = getSavedPhotos().filter(ph => !ids.includes(ph.id));
+        setSavedPhotos(remaining); render();
+      });
+
+      // Helpers
+      async function shareOne(type, id){
+        const file = await ctxToFile(type, id);
+        shareFiles([file]);
+      }
+
+      async function ctxToFile(type, id){
+        if (type === 'picked'){
+          const ph = sessionPhotos.find(x=>x.id===id);
+          return ph?.file;
+        } else {
+          const ph = getSavedPhotos().find(x=>x.id===id);
+          if (!ph) return null;
+          return dataURLtoFile(ph.dataURL, ph.name || `photo-${id}.png`);
+        }
+      }
+
+      async function shareFiles(files){
+        const valid = files.filter(Boolean);
+        if (!valid.length) return;
+
+        // iPad Share Sheet (Web Share Level 2)
+        if (navigator.canShare && navigator.canShare({ files: valid })) {
+          try {
+            await navigator.share({ files: valid, title: 'Photos' });
+            return;
+          } catch (err) {
+            // User canceled or share failed – fall through to fallback
+          }
+        } else if (navigator.share && valid.length === 1) {
+          // Fallback: share simple URL if possible (convert to blob URL)
+          const f = valid[0];
+          const url = URL.createObjectURL(f);
+          try {
+            await navigator.share({ url, title: f.name || 'Photo' });
+            URL.revokeObjectURL(url);
+            return;
+          } catch { URL.revokeObjectURL(url); }
+        }
+
+        // Final fallback: trigger downloads
+        valid.forEach(f => {
+          const a = document.createElement('a');
+          const url = URL.createObjectURL(f);
+          a.href = url; a.download = f.name || 'photo';
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(()=>URL.revokeObjectURL(url), 2000);
+        });
+      }
+
+      // initial render
+      render();
+
+      // cleanup object URLs on unload
+      window.addEventListener('beforeunload', () => {
+        sessionPhotos.forEach(p => URL.revokeObjectURL(p.url));
+      });
+    })();
+
+    // ---------- Credits ----------
+    (function credits(){
+      const acct = $('#acctId');
+      const loadBtn = $('#loadAcctBtn');
+      const value = $('#creditsValue');
+      const saveBtn = $('#saveCreditsBtn');
+      const deltaBtns = $$('button[data-delta]');
+
+      let currentId = '';
+      let currentVal = 0;
+
+      const load = (id) => {
+        currentId = (id || '').trim();
+        if (!currentId){ value.textContent = '0'; return; }
+        currentVal = parseInt(localStorage.getItem('credits:'+currentId) || '0', 10) || 0;
+        value.textContent = currentVal;
+      };
+
+      loadBtn.addEventListener('click', () => load(acct.value));
+      acct.addEventListener('keydown', (e) => { if(e.key==='Enter') load(acct.value); });
+
+      deltaBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const d = parseInt(btn.getAttribute('data-delta'), 10);
+          currentVal = Math.max(0, (currentVal || 0) + d);
+          value.textContent = currentVal;
+        });
+      });
+
+      saveBtn.addEventListener('click', () => {
+        if (!currentId) return alert('Enter an Account ID or Email first.');
+        localStorage.setItem('credits:'+currentId, String(currentVal));
+        alert('Credits saved.');
+      });
+    })();
+
+    // ---------- Change PIN ----------
+    (function pinChange(){
+      $('#savePinBtn').addEventListener('click', () => {
+        const oldPin = ($('#oldPin').value || '').trim();
+        const np = ($('#newPin').value || '').trim();
+        const np2 = ($('#newPin2').value || '').trim();
+        if (oldPin !== getPin()) return alert('Current PIN is incorrect.');
+        if (!/^\d{4}$/.test(np)) return alert('New PIN must be exactly 4 digits.');
+        if (np !== np2) return alert('New PIN entries do not match.');
+        setPin(np);
+        $('#oldPin').value = $('#newPin').value = $('#newPin2').value = '';
+        alert('PIN updated.');
+      });
+    })();
+  </script>
+</body>
+</html>

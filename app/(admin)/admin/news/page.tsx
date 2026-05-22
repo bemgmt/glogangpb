@@ -142,7 +142,7 @@ export default async function AdminNewsPage() {
             </tr>
           </thead>
           <tbody>
-            {posts.map((post) => (
+            {posts.map((post: any) => (
               <tr key={post._id}>
                 <td>
                   <span style={{ fontWeight: 700, fontSize: '1rem' }}>{post.title}</span>
