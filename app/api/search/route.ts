@@ -5,16 +5,35 @@ import { createClient } from '@supabase/supabase-js'
 // ---------------------------------------------------------------------------
 // Clients
 // ---------------------------------------------------------------------------
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+let openaiInstance: OpenAI | null = null
+let supabaseInstance: ReturnType<typeof createClient> | null = null
 
-// Use service role to bypass RLS for logging + reading embeddings
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!,
-  { auth: { persistSession: false } },
-)
+function getOpenAI(): OpenAI {
+  if (!openaiInstance) {
+    const key = process.env.OPENAI_API_KEY
+    if (!key) {
+      throw new Error('OPENAI_API_KEY is missing')
+    }
+    openaiInstance = new OpenAI({
+      apiKey: key,
+    })
+  }
+  return openaiInstance
+}
+
+function getSupabase() {
+  if (!supabaseInstance) {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
+    if (!url || !key) {
+      throw new Error('Supabase environment variables are missing')
+    }
+    supabaseInstance = createClient(url, key, {
+      auth: { persistSession: false },
+    })
+  }
+  return supabaseInstance
+}
 
 // ---------------------------------------------------------------------------
 // Types
@@ -53,7 +72,7 @@ export async function POST(request: Request) {
     // -----------------------------------------------------------------------
     // 1. Embed the query with OpenAI
     // -----------------------------------------------------------------------
-    const embeddingResponse = await openai.embeddings.create({
+    const embeddingResponse = await getOpenAI().embeddings.create({
       model: 'text-embedding-3-small',
       input: query,
     })
@@ -70,7 +89,7 @@ export async function POST(request: Request) {
     // -----------------------------------------------------------------------
     // 2. Query Supabase with pgvector cosine similarity
     // -----------------------------------------------------------------------
-    const { data: results, error: searchError } = await supabase.rpc(
+    const { data: results, error: searchError } = await getSupabase().rpc(
       'match_content_embeddings',
       {
         query_embedding: embedding,
@@ -89,7 +108,7 @@ export async function POST(request: Request) {
     // -----------------------------------------------------------------------
     // 3. Log the search query
     // -----------------------------------------------------------------------
-    await supabase.from('search_logs').insert({
+    await getSupabase().from('search_logs').insert({
       query,
       results_count: searchResults.length,
     })
