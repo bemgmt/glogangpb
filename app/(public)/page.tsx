@@ -4,8 +4,8 @@ import { ArrowRight, Camera, Star, Zap } from 'lucide-react'
 import { getUpcomingEvents, getFeaturedArtists } from '@/lib/sanity'
 
 export const metadata = {
-  title: 'Glo Gang Worldwide — Official Fan Portal',
-  description: 'The official community & member portal for Glo Gang Worldwide. Explore artists, events, exclusive drops, and the iconic photobooth experience.',
+  title: 'DJ Maino da Plug — Official Fan Portal',
+  description: 'The official community & member portal for DJ Maino da Plug. Explore music releases, live sets, events, and the interactive photobooth.',
 }
 
 // Revalidate every 60 seconds for ISR
@@ -45,16 +45,16 @@ export default async function HomePage() {
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'url(/glogangpb.svg)',
+            backgroundImage: 'url(/maino_bg.svg)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            opacity: 0.35,
+            opacity: 0.5,
           }}
           aria-hidden
         />
 
-        {/* Gold glow radial */}
+        {/* Cyan glow radial */}
         <div
           style={{
             position: 'absolute',
@@ -63,7 +63,7 @@ export default async function HomePage() {
             transform: 'translateX(-50%)',
             width: '900px',
             height: '600px',
-            background: 'radial-gradient(ellipse, rgba(255,209,0,0.14) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(0,229,255,0.14) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
           aria-hidden
@@ -98,7 +98,7 @@ export default async function HomePage() {
               backgroundClip: 'text',
             }}
           >
-            GLO GANG<br />WORLDWIDE
+            DJ MAINO<br />DA PLUG
           </h1>
 
           <p
@@ -111,8 +111,7 @@ export default async function HomePage() {
               lineHeight: 1.7,
             }}
           >
-            Chief Keef's label. Fan community, exclusive events, the iconic
-            photobooth & more — all in one place.
+            Official fan community and member portal for DJ Maino. Explore SoundCloud mixes, Twitch live sets, shows, and exclusive VIP drops.
           </p>
 
           {/* CTAs */}
@@ -126,7 +125,7 @@ export default async function HomePage() {
             }}
           >
             <Link href="/register" className="gg-btn gg-btn--primary gg-btn--lg">
-              Join the Glo
+              Join the Plug
               <ArrowRight size={18} />
             </Link>
             <Link href="/artists" className="gg-btn gg-btn--ghost gg-btn--lg">
@@ -146,9 +145,9 @@ export default async function HomePage() {
             }}
           >
             {[
-              { label: 'Artists', value: '20+' },
-              { label: 'Members', value: '10K+' },
-              { label: 'Events', value: '50+' },
+              { label: 'Mixes', value: '10+' },
+              { label: 'Members', value: '5K+' },
+              { label: 'Gigs & Streams', value: '50+' },
             ].map(({ label, value }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontWeight: 900, fontSize: '2rem', color: 'var(--accent)', lineHeight: 1 }}>
@@ -184,13 +183,51 @@ export default async function HomePage() {
         </div>
       </section>
 
+      {/* ── Twitch Live Section ───────────────────────────────────── */}
+      <section style={{ padding: '60px 0 20px' }}>
+        <div className="gg-container">
+          <div style={{ textAlign: 'center', marginBottom: 32 }}>
+            <span className="gg-pill gg-pill--gold" style={{ marginBottom: 12 }}>
+              🔴 Twitch Broadcast
+            </span>
+            <h2>Tune In Live</h2>
+            <p style={{ maxWidth: 520, margin: '8px auto 0', color: 'var(--text-muted)' }}>
+              Watch DJ Maino spin live sets directly. Turn up the volume and join the chat on Twitch!
+            </p>
+          </div>
+
+          <div style={{
+            maxWidth: 800,
+            margin: '0 auto',
+            position: 'relative',
+            borderRadius: 18,
+            overflow: 'hidden',
+            border: '1px solid var(--border-accent)',
+            boxShadow: '0 20px 50px rgba(0,229,255,0.1)',
+            background: 'var(--panel)'
+          }}>
+            <iframe
+              src={`https://player.twitch.tv/?channel=djmainodaplug&parent=${
+                process.env.NEXT_PUBLIC_SITE_URL
+                  ? new URL(process.env.NEXT_PUBLIC_SITE_URL).hostname
+                  : 'localhost'
+              }&autoplay=false`}
+              height="450"
+              width="100%"
+              allowFullScreen
+              style={{ border: 'none', display: 'block' }}
+            ></iframe>
+          </div>
+        </div>
+      </section>
+
       {/* ── Photobooth CTA ────────────────────────────────────────── */}
       <section style={{ padding: '80px 0' }}>
         <div className="gg-container">
           <div
             className="gg-card gg-card--accent animate-fade-in"
             style={{
-              background: 'linear-gradient(135deg, rgba(255,209,0,0.07) 0%, rgba(225,38,38,0.04) 100%)',
+              background: 'linear-gradient(135deg, rgba(0,229,255,0.07) 0%, rgba(57,255,20,0.04) 100%)',
               display: 'flex',
               flexDirection: 'row',
               alignItems: 'center',
@@ -216,11 +253,11 @@ export default async function HomePage() {
                 <span className="gg-pill gg-pill--gold">Member Experience</span>
               </div>
               <h2 style={{ marginBottom: 12, fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-                GLO GANG PHOTOBOOTH
+                PLUG PHOTOBOOTH
               </h2>
               <p style={{ maxWidth: 440, lineHeight: 1.7 }}>
-                Strike a pose with exclusive Glo Gang overlays, 3D face filters,
-                and branded digital props. Members only — sign up free.
+                Strike a pose with exclusive DJ Maino overlays, custom turntable stickers,
+                and glowing headphones. Members only — sign up free.
               </p>
             </div>
             <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
@@ -288,7 +325,7 @@ export default async function HomePage() {
           ) : (
             /* Placeholder cards while Sanity is being populated */
             <div className="gg-grid-3">
-              {['Chief Keef', 'Ballout', 'Fredo Santana'].map((name, i) => (
+              {['DJ Maino da Plug', '48 Laws Network', 'Plug Affiliates'].map((name, i) => (
                 <div
                   key={name}
                   className={`gg-card animate-fade-in delay-${i * 100}`}
@@ -302,9 +339,9 @@ export default async function HomePage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: 48,
-                  }}>⭐</div>
+                  }}>🔌</div>
                   <h4 style={{ marginBottom: 4 }}>{name}</h4>
-                  <span className="gg-pill" style={{ fontSize: 10 }}>Glo Gang</span>
+                  <span className="gg-pill" style={{ fontSize: 10 }}>Plug Network</span>
                 </div>
               ))}
             </div>
@@ -336,8 +373,8 @@ export default async function HomePage() {
                   <div style={{
                     minWidth: 56,
                     height: 56,
-                    background: 'rgba(225,38,38,0.15)',
-                    border: '1px solid rgba(225,38,38,0.3)',
+                    background: 'rgba(57,255,20,0.15)',
+                    border: '1px solid rgba(57,255,20,0.3)',
                     borderRadius: 12,
                     display: 'flex',
                     flexDirection: 'column',
@@ -347,7 +384,7 @@ export default async function HomePage() {
                     fontWeight: 900,
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
-                    color: '#f87171',
+                    color: '#39ff14',
                   }}>
                     {event.eventDate
                       ? new Date(event.eventDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(' ').map((p: string, idx: number) => (
@@ -378,7 +415,7 @@ export default async function HomePage() {
           ) : (
             <div className="gg-card" style={{ textAlign: 'center', padding: 48, color: 'var(--text-muted)' }}>
               <p style={{ fontSize: 32, marginBottom: 12 }}>🎤</p>
-              <p>No upcoming events yet. Check back soon.</p>
+              <p>No upcoming shows or streams yet. Check back soon.</p>
             </div>
           )}
         </div>
@@ -390,10 +427,10 @@ export default async function HomePage() {
           <span className="gg-pill gg-pill--gold" style={{ marginBottom: 20, display: 'inline-flex' }}>
             Free to Join
           </span>
-          <h2 style={{ marginBottom: 16 }}>Become a Glo Fan</h2>
+          <h2 style={{ marginBottom: 16 }}>Become a Plug Fan</h2>
           <p style={{ maxWidth: 440, margin: '0 auto 36px', lineHeight: 1.7 }}>
             Free member accounts unlock the photobooth, event RSVPs, and
-            exclusive Glo Gang content. VIP tiers unlock even more.
+            exclusive DJ Maino content. VIP tiers unlock even more.
           </p>
           <Link href="/register" className="gg-btn gg-btn--primary gg-btn--lg">
             Join Free <ArrowRight size={18} />

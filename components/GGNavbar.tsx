@@ -71,15 +71,12 @@ export function GGNavbar() {
               flexShrink: 0,
             }}
           >
-            <span style={{
-              display: 'inline-block',
-              width: 28,
-              height: 28,
-              background: 'var(--accent)',
-              borderRadius: 6,
-              flexShrink: 0,
-            }} />
-            <span>GLO GANG</span>
+            {/* Custom Plug Logo SVG */}
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent)', flexShrink: 0 }}>
+              <path d="M12 2v8M18 10V6M6 10V6M12 18v4" />
+              <rect x="5" y="10" width="14" height="8" rx="3" fill="var(--accent)" />
+            </svg>
+            <span>DJ MAINO</span>
           </Link>
 
           {/* Desktop nav */}
@@ -107,7 +104,7 @@ export function GGNavbar() {
                     letterSpacing: '0.05em',
                     textTransform: 'uppercase',
                     color: active ? 'var(--accent)' : 'var(--text-muted)',
-                    background: active ? 'rgba(255,209,0,0.10)' : 'transparent',
+                    background: active ? 'rgba(0,229,255,0.10)' : 'transparent',
                     transition: 'color 0.15s, background 0.15s',
                   }}
                   onMouseEnter={e => {
@@ -128,11 +125,9 @@ export function GGNavbar() {
               )
             })}
 
-            {/* Merch — external */}
-            <a
-              href={process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL || '#'}
-              target="_blank"
-              rel="noopener noreferrer"
+            {/* Links — Connect page */}
+            <Link
+              href="/links"
               style={{
                 padding: '7px 14px',
                 borderRadius: 'var(--radius-md)',
@@ -140,12 +135,25 @@ export function GGNavbar() {
                 fontSize: 13,
                 letterSpacing: '0.05em',
                 textTransform: 'uppercase',
-                color: 'var(--text-muted)',
+                color: pathname === '/links' ? 'var(--accent)' : 'var(--text-muted)',
+                background: pathname === '/links' ? 'rgba(0,229,255,0.10)' : 'transparent',
                 transition: 'color 0.15s, background 0.15s',
               }}
+              onMouseEnter={e => {
+                if (pathname !== '/links') {
+                  (e.currentTarget as HTMLElement).style.color = 'var(--text)'
+                  ;(e.currentTarget as HTMLElement).style.background = 'var(--surface)'
+                }
+              }}
+              onMouseLeave={e => {
+                if (pathname !== '/links') {
+                  (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'
+                  ;(e.currentTarget as HTMLElement).style.background = 'transparent'
+                }
+              }}
             >
-              Merch ↗
-            </a>
+              Connect 🔌
+            </Link>
           </nav>
 
           {/* Right side */}
@@ -198,17 +206,12 @@ export function GGNavbar() {
               padding: '12px 20px 20px',
             }}
           >
-            {[...NAV_LINKS, { href: '/merch', label: 'Merch', icon: Star }].map(({ href, label, icon: Icon }) => {
+            {[...NAV_LINKS, { href: '/links', label: 'Connect', icon: Star }].map(({ href, label, icon: Icon }) => {
               const active = pathname === href
-              const isExternal = label === 'Merch'
-              const Comp = isExternal ? 'a' : Link
-              const extraProps = isExternal
-                ? { href: process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL || '#', target: '_blank', rel: 'noopener noreferrer' }
-                : { href }
               return (
-                <Comp
+                <Link
                   key={href}
-                  {...(extraProps as any)}
+                  href={href}
                   style={{
                     display: 'flex',
                     alignItems: 'center',
@@ -224,7 +227,7 @@ export function GGNavbar() {
                 >
                   <Icon size={16} style={{ color: active ? 'var(--accent)' : 'var(--text-muted)' }} />
                   {label}
-                </Comp>
+                </Link>
               )
             })}
           </div>

@@ -4,12 +4,12 @@ import type { Metadata } from 'next'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Membership | Glo Gang Worldwide',
+  title: 'Membership | DJ Maino da Plug',
   description:
-    'Join the Glo Gang community. Unlock exclusive content, early ticket access, and VIP perks.',
+    'Join the DJ Maino da Plug VIP community. Unlock exclusive mix downloads, soundpacks, and early ticket access.',
   openGraph: {
-    title: 'Membership | Glo Gang Worldwide',
-    description: 'Join the Glo Gang community with a Fan or VIP membership.',
+    title: 'Membership | DJ Maino da Plug',
+    description: 'Join the DJ Maino da Plug community with a Fan or VIP membership.',
   },
 }
 
@@ -33,7 +33,7 @@ interface Tier {
 const TIERS: Tier[] = [
   {
     id: 'free',
-    name: 'Free',
+    name: 'Plug Fan',
     price: '$0',
     interval: 'forever',
     highlighted: false,
@@ -41,44 +41,43 @@ const TIERS: Tier[] = [
     ctaHref: '/signup',
     perks: [
       'Community profile',
-      'Public artist & event listings',
+      'Public mix & stream schedules',
       'Monthly newsletter',
-      'Public chat access',
+      'Community chat access',
     ],
   },
   {
     id: 'glo-fan',
-    name: 'Glo Fan',
+    name: 'Plug VIP',
     price: '$9.99',
     interval: 'month',
     highlighted: false,
-    ctaLabel: 'Become a Glo Fan',
+    ctaLabel: 'Become a VIP',
     ctaHref: '/signup?tier=glo-fan',
     perks: [
       'Everything in Free',
-      'Exclusive member news feed',
-      'Early event ticket access',
-      'Digital photo booth',
-      'Members-only Discord channel',
-      'Monthly digital merch drops',
+      'Exclusive mixtape audio feeds',
+      'Early live show ticket access',
+      'Digital photo booth access',
+      'VIP Discord channels',
+      'Monthly exclusive sound kit drops',
     ],
   },
   {
     id: 'glogangvip',
-    name: 'GloGang VIP',
+    name: 'Super Plug',
     price: '$24.99',
     interval: 'month',
     highlighted: true,
-    ctaLabel: 'Go VIP',
+    ctaLabel: 'Go Super Plug',
     ctaHref: '/signup?tier=vip',
     perks: [
-      'Everything in Glo Fan',
-      'VIP event meet & greets',
-      'Signed digital collectibles',
-      'Priority support',
-      'Behind-the-scenes content',
-      'Annual physical merch package',
-      'Direct message artists',
+      'Everything in Plug VIP',
+      'Stream guest & chat badges',
+      'Exclusive digital audio tokens',
+      'Priority booking support',
+      'Direct messaging with DJ Maino',
+      'Mixtape shout-outs & mentions',
     ],
   },
 ]
@@ -178,7 +177,7 @@ export default function MembershipPage() {
             margin: 0,
           }}
         >
-          Join The Glo Gang
+          Join The Plug VIP
         </h1>
         <p
           style={{
@@ -189,8 +188,7 @@ export default function MembershipPage() {
             lineHeight: 1.6,
           }}
         >
-          Pick your tier. Get closer to the movement. Exclusive content, early
-          access, and real community.
+          Pick your tier. Get closer to the sounds. Exclusive audio downloads, sound kits, and real community.
         </p>
       </header>
 

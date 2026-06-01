@@ -3,8 +3,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 
 export const metadata: Metadata = {
-  title: 'Admin Dashboard | Glo Gang Worldwide',
-  description: 'Glo Gang admin control panel.',
+  title: 'Admin Dashboard | DJ Maino da Plug',
+  description: 'DJ Maino admin control panel.',
 }
 
 // ---------------------------------------------------------------------------

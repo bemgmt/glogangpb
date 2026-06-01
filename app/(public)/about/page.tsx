@@ -56,7 +56,7 @@ export default function AboutPage() {
       {/* Header */}
       <header style={{ marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
-          ABOUT GGW
+          ABOUT THE PLUG
         </p>
         <h1
           style={{
@@ -69,10 +69,10 @@ export default function AboutPage() {
             margin: 0,
           }}
         >
-          Glo Gang Worldwide
+          DJ MAINO DA PLUG
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Glory Boyz Entertainment. More than a label — a global culture, streetwear fashion empire, and fan community.
+          Mixtape curation, live Twitch broadcasting, and artist management. Connecting fans with the rawest sounds and exclusive sets.
         </p>
       </header>
 
@@ -85,23 +85,23 @@ export default function AboutPage() {
             Our Movement
           </h2>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-            Founded in Chicago by hip-hop pioneer <strong>Chief Keef</strong>, Glo Gang (originally Glory Boyz Entertainment) rose from the streets of the South Side to redefine the sound, look, and attitude of modern music culture. What started as a collective of raw talent quickly erupted into a worldwide phenomenon, inventing the drill music subgenre and dictating global youth culture.
+            Renowned as a premier curator and host of the highly acclaimed <strong>48 Laws</strong> mixtape series, <strong>DJ Maino da Plug</strong> has carved out a unique space in modern music culture. Spinning the freshest tracks, managing rising talent, and building a massive digital fan base, DJ Maino is the ultimate conduit for music discovery.
           </p>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)' }}>
-            Today, Glo Gang Worldwide is a multifaceted lifestyle brand. We operate at the intersection of independent music, avant-garde streetwear design, physical art installations, and high-fidelity digital fan experiences. We represent self-determination, creative freedom, and staying true to the glory within.
+            Today, DJ Maino da Plug's platform is a digital hub for fans worldwide. By bridging the gap between underground artists and mainstream visibility, we host interactive live sets on Twitch, distribute exclusive mixtape drops, and run premium VIP experiences that connect the community directly to the movement.
           </p>
 
           {/* Pillars */}
           <div className="pillars-grid" style={{ marginTop: '3rem' }}>
             <div className="gg-card pillar-card">
               <div className="pillar-icon"><Compass size={20} /></div>
-              <h3 className="pillar-title">Independence</h3>
-              <p className="pillar-desc">Built by artists, run by artists. We own our narrative, master recordings, and creative outputs.</p>
+              <h3 className="pillar-title">Curation</h3>
+              <p className="pillar-desc">Only the rawest tracks and mixtapes. We filter through the noise to bring you the certified hits.</p>
             </div>
             <div className="gg-card pillar-card">
               <div className="pillar-icon"><ShieldCheck size={20} /></div>
-              <h3 className="pillar-title">Authenticity</h3>
-              <p className="pillar-desc">Unapologetic energy. We stay rooted in our origins while driving the culture forward globally.</p>
+              <h3 className="pillar-title">High Energy</h3>
+              <p className="pillar-desc">High-voltage Twitch streams and club sets. We bring the electric vibe directly to you.</p>
             </div>
           </div>
         </section>
@@ -113,7 +113,7 @@ export default function AboutPage() {
               Get In Touch
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
-              Booking inquiries, feedback, or support. Send us a message directly.
+              Booking inquiries, mixtape submissions, or support. Send a message directly.
             </p>
 
             <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -170,15 +170,15 @@ export default function AboutPage() {
             <div className="quick-info-strip" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
               <div className="info-item">
                 <MapPin size={16} className="info-icon" />
-                <span>Los Angeles, CA / Chicago, IL</span>
+                <span>Los Angeles, CA / Twitch Live</span>
               </div>
               <div className="info-item">
                 <Mail size={16} className="info-icon" />
-                <span>support@glogangworldwide.com</span>
+                <span>booking@djmainodaplug.com</span>
               </div>
               <div className="info-item">
                 <Globe size={16} className="info-icon" />
-                <span>glogangworldwide.com</span>
+                <span>djmainodaplug.com</span>
               </div>
             </div>
           </div>

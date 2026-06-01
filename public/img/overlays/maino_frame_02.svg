@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="100%" height="100%">
+  <!-- Vintage tape frame -->
+  <rect x="25" y="25" width="1030" height="1870" fill="none" stroke="#39ff14" stroke-width="6" rx="28" opacity="0.8" />
+  
+  <!-- Tape Label Top -->
+  <g transform="translate(0, 100)">
+    <rect x="140" y="0" width="800" height="90" rx="15" fill="#12151c" stroke="#00e5ff" stroke-width="3" />
+    <text x="540" y="55" font-family="'Space Grotesk', sans-serif" font-size="36" font-weight="bold" fill="#f8fafc" text-anchor="middle" letter-spacing="4">SIDE A — 48 LAWS OF POWER</text>
+  </g>
+
+  <!-- Tape Spindle Graphics (left and right watermark) -->
+  <g transform="translate(150, 960)" opacity="0.15">
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#f8fafc" stroke-width="8" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#f8fafc" stroke-width="4" stroke-dasharray="10 6" />
+  </g>
+  <g transform="translate(930, 960)" opacity="0.15">
+    <circle cx="0" cy="0" r="80" fill="none" stroke="#f8fafc" stroke-width="8" />
+    <circle cx="0" cy="0" r="40" fill="none" stroke="#f8fafc" stroke-width="4" stroke-dasharray="10 6" />
+  </g>
+
+  <!-- Cassette Window lines in middle side -->
+  <rect x="340" y="900" width="400" height="120" rx="10" fill="none" stroke="#00e5ff" stroke-width="2" opacity="0.2" />
+
+  <!-- Bottom Brand Text -->
+  <g transform="translate(0, 1700)">
+    <rect x="140" y="0" width="800" height="110" rx="15" fill="#12151c" stroke="#39ff14" stroke-width="3" />
+    <text x="540" y="50" font-family="'Outfit', sans-serif" font-size="34" font-weight="900" fill="#39ff14" text-anchor="middle" letter-spacing="6">MIXTAPE SERIES</text>
+    <text x="540" y="85" font-family="'Space Grotesk', sans-serif" font-size="20" font-weight="bold" fill="#00e5ff" text-anchor="middle" letter-spacing="4">DJ MAINO ON THE DECKS</text>
+  </g>
+</svg>

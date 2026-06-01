@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="100%" height="100%">
+  <!-- Outer Neon cyan border -->
+  <rect x="20" y="20" width="1040" height="1880" fill="none" stroke="#00e5ff" stroke-width="8" rx="20" opacity="0.85" />
+  <!-- Inner thin volt green border -->
+  <rect x="36" y="36" width="1008" height="1848" fill="none" stroke="#39ff14" stroke-width="2" rx="12" opacity="0.5" />
+
+  <!-- Recording indicator in top-left -->
+  <g transform="translate(70, 70)">
+    <circle cx="20" cy="20" r="14" fill="#ff0055" />
+    <text x="45" y="27" font-family="'Space Grotesk', sans-serif" font-size="24" font-weight="bold" fill="#ffffff" letter-spacing="1">REC</text>
+  </g>
+
+  <!-- Live tag in top-right -->
+  <g transform="translate(860, 70)">
+    <rect x="0" y="0" width="150" height="40" rx="8" fill="#00e5ff" />
+    <text x="75" y="27" font-family="'Space Grotesk', sans-serif" font-size="20" font-weight="900" fill="#07080a" text-anchor="middle">LIVE SET</text>
+  </g>
+
+  <!-- Branding Banner at the bottom -->
+  <g transform="translate(0, 1720)">
+    <!-- Dark glass-like banner back plate -->
+    <path d="M 40,0 L 1040,0 C 1040,0 1040,120 1040,120 C 1040,140 1020,160 1000,160 L 80,160 C 60,160 40,140 40,120 Z" fill="#07080a" opacity="0.9" stroke="rgba(0, 229, 255, 0.3)" stroke-width="2" />
+    
+    <text x="540" y="70" font-family="'Outfit', sans-serif" font-size="44" font-weight="900" fill="#00e5ff" text-anchor="middle" letter-spacing="8">DJ MAINO DA PLUG</text>
+    <text x="540" y="115" font-family="'Space Grotesk', sans-serif" font-size="22" font-weight="600" fill="#39ff14" text-anchor="middle" letter-spacing="4">THE PLUG WORLDWIDE</text>
+  </g>
+</svg>

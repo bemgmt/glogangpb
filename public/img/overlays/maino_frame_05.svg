@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="100%" height="100%">
+  <!-- Left Side Equalizer Columns -->
+  <g transform="translate(30, 460)" opacity="0.8">
+    <rect x="0" y="0" width="16" height="50" rx="4" fill="#00e5ff" />
+    <rect x="24" y="0" width="16" height="120" rx="4" fill="#00e5ff" />
+    <rect x="48" y="0" width="16" height="240" rx="4" fill="#00e5ff" />
+    <rect x="72" y="0" width="16" height="380" rx="4" fill="#39ff14" />
+    <rect x="96" y="0" width="16" height="290" rx="4" fill="#00e5ff" />
+    <rect x="120" y="0" width="16" height="180" rx="4" fill="#00e5ff" />
+    <rect x="144" y="0" width="16" height="80" rx="4" fill="#00e5ff" />
+  </g>
+
+  <!-- Right Side Equalizer Columns (Inverted height direction or similar, or just standing up) -->
+  <g transform="translate(880, 460)" opacity="0.8">
+    <rect x="0" y="0" width="16" height="90" rx="4" fill="#00e5ff" />
+    <rect x="24" y="0" width="16" height="190" rx="4" fill="#00e5ff" />
+    <rect x="48" y="0" width="16" height="350" rx="4" fill="#39ff14" />
+    <rect x="72" y="0" width="16" height="270" rx="4" fill="#00e5ff" />
+    <rect x="96" y="0" width="16" height="150" rx="4" fill="#00e5ff" />
+    <rect x="120" y="0" width="16" height="100" rx="4" fill="#00e5ff" />
+    <rect x="144" y="0" width="16" height="40" rx="4" fill="#00e5ff" />
+  </g>
+
+  <!-- Soundwave line top banner -->
+  <path d="M 30,120 Q 200,60 400,120 T 800,120 T 1050,120" fill="none" stroke="#00e5ff" stroke-width="4" opacity="0.5" />
+
+  <!-- Bottom sound branding bar -->
+  <g transform="translate(0, 1740)">
+    <text x="540" y="40" font-family="'Outfit', sans-serif" font-size="48" font-weight="900" fill="#00e5ff" text-anchor="middle" letter-spacing="8">MAINO ON THE BEAT</text>
+    <path d="M 200,65 L 880,65" stroke="#39ff14" stroke-width="3" stroke-dasharray="20 10" />
+    <text x="540" y="110" font-family="'Space Grotesk', sans-serif" font-size="20" font-weight="bold" fill="#39ff14" text-anchor="middle" letter-spacing="4">48 LAWS SOUNDSYSTEM</text>
+  </g>
+</svg>

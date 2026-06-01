@@ -7,26 +7,26 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-// ─── Overlay presets (matching photobooth.html) ──────────────────────────────
+// ─── Overlay presets ──────────────────────────────────────────────
 const PRESET_OVERLAYS = [
-  { name: 'GLOry Day',        src: '/img/overlays/photoboth frames-01.png' },
-  { name: 'Rising Sun Pink',  src: '/img/overlays/photoboth frames-02.png' },
-  { name: 'GLOry Girls',      src: '/img/overlays/photoboth frames-03.png' },
-  { name: 'Rising Sun BW',    src: '/img/overlays/photoboth frames-04.png' },
-  { name: 'Rising Sun Gold',  src: '/img/overlays/photoboth frames-05.png' },
-  { name: 'GLOGANG',          src: '/img/overlays/photoboth frames-06.png' },
-  { name: 'GLOshop LA',       src: '/img/overlays/photoboth frames-07.png' },
-  { name: 'GLO Up',           src: '/img/overlays/photoboth frames-08.png' },
-  { name: 'GLOshop LA Visit', src: '/img/overlays/photoboth frames-09.png' },
+  { name: 'The Plug Live',    src: '/img/overlays/maino_frame_01.svg' },
+  { name: '48 Laws Tape',     src: '/img/overlays/maino_frame_02.svg' },
+  { name: 'Twitch Stream',    src: '/img/overlays/maino_frame_03.svg' },
+  { name: 'Neon Cyber Grid',  src: '/img/overlays/maino_frame_04.svg' },
+  { name: 'Equalizer Wave',   src: '/img/overlays/maino_frame_05.svg' },
+  { name: 'Plugged In',       src: '/img/overlays/maino_frame_06.svg' },
+  { name: 'Retro Vinyl',      src: '/img/overlays/maino_frame_07.svg' },
+  { name: 'VIP Access Gold',  src: '/img/overlays/maino_frame_08.svg' },
+  { name: 'Voltage Surge',    src: '/img/overlays/maino_frame_09.svg' },
 ]
 
 const PRESET_PROPS = [
-  { name: 'Cool Shades',   src: '/img/props/sunglasses.png' },
-  { name: 'Gold Crown',    src: '/img/props/crown.png' },
-  { name: 'Bling Chain',   src: '/img/props/chain.png' },
-  { name: 'Diamond Grill', src: '/img/props/grill.png' },
-  { name: 'Money Stack',   src: '/img/props/money.png' },
-  { name: 'Mic Drop',      src: '/img/props/microphone.png' },
+  { name: 'DJ Headphones', src: '/img/props/headphones.svg' },
+  { name: 'DJ Turntable',  src: '/img/props/turntable.svg' },
+  { name: 'Neon Glasses',  src: '/img/props/neon_sunglasses.svg' },
+  { name: 'The Plug 🔌',    src: '/img/props/plug.svg' },
+  { name: 'Lightning ⚡',   src: '/img/props/lightning.svg' },
+  { name: 'Gold Mic 🎤',    src: '/img/props/gold_mic.svg' },
 ]
 
 // ─── Props: sticker type ─────────────────────────────────────────────────────
@@ -332,7 +332,7 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
       }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 16px', gap: 12 }}>
           <div style={{ fontWeight: 900, letterSpacing: '0.08em', textTransform: 'uppercase', fontSize: 14 }}>
-            GLO BOOTH
+            PLUG BOOTH
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             {!kioskMode && (

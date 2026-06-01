@@ -7,8 +7,8 @@ import { Calendar, Tag, ArrowRight } from 'lucide-react'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'News & Releases | Glo Gang Worldwide',
-  description: 'Stay updated with the latest music releases, tour dates, and announcements from Glo Gang.',
+  title: 'News & Releases | DJ Maino da Plug',
+  description: 'Stay updated with the latest music releases, sets, and announcements from DJ Maino.',
 }
 
 // ---------------------------------------------------------------------------
@@ -38,32 +38,32 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: NewsPost[] = [
   {
     _id: 'np1',
-    title: 'Chief Keef Announces Almighty So 2 Tour Dates',
+    title: 'DJ Maino Announces New Twitch Stream Calendar',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-    category: 'tour',
+    category: 'stream',
     featured: true,
-    excerpt: 'The Glo Gang frontman is taking the highly anticipated Almighty So 2 on the road. Check out the city listings and ticket drop schedules inside.',
+    excerpt: 'DJ Maino is taking his sets live on Twitch and announcing his weekly broadcast schedules. Get the full calendar inside.',
   },
   {
     _id: 'np2',
-    title: 'New Drop: Glo Gang x Glory Boyz Premium Hoodies',
+    title: 'New Drop: 48 Laws Premium Sample & Drum Kit',
     publishedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-    category: 'community',
-    excerpt: 'Featuring embroidered star logos and premium heavyweight cotton, the latest drops are available now on the Glo Gang Worldwide store.',
+    category: 'release',
+    excerpt: 'Featuring custom drums, processed loops, and high-fidelity sound presets, the latest kit is available now for VIP members.',
   },
   {
     _id: 'np3',
-    title: 'Tadoe Releases New Album "Glory To Drill"',
+    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
-    excerpt: 'Tadoe delivers 14 tracks of pure drill energy. The album features Chief Keef, Ballout, and production by Young Chop.',
+    excerpt: 'DJ Maino drops a brand new 60-minute high-energy mix featuring the hottest underground rap, electronic, and drill sounds.',
   },
   {
     _id: 'np4',
-    title: 'Inside the Glo Gang Physical Photobooth Experience',
+    title: 'Inside the DJ Maino Member Photobooth',
     publishedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
     category: 'general',
-    excerpt: 'Learn more about the state-of-the-art interactive photobooth setup in our flagship store, complete with custom face-filters.',
+    excerpt: 'Learn how to use the member dashboard photobooth with custom headphones, turntable overlays, and neon frames.',
   },
 ]
 
@@ -106,7 +106,7 @@ export default async function NewsPage() {
       {/* Header */}
       <header style={{ marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
-          GG BLOG
+          PLUG BLOG
         </p>
         <h1
           style={{
@@ -122,7 +122,7 @@ export default async function NewsPage() {
           News & Releases
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Stay updated with Glo Gang announcements, album releases, streetwear drops, and events.
+          Stay updated with DJ Maino announcements, mix releases, sound kit drops, and events.
         </p>
       </header>
 
@@ -136,7 +136,7 @@ export default async function NewsPage() {
               {featuredPost.coverImage?.asset?.url ? (
                 <img src={featuredPost.coverImage.asset.url} alt={featuredPost.title} className="featured-img" />
               ) : (
-                <div className="featured-img-placeholder">GLO GANG</div>
+                <div className="featured-img-placeholder">MAINO</div>
               )}
             </div>
             <div className="featured-content">
@@ -180,7 +180,7 @@ export default async function NewsPage() {
                   {post.coverImage?.asset?.url ? (
                     <img src={post.coverImage.asset.url} alt={post.title} className="news-img" />
                   ) : (
-                    <div className="news-img-placeholder">GLO</div>
+                    <div className="news-img-placeholder">MAINO</div>
                   )}
                   {post.category && (
                     <span className="news-card-cat">{post.category}</span>

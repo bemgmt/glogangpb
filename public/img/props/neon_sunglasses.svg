@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Left lens outer glow frame -->
+  <rect x="15" y="80" width="75" height="40" rx="10" fill="#12151c" stroke="#39ff14" stroke-width="6" opacity="0.9" />
+  <!-- Left lens shutter lines -->
+  <line x1="20" y1="90" x2="85" y2="90" stroke="#39ff14" stroke-width="3" />
+  <line x1="20" y1="100" x2="85" y2="100" stroke="#39ff14" stroke-width="3" />
+  <line x1="20" y1="110" x2="85" y2="110" stroke="#39ff14" stroke-width="3" />
+
+  <!-- Right lens outer glow frame -->
+  <rect x="110" y="80" width="75" height="40" rx="10" fill="#12151c" stroke="#39ff14" stroke-width="6" opacity="0.9" />
+  <!-- Right lens shutter lines -->
+  <line x1="115" y1="90" x2="180" y2="90" stroke="#39ff14" stroke-width="3" />
+  <line x1="115" y1="100" x2="180" y2="100" stroke="#39ff14" stroke-width="3" />
+  <line x1="115" y1="110" x2="180" y2="110" stroke="#39ff14" stroke-width="3" />
+
+  <!-- Bridge -->
+  <rect x="88" y="90" width="24" height="8" rx="2" fill="#39ff14" />
+
+  <!-- Side temples/arms -->
+  <path d="M 15,90 C 5,90 2,75 2,75" fill="none" stroke="#39ff14" stroke-width="4" stroke-linecap="round" />
+  <path d="M 185,90 C 195,90 198,75 198,75" fill="none" stroke="#39ff14" stroke-width="4" stroke-linecap="round" />
+</svg>

@@ -6,8 +6,8 @@ import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './sanity/schemaTypes'
 
 export default defineConfig({
-  name: 'glogang',
-  title: 'Glo Gang Worldwide',
+  name: 'mainodaplug',
+  title: 'DJ Maino da Plug Console',
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   plugins: [structureTool(), visionTool()],

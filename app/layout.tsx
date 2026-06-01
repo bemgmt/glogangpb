@@ -7,26 +7,26 @@ import { Analytics } from '@vercel/analytics/react'
 
 export const metadata: Metadata = {
   title: {
-    default: 'Glo Gang Worldwide — Official Fan Portal',
-    template: '%s | Glo Gang Worldwide',
+    default: 'DJ Maino da Plug — Official Fan Portal & VIP Community',
+    template: '%s | DJ Maino da Plug',
   },
   description:
-    'The official fan community portal for Glo Gang Worldwide — Chief Keef\'s label. Artists, events, exclusive member content & the iconic photobooth experience.',
+    'The official fan portal and VIP community for DJ Maino da Plug. Explore music releases, live shows, exclusive drops, and the interactive photobooth.',
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'https://glogangworldwide.com'
+    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
   ),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://glogangworldwide.com',
-    siteName: 'Glo Gang Worldwide',
-    title: 'Glo Gang Worldwide — Official Fan Portal',
-    description: 'Official fan community portal for Glo Gang Worldwide.',
+    url: 'http://localhost:3000',
+    siteName: 'DJ Maino da Plug',
+    title: 'DJ Maino da Plug — Official Fan Portal & VIP Community',
+    description: 'Official fan community and member portal for DJ Maino da Plug.',
   },
   twitter: {
     card: 'summary_large_image',
-    site: '@glogang',
-    title: 'Glo Gang Worldwide',
+    site: '@mainodaplug',
+    title: 'DJ Maino da Plug',
   },
   robots: {
     index: true,
@@ -45,7 +45,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#0f1115',
+  themeColor: '#07080a',
 }
 
 export default function RootLayout({

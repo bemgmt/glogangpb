@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="100%" height="100%">
+  <!-- Cord border lines -->
+  <rect x="30" y="30" width="1020" height="1860" fill="none" stroke="#00e5ff" stroke-width="6" rx="24" opacity="0.8" />
+  
+  <!-- Plug vectors at the corners -->
+  <!-- Top Left Plug -->
+  <g transform="translate(60, 60)" stroke="#39ff14" stroke-width="3" fill="#12151c" stroke-linejoin="round">
+    <rect x="-15" y="-10" width="30" height="20" rx="4" />
+    <line x1="-5" y1="-10" x2="-5" y2="-20" />
+    <line x1="5" y1="-10" x2="5" y2="-20" />
+    <!-- Cable tail -->
+    <path d="M 0,10 C 0,20 -15,30 -15,45" fill="none" stroke="#00e5ff" stroke-width="4" />
+  </g>
+
+  <!-- Top Right Plug -->
+  <g transform="translate(1020, 60)" stroke="#39ff14" stroke-width="3" fill="#12151c" stroke-linejoin="round">
+    <rect x="-15" y="-10" width="30" height="20" rx="4" />
+    <line x1="-5" y1="-10" x2="-5" y2="-20" />
+    <line x1="5" y1="-10" x2="5" y2="-20" />
+    <!-- Cable tail -->
+    <path d="M 0,10 C 0,20 15,30 15,45" fill="none" stroke="#00e5ff" stroke-width="4" />
+  </g>
+
+  <!-- Bottom Left Plug socket -->
+  <g transform="translate(60, 1860)" stroke="#00e5ff" stroke-width="3" fill="#12151c">
+    <circle cx="0" cy="-20" r="22" />
+    <rect x="-6" y="-28" width="4" height="10" rx="1" fill="#39ff14" />
+    <rect x="2" y="-28" width="4" height="10" rx="1" fill="#39ff14" />
+  </g>
+
+  <!-- Bottom Right Plug socket -->
+  <g transform="translate(1020, 1860)" stroke="#00e5ff" stroke-width="3" fill="#12151c">
+    <circle cx="0" cy="-20" r="22" />
+    <rect x="-6" y="-28" width="4" height="10" rx="1" fill="#39ff14" />
+    <rect x="2" y="-28" width="4" height="10" rx="1" fill="#39ff14" />
+  </g>
+
+  <!-- Bottom Text banner -->
+  <g transform="translate(540, 1820)">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="36" font-weight="900" fill="#00e5ff" text-anchor="middle" letter-spacing="6">🔌 PLUGGED IN 🔌</text>
+    <text x="0" y="40" font-family="'Outfit', sans-serif" font-size="18" font-weight="bold" fill="#39ff14" text-anchor="middle" letter-spacing="4">THE PLUG EXCLUSIVE</text>
+  </g>
+</svg>

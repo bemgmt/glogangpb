@@ -1,61 +1,61 @@
 @import "tw-animate-css";
 
-@import url("https://fonts.googleapis.com/css2?family=Jost:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&family=Space+Grotesk:wght@400;500;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 /* ─── Design Tokens ─────────────────────────────────────────────── */
 :root {
   /* Backgrounds */
-  --bg:          #0f1115;
-  --bg-alt:      #0a0c0f;
-  --panel:       #171a21;
-  --panel-hover: #1e2230;
-  --surface:     #1c2030;
+  --bg:          #07080a;
+  --bg-alt:      #0c0d10;
+  --panel:       #12151c;
+  --panel-hover: #191e28;
+  --surface:     #171c26;
 
   /* Accents */
-  --accent:      #ffd100; /* Glo Gang gold */
-  --accent-dark: #c9a200;
-  --accent-red:  #e12626; /* Glo Gang red */
-  --accent-red-dark: #b51e1e;
-  --glow-gold:   rgba(255, 209, 0, 0.18);
-  --glow-red:    rgba(225, 38, 38, 0.15);
+  --accent:      #00e5ff; /* Electric Cyan */
+  --accent-dark: #00b8d4;
+  --accent-red:  #39ff14; /* Volt Green */
+  --accent-red-dark: #22d3ee;
+  --glow-gold:   rgba(0, 229, 255, 0.18);
+  --glow-red:    rgba(57, 255, 20, 0.15);
 
   /* Tier Accents */
   --tier-the-block: #9ca3af;
-  --tier-frontline: #3b82f6;
-  --tier-glory-circle: #a855f7;
+  --tier-frontline: #00e5ff;
+  --tier-glory-circle: #39ff14;
   --tier-the-block-glow: rgba(156, 163, 175, 0.2);
-  --tier-frontline-glow: rgba(59, 130, 246, 0.2);
-  --tier-glory-circle-glow: rgba(168, 85, 247, 0.2);
+  --tier-frontline-glow: rgba(0, 229, 255, 0.2);
+  --tier-glory-circle-glow: rgba(57, 255, 20, 0.2);
 
   /* Text */
-  --text:        #f6f7fb;
-  --text-muted:  #8b93a7;
-  --text-faint:  #4a5068;
-  --ink:         #121212; /* text on accent bg */
+  --text:        #f8fafc;
+  --text-muted:  #94a3b8;
+  --text-faint:  #475569;
+  --ink:         #07080a; /* text on accent bg */
 
   /* Status */
-  --ok:          #2ecc71;
-  --warn:        #ff5a5f;
-  --info:        #38bdf8;
+  --ok:          #00ff66;
+  --warn:        #ff0055;
+  --info:        #00e5ff;
 
   /* Borders */
-  --border:      rgba(255, 255, 255, 0.08);
-  --border-accent: rgba(255, 209, 0, 0.30);
-  --stroke:      rgba(0, 0, 0, 0.45);
+  --border:      rgba(255, 255, 255, 0.06);
+  --border-accent: rgba(0, 229, 255, 0.25);
+  --stroke:      rgba(0, 0, 0, 0.5);
 
   /* Focus ring */
-  --ring:        rgba(255, 209, 0, 0.40);
+  --ring:        rgba(0, 229, 255, 0.40);
 
   /* Typography */
-  --font-sans:   'Jost', 'ui-rounded', system-ui, -apple-system, sans-serif;
+  --font-sans:   'Space Grotesk', 'Outfit', system-ui, -apple-system, sans-serif;
 
   /* Radii */
-  --radius-sm:   10px;
-  --radius-md:   14px;
-  --radius-lg:   20px;
-  --radius-xl:   28px;
+  --radius-sm:   8px;
+  --radius-md:   12px;
+  --radius-lg:   16px;
+  --radius-xl:   24px;
 }
 
 /* ─── Reset & Base ──────────────────────────────────────────────── */

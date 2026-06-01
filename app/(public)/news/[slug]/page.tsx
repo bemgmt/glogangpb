@@ -33,59 +33,59 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: Record<string, NewsPost> = {
   np1: {
     _id: 'np1',
-    title: 'Chief Keef Announces Almighty So 2 Tour Dates',
+    title: 'DJ Maino Announces New Twitch Stream Calendar',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-    category: 'tour',
-    excerpt: 'The Glo Gang frontman is taking the highly anticipated Almighty So 2 on the road.',
-    content: `Chief Keef has officially announced a massive nationwide tour in support of his legendary album, Almighty So 2. The tour is slated to kick off next month, visiting major cities including Chicago, Los Angeles, New York, Atlanta, and Houston.
+    category: 'stream',
+    excerpt: 'DJ Maino is taking his sets live on Twitch and announcing his weekly broadcast schedules.',
+    content: `DJ Maino has officially announced a massive Twitch broadcasting calendar. The streams are slated to start next week, visiting virtual rooms and clubs with guest appearances and community giveaways.
 
-Glo Gang affiliates Tadoe and Ballout are confirmed to join the tour as special guest openers, promising an unforgettable high-energy experience.
-
-Tickets will be available for general public purchase starting this Friday. However, verified Glo Gang Community Portal members holding a "Glo Fan" or "GloGang VIP" tier status will receive an exclusive early pre-sale access code via their Member Dashboard 24 hours prior to general release.`,
+Mixtape collaborators and guests will join the streams, promising an unforgettable high-energy experience.
+    
+Verified DJ Maino VIP Portal members holding a "Plug VIP" or "Super Plug" tier status will receive exclusive track lists and sound files.`,
   },
   np2: {
     _id: 'np2',
-    title: 'New Drop: Glo Gang x Glory Boyz Premium Hoodies',
+    title: 'New Drop: 48 Laws Premium Sample & Drum Kit',
     publishedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-    category: 'community',
-    excerpt: 'Featuring embroidered star logos and premium heavyweight cotton, the latest drops are available now.',
-    content: `Glo Gang Worldwide is proud to present the latest streetwear collaboration featuring our signature Glo Star and classic Glory Boyz branding. This drop showcases high-density embroidery, custom cut-and-sew heavyweight cotton fleece, and a premium streetwear oversized fit.
-
-Each piece is designed to withstand the elements while bringing the authentic Glo aesthetic to your everyday style.
-
-Available in Gold, Pitch Black, and Crimson Red. The collection is now live on our official merchandise store. VIP members can access an exclusive 15% discount code under their profile page.`,
+    category: 'release',
+    excerpt: 'Featuring custom drums, processed loops, and high-fidelity sound presets, the latest kit is available now.',
+    content: `DJ Maino da Plug is proud to present the latest drum kit and loop pack featuring his signature sounds. This drop showcases high-density WAV files, custom-built drum loops, and synth presets.
+    
+Each sample is designed to punch through your mix and bring the authentic DJ Maino energy to your productions.
+    
+Available for download now. The collection is live in our VIP portal. VIP members can access an exclusive download code under their profile page.`,
   },
   np3: {
     _id: 'np3',
-    title: 'Tadoe Releases New Album "Glory To Drill"',
+    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
-    excerpt: 'Tadoe delivers 14 tracks of pure drill energy.',
-    content: `Tadoe's new album "Glory To Drill" has finally hit streaming services. Jam-packed with aggressive beats and heavy lyricism, the album serves as Tadoe's declaration of drill dominance.
-
-The record features standout production from classic drill sound-architects like Young Chop and DP Beats, alongside powerful verses from Chief Keef, Ballout, and several special guest appearances.
-
-Stream "Glory To Drill" now on Spotify, Apple Music, and YouTube Music. Physical vinyl and CD releases will be shipped exclusively to VIP level members in next month's drop bundle.`,
+    excerpt: 'DJ Maino drops a brand new 60-minute high-energy mix.',
+    content: `DJ Maino's new mix "48 Laws of Power Vol. 8" has finally hit SoundCloud and Twitch. Jam-packed with high energy, heavy basslines, and exclusive edits, the mix serves as a testament to his curation.
+    
+The mix features standout edits from electronic and hip-hop producers, alongside exclusive verses.
+    
+Stream the mix now on SoundCloud. Digital sound packs are shipped to VIP members in next month's drop bundle.`,
   },
   np4: {
     _id: 'np4',
-    title: 'Inside the Glo Gang Physical Photobooth Experience',
+    title: 'Inside the DJ Maino Member Photobooth',
     publishedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
     category: 'general',
-    excerpt: 'Learn more about the state-of-the-art interactive photobooth setup in our flagship store.',
-    content: `Our physical store in Los Angeles has officially unveiled its brand-new custom interactive photobooth. The booth lets fans step in and snap high-resolution captures using the exclusive Glo Gang overlays and 3D digital face filters.
-
-Step inside and choose from classic sticker graphics, the iconic Glo Sun, and futuristic elements.
-
-Once captured, you can print a high-quality physical copy or use the touchscreen to instantly send the digital copy to your phone via SMS or Email. Members can also sign in to their portal account directly inside the booth to automatically save photos to their Supabase Storage portfolio!`,
+    excerpt: 'Learn how to use the member dashboard photobooth with custom overlays.',
+    content: `Our online VIP member portal has officially unveiled its brand-new custom interactive photobooth. The booth lets fans step in and snap high-resolution captures using the exclusive DJ Maino overlays and custom props.
+    
+Step inside and choose from classic sticker graphics, headphones, and neon elements.
+    
+Once captured, you can download a high-quality copy or share it directly. Members can also sign in to their portal account directly inside the booth to automatically save photos to their gallery!`,
   },
 }
 
 const SLUG_TO_PLACEHOLDER: Record<string, string> = {
-  'chief-keef-announces-almighty-so-2-tour-dates': 'np1',
-  'new-drop-glo-gang-x-glory-boyz-premium-hoodies': 'np2',
-  'tadoe-releases-new-album-glory-to-drill': 'np3',
-  'inside-the-glo-gang-physical-photobooth-experience': 'np4',
+  'dj-maino-announces-new-twitch-stream-calendar': 'np1',
+  'new-drop-48-laws-premium-sample-drum-kit': 'np2',
+  'dj-maino-releases-new-mix-48-laws-of-power-vol-8': 'np3',
+  'inside-the-dj-maino-member-photobooth': 'np4',
 }
 
 // ---------------------------------------------------------------------------
@@ -116,11 +116,11 @@ async function getPost(slug: string): Promise<NewsPost | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const post = await getPost(slug)
-  if (!post) return { title: 'Post Not Found | Glo Gang' }
+  if (!post) return { title: 'Post Not Found | DJ Maino' }
 
   return {
-    title: `${post.title} | News | Glo Gang Worldwide`,
-    description: post.excerpt || `Read the latest news on Glo Gang.`,
+    title: `${post.title} | News | DJ Maino da Plug`,
+    description: post.excerpt || `Read the latest news from DJ Maino.`,
   }
 }
 
@@ -177,7 +177,7 @@ export default async function NewsDetailPage({ params }: { params: Promise<{ slu
           {post.coverImage?.asset?.url ? (
             <img src={post.coverImage.asset.url} alt={post.title} className="post-cover-img" />
           ) : (
-            <div className="post-cover-placeholder">GLO GANG WORLDWIDE</div>
+            <div className="post-cover-placeholder">MAINO WORLDWIDE</div>
           )}
         </div>
 

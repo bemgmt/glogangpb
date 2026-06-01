@@ -5,12 +5,12 @@ import { createClient } from 'next-sanity'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Events | Glo Gang Worldwide',
+  title: 'Events | DJ Maino da Plug',
   description:
-    'Browse upcoming Glo Gang shows, concerts, and events. Get tickets and RSVP.',
+    'Browse upcoming DJ Maino shows, club sets, and live stream sessions. Get tickets and RSVP.',
   openGraph: {
-    title: 'Events | Glo Gang Worldwide',
-    description: 'Browse upcoming Glo Gang shows, concerts, and events.',
+    title: 'Events | DJ Maino da Plug',
+    description: 'Browse upcoming DJ Maino shows, club sets, and live stream sessions.',
   },
 }
 
@@ -45,28 +45,28 @@ const sanity = createClient({
 const PLACEHOLDER_EVENTS: SanityEvent[] = [
   {
     _id: 'ph1',
-    title: 'Glo Gang Live – Chicago',
+    title: 'DJ Maino Live Set – LA',
     eventDate: new Date(Date.now() + 14 * 86400000).toISOString(),
-    venue: 'United Center',
-    city: 'Chicago, IL',
+    venue: 'Exchange LA',
+    city: 'Los Angeles, CA',
     featured: true,
-    description: 'Chief Keef and the full GGW roster hit Chicago for a historic night.',
+    description: 'DJ Maino spinning the absolute finest electronic and hip-hop sets live.',
   },
   {
     _id: 'ph2',
-    title: 'Glo Fest – Atlanta',
+    title: 'Mixtape Launch – Atlanta',
     eventDate: new Date(Date.now() + 30 * 86400000).toISOString(),
-    venue: 'State Farm Arena',
+    venue: 'Believe Music Hall',
     city: 'Atlanta, GA',
-    description: 'Two nights of pure drill. ATL, we coming.',
+    description: 'Mixtape drop party with DJ Maino on the decks.',
   },
   {
     _id: 'ph3',
-    title: 'GGW Tour – Los Angeles',
+    title: 'Twitch Stream Session',
     eventDate: new Date(Date.now() + 45 * 86400000).toISOString(),
-    venue: 'Crypto.com Arena',
-    city: 'Los Angeles, CA',
-    description: 'West coast takeover. Full crew, full setlist.',
+    venue: 'Twitch Online',
+    city: 'Live Stream',
+    description: 'Live on Twitch with exclusive interactive audio and fan guest list.',
   },
 ]
 
@@ -188,7 +188,7 @@ export default async function EventsPage() {
           Shows &amp; Events
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Catch the Glo Gang on tour. Tickets sell out fast.
+          Catch DJ Maino live or tune in to Twitch stream sessions.
         </p>
       </header>
 

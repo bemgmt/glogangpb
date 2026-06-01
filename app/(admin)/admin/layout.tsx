@@ -48,7 +48,7 @@ export default async function AdminLayout({
               margin: '0.5rem 0 0',
             }}
           >
-            Glo Gang HQ
+            Plug HQ
           </p>
         </div>
 

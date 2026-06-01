@@ -1,7 +1,24 @@
 'use client'
 
 import Link from 'next/link'
-import { Instagram, Twitter, Youtube } from 'lucide-react'
+import { Instagram, Twitter, Youtube, Twitch, Music } from 'lucide-react'
+
+// Custom TikTok icon component
+const TiktokIcon = ({ size = 16, ...props }: { size?: number; [key: string]: any }) => (
+  <svg
+    viewBox="0 0 24 24"
+    width={size}
+    height={size}
+    stroke="currentColor"
+    strokeWidth="2"
+    fill="none"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+)
 
 const FOOTER_LINKS = [
   {
@@ -23,19 +40,22 @@ const FOOTER_LINKS = [
     ],
   },
   {
-    heading: 'Label',
+    heading: 'Connect',
     links: [
       { label: 'About',      href: '/about' },
-      { label: 'Merch Store', href: process.env.NEXT_PUBLIC_SHOPIFY_STORE_URL || '#', external: true },
+      { label: 'Links & Socials', href: '/links' },
       { label: 'Contact',    href: '/contact' },
     ],
   },
 ]
 
 const SOCIAL = [
-  { label: 'Instagram', href: 'https://www.instagram.com/glogang', Icon: Instagram },
-  { label: 'Twitter',   href: 'https://twitter.com/glogang',       Icon: Twitter },
-  { label: 'YouTube',   href: 'https://youtube.com/@glogang',      Icon: Youtube },
+  { label: 'Twitch',    href: 'https://www.twitch.tv/djmainodaplug',   Icon: Twitch },
+  { label: 'Instagram', href: 'https://www.instagram.com/mainodaplug/', Icon: Instagram },
+  { label: 'SoundCloud', href: 'https://soundcloud.com/48-laws',        Icon: Music },
+  { label: 'YouTube',   href: 'https://www.youtube.com/@Djmainodaplug/featured', Icon: Youtube },
+  { label: 'TikTok',    href: 'https://www.tiktok.com/@mainodaplug',   Icon: TiktokIcon },
+  { label: 'Twitter/X', href: 'https://x.com/mainodaplug',             Icon: Twitter },
 ]
 
 export function GGFooter() {
@@ -76,22 +96,19 @@ export function GGFooter() {
                 marginBottom: 12,
               }}
             >
-              <span style={{
-                display: 'inline-block',
-                width: 32,
-                height: 32,
-                background: 'var(--accent)',
-                borderRadius: 8,
-                flexShrink: 0,
-              }} />
-              GLO GANG
+              {/* Custom Plug Logo SVG */}
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: 'var(--accent)', flexShrink: 0 }}>
+                <path d="M12 2v8M18 10V6M6 10V6M12 18v4" />
+                <rect x="5" y="10" width="14" height="8" rx="3" fill="var(--accent)" />
+              </svg>
+              DJ MAINO
             </Link>
             <p style={{ fontSize: 14, maxWidth: 260, lineHeight: 1.7 }}>
-              The official fan community portal for Glo Gang Worldwide — Chief Keef's label.
+              The official fan portal and VIP community for DJ Maino da Plug.
             </p>
 
             {/* Social */}
-            <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
+            <div style={{ display: 'flex', gap: 10, marginTop: 20, flexWrap: 'wrap' }}>
               {SOCIAL.map(({ label, href, Icon }) => (
                 <a
                   key={label}
@@ -144,7 +161,7 @@ export function GGFooter() {
                 {heading}
               </p>
               <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {links.map(({ label, href, external }) => (
+                {links.map(({ label, href, external }: any) => (
                   <li key={label}>
                     {external ? (
                       <a
@@ -187,10 +204,10 @@ export function GGFooter() {
           }}
         >
           <p style={{ fontSize: 12, color: 'var(--text-faint)' }}>
-            © {new Date().getFullYear()} Glo Gang Worldwide. All rights reserved.
+            © {new Date().getFullYear()} DJ Maino da Plug. All rights reserved.
           </p>
           <p style={{ fontSize: 12, color: 'var(--text-faint)' }}>
-            Built for the Glo
+            The Plug Worldwide
           </p>
         </div>
       </div>

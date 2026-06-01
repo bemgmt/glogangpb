@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1920" width="100%" height="100%">
+  <!-- Lightning borders and neon elements -->
+  <rect x="25" y="25" width="1030" height="1870" fill="none" stroke="#39ff14" stroke-width="4" rx="20" opacity="0.6" stroke-dasharray="30 15" />
+
+  <!-- Lightning Bolt Top Left -->
+  <g transform="translate(60, 60)" fill="#39ff14" opacity="0.9">
+    <polygon points="0,-30 20,-10 0,-10 10,20 -20,-10 0,-10" transform="scale(1.5)" />
+  </g>
+
+  <!-- Lightning Bolt Top Right -->
+  <g transform="translate(1020, 60)" fill="#39ff14" opacity="0.9">
+    <polygon points="0,-30 20,-10 0,-10 10,20 -20,-10 0,-10" transform="scale(1.5)" />
+  </g>
+
+  <!-- Lightning Bolt Bottom Left -->
+  <g transform="translate(60, 1860)" fill="#00e5ff" opacity="0.9">
+    <polygon points="0,-30 20,-10 0,-10 10,20 -20,-10 0,-10" transform="scale(1.5)" />
+  </g>
+
+  <!-- Lightning Bolt Bottom Right -->
+  <g transform="translate(1020, 1860)" fill="#00e5ff" opacity="0.9">
+    <polygon points="0,-30 20,-10 0,-10 10,20 -20,-10 0,-10" transform="scale(1.5)" />
+  </g>
+
+  <!-- Side sparks -->
+  <path d="M 30,600 L 50,610 L 35,620 L 60,635" fill="none" stroke="#39ff14" stroke-width="3" />
+  <path d="M 1050,1300 L 1030,1310 L 1045,1320 L 1020,1335" fill="none" stroke="#00e5ff" stroke-width="3" />
+
+  <!-- Title Bottom -->
+  <g transform="translate(540, 1800)">
+    <text x="0" y="0" font-family="'Space Grotesk', sans-serif" font-size="44" font-weight="900" fill="#39ff14" text-anchor="middle" letter-spacing="10">HIGH VOLTAGE</text>
+    <text x="0" y="45" font-family="'Outfit', sans-serif" font-size="18" font-weight="bold" fill="#00e5ff" text-anchor="middle" letter-spacing="4">WARNING: OVERCHARGED SOUNDS</text>
+  </g>
+</svg>

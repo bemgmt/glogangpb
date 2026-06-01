@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <!-- Glowing shadow/outline -->
+  <polygon points="100,10 150,90 100,90 130,190 50,110 100,110" fill="none" stroke="#39ff14" stroke-width="12" stroke-linejoin="round" opacity="0.4" />
+  
+  <!-- Outer Body -->
+  <polygon points="100,10 150,90 100,90 130,190 50,110 100,110" fill="#39ff14" stroke="#07080a" stroke-width="4" stroke-linejoin="round" />
+
+  <!-- Inner Cyan Spark highlight -->
+  <polygon points="98,25 130,85 92,85 118,170 65,115 98,115" fill="#00e5ff" />
+</svg>

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { Camera, Calendar, User, Star, ArrowRight, Lock, Key, Flame } from 'lucide-react'
 
 export const metadata = {
-  title: 'Dashboard | Glo Gang Worldwide',
-  description: 'Your Glo Gang fan member dashboard and Digital Closet.',
+  title: 'Dashboard | DJ Maino da Plug',
+  description: 'Your DJ Maino VIP fan member dashboard and digital locker.',
 }
 
 export default async function DashboardPage() {
@@ -29,7 +29,7 @@ export default async function DashboardPage() {
 
   const displayName = profile?.display_name || user.email?.split('@')[0] || 'Fan'
   const tier = profile?.current_tier || 'the_block'
-  const tierLabel = tier === 'glory_circle' ? 'Glory Circle' : tier === 'frontline' ? 'Frontline' : 'The Block'
+  const tierLabel = tier === 'glory_circle' ? 'Super Plug' : tier === 'frontline' ? 'Plug VIP' : 'Plug Fan'
   
   const tierColor = tier === 'glory_circle' ? 'var(--tier-glory-circle)' : tier === 'frontline' ? 'var(--tier-frontline)' : 'var(--tier-the-block)'
   const tierBg = tier === 'glory_circle' ? 'var(--tier-glory-circle-glow)' : tier === 'frontline' ? 'var(--tier-frontline-glow)' : 'var(--tier-the-block-glow)'
@@ -45,14 +45,14 @@ export default async function DashboardPage() {
       href: '/member/vault',
       icon: Lock,
       label: 'The Vault',
-      desc: 'Glory Circle Exclusive',
+      desc: 'Super Plug Exclusive',
       locked: tier !== 'glory_circle' && profile?.role !== 'admin'
     },
     {
       href: '/member/early-access',
       icon: Key,
       label: 'Early Access',
-      desc: 'Frontline & Glory Circle',
+      desc: 'Plug VIP & Super Plug',
       locked: tier === 'the_block' && profile?.role !== 'admin'
     },
     {
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
                   Welcome, {displayName}
                 </h1>
               </div>
-              <p>Your Glo Gang enterprise portal.</p>
+              <p>Your DJ Maino VIP member portal.</p>
             </div>
             
             {/* Gamified Passport Card */}
@@ -155,7 +155,7 @@ export default async function DashboardPage() {
             <div className="gg-card" style={{ textAlign: 'center', padding: '48px 24px', color: 'var(--text-muted)' }}>
               <Lock size={32} style={{ margin: '0 auto 16px', opacity: 0.5 }} />
               <p style={{ fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>Your closet is empty</p>
-              <p style={{ maxWidth: 400, margin: '0 auto' }}>Purchase drops on Shopify with your registered email to automatically unlock digital assets here.</p>
+              <p style={{ maxWidth: 400, margin: '0 auto' }}>Purchase mix passes and sound kits with your registered email to automatically unlock digital collectibles here.</p>
             </div>
           ) : (
             <div className="gg-grid-3">
