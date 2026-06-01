@@ -40,21 +40,31 @@ export default async function HomePage() {
           background: 'var(--bg)',
         }}
       >
-        {/* Background SVG */}
+        {/* Background Image */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
-            backgroundImage: 'url(/maino_bg.svg)',
+            backgroundImage: 'url(/img/maino_hero_bg.png)',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
             backgroundRepeat: 'no-repeat',
-            opacity: 0.5,
           }}
           aria-hidden
         />
 
-        {/* Cyan glow radial */}
+        {/* Dark overlay for readability */}
+        <div
+          style={{
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.85) 100%)',
+            pointerEvents: 'none',
+          }}
+          aria-hidden
+        />
+
+        {/* Volt Green glow radial */}
         <div
           style={{
             position: 'absolute',
@@ -63,7 +73,7 @@ export default async function HomePage() {
             transform: 'translateX(-50%)',
             width: '900px',
             height: '600px',
-            background: 'radial-gradient(ellipse, rgba(0,229,255,0.14) 0%, transparent 70%)',
+            background: 'radial-gradient(ellipse, rgba(57,255,20,0.1) 0%, transparent 70%)',
             pointerEvents: 'none',
           }}
           aria-hidden
