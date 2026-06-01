@@ -5,7 +5,7 @@ import { createClient as createSanityClient } from 'next-sanity'
 import MemberEventsClient from './MemberEventsClient'
 
 export const metadata: Metadata = {
-  title: 'Member Events & RSVPs | Glo Gang',
+  title: 'Member Events & RSVPs | DJ Maino',
   description: 'Manage your event RSVPs, listening parties, and exclusive drop invitations.',
 }
 
@@ -37,28 +37,28 @@ interface SanityEvent {
 const PLACEHOLDER_EVENTS: SanityEvent[] = [
   {
     _id: 'ph1',
-    title: 'Glo Gang Live – Chicago',
+    title: 'DJ Maino Live – Los Angeles',
     eventDate: new Date(Date.now() + 14 * 86400000).toISOString(),
-    venue: 'United Center',
-    city: 'Chicago, IL',
+    venue: 'Exchange LA',
+    city: 'Los Angeles, CA',
     featured: true,
-    description: 'Chief Keef and the full GGW roster hit Chicago for a historic night.',
+    description: 'DJ Maino and the 48 Laws affiliates live set.',
   },
   {
     _id: 'ph2',
-    title: 'Glo Fest – Atlanta',
+    title: '48 Laws Soundsystem Fest – Miami',
     eventDate: new Date(Date.now() + 30 * 86400000).toISOString(),
-    venue: 'State Farm Arena',
-    city: 'Atlanta, GA',
-    description: 'Annual Glo Gang music festival and streetwear exhibition.',
+    venue: 'Mana Wynwood',
+    city: 'Miami, FL',
+    description: 'Annual 48 Laws soundsystem, music festival, and exclusive pop-up exhibition.',
   },
   {
     _id: 'ph3',
-    title: 'Exclusive VIP Listening Party – Los Angeles',
+    title: 'Exclusive VIP Listening Party – New York',
     eventDate: new Date(Date.now() + 5 * 86400000).toISOString(),
-    venue: 'Glo Gang HQ Studio',
-    city: 'Los Angeles, CA',
-    description: 'Private studio listening party for upcoming secret album release. VIP members only.',
+    venue: '48 Laws HQ Studio',
+    city: 'New York, NY',
+    description: 'Private studio listening party for upcoming secret mixtape release. VIP members only.',
   },
 ]
 

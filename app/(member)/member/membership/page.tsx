@@ -4,8 +4,8 @@ import type { Metadata } from 'next'
 import { ShieldCheck, Award, Zap, ArrowRight, CreditCard, Sparkles } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'My Membership | Glo Gang',
-  description: 'Manage your Glo Gang membership tier and billing.',
+  title: 'My Membership | DJ Maino',
+  description: 'Manage your DJ Maino membership tier and billing.',
 }
 
 export default async function MemberMembershipPage() {
@@ -47,7 +47,7 @@ export default async function MemberMembershipPage() {
     },
     {
       id: 'glo-fan',
-      name: 'Glo Fan',
+      name: 'Plug Fan',
       price: '$9.99/mo',
       perks: [
         'All Free membership features',
@@ -61,11 +61,11 @@ export default async function MemberMembershipPage() {
     },
     {
       id: 'glogangvip',
-      name: 'GloGang VIP',
+      name: 'Super Plug',
       price: '$24.99/mo',
       perks: [
-        'All Glo Fan membership features',
-        'Special edition physical Glo star stickers',
+        'All Plug Fan membership features',
+        'Special edition physical 48 Laws stickers',
         'Free entry to official listening parties',
         'Exclusive merch discounts (15% off)',
         'Quarterly physical collector bundles',
@@ -99,7 +99,7 @@ export default async function MemberMembershipPage() {
           View your current subscription level or upgrade to unlock premium VIP content and digital photobooth capabilities.
         </p>
       </header>
-
+ 
       <hr className="gg-divider" style={{ marginBottom: '3rem' }} />
 
       {/* Current Status Banner */}
@@ -113,7 +113,7 @@ export default async function MemberMembershipPage() {
               Current Level
             </p>
             <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '1.75rem', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.02em', color: 'var(--accent)', margin: '0.2rem 0' }}>
-              {tier === 'free' ? 'Free Fan' : tier === 'glo-fan' ? 'Glo Fan' : 'GloGang VIP'}
+              {tier === 'free' ? 'Free Fan' : tier === 'glo-fan' ? 'Plug Fan' : 'Super Plug'}
             </h2>
             <p style={{ margin: 0, fontSize: '0.875rem', color: 'var(--text-muted)' }}>
               Status: <span style={{ color: status === 'active' ? '#2ecc71' : 'var(--accent)', fontWeight: 700, textTransform: 'uppercase' }}>{status}</span>

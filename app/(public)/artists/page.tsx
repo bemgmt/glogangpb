@@ -6,12 +6,12 @@ import ArtistsClient from './ArtistsClient'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Artists | Glo Gang Worldwide',
+  title: 'Artists & Affiliates | DJ Maino da Plug',
   description:
-    'Explore the full roster of Glo Gang artists. Discover music, bios, and upcoming shows.',
+    'Explore the full roster of DJ Maino da Plug collaborators and artists. Discover music, bios, and upcoming shows.',
   openGraph: {
-    title: 'Artists | Glo Gang Worldwide',
-    description: 'Explore the full roster of Glo Gang artists.',
+    title: 'Artists & Affiliates | DJ Maino da Plug',
+    description: 'Explore the full roster of DJ Maino da Plug collaborators and artists.',
   },
 }
 
@@ -64,10 +64,10 @@ export default async function ArtistsPage() {
             margin: 0,
           }}
         >
-          Glo Gang Artists
+          Collaborators & Affiliates
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Chicago&rsquo;s finest. Discover the artists behind the movement.
+          48 Laws Network. Discover the talent and producers behind the movement.
         </p>
       </header>
 

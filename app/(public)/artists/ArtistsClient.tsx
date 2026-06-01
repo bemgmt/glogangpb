@@ -18,12 +18,12 @@ interface Artist {
 // Placeholder data (shown when Sanity returns nothing)
 // ---------------------------------------------------------------------------
 const PLACEHOLDER_ARTISTS: Artist[] = [
-  { _id: 'ph1', name: 'Chief Keef', genre: 'Drill', featured: true },
-  { _id: 'ph2', name: 'Tadoe', genre: 'Hip-Hop' },
-  { _id: 'ph3', name: 'Ballout', genre: 'Drill' },
-  { _id: 'ph4', name: 'Fredo Santana', genre: 'Trap' },
-  { _id: 'ph5', name: 'SD', genre: 'Drill' },
-  { _id: 'ph6', name: 'Capo', genre: 'Hip-Hop' },
+  { _id: 'ph1', name: 'DJ Maino da Plug', genre: 'DJ / Curator', featured: true },
+  { _id: 'ph2', name: 'Kid 48', genre: 'Trap' },
+  { _id: 'ph3', name: 'Lex 808', genre: 'Drill' },
+  { _id: 'ph4', name: 'Plug Producer', genre: 'Beats' },
+  { _id: 'ph5', name: 'Volt Rapper', genre: 'Hip-Hop' },
+  { _id: 'ph6', name: 'Supa Bass', genre: 'Electronic' },
 ]
 
 // ---------------------------------------------------------------------------

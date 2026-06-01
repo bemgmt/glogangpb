@@ -37,81 +37,81 @@ interface Artist {
 const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
   ph1: {
     _id: 'ph1',
-    name: 'Chief Keef',
-    genre: 'Drill',
+    name: 'DJ Maino da Plug',
+    genre: 'DJ / Curator',
     featured: true,
-    bio: 'Chief Keef (Sosa) is a pioneer of the Chicago drill music scene. Known for his raw delivery and hit singles like "Love Sosa" and "I Don\'t Like," Keef redefined modern hip-hop and built a global movement with Glo Gang.',
+    bio: 'Renowned as a premier curator and host of the highly acclaimed 48 Laws mixtape series, DJ Maino da Plug has carved out a unique space in modern music culture. Spinning the freshest tracks, managing rising talent, and building a massive digital fan base, DJ Maino is the ultimate conduit for music discovery.',
     socialLinks: {
-      instagram: 'https://instagram.com/chieffkeeffsossa',
-      twitter: 'https://twitter.com/chiefkeef',
-      youtube: 'https://youtube.com/user/ChiefKeefVEVO',
-      spotify: 'https://open.spotify.com/artist/15wszCK49AY2UgQLGz5t6Q',
+      instagram: 'https://www.instagram.com/mainodaplug/',
+      twitter: 'https://x.com/mainodaplug',
+      youtube: 'https://www.youtube.com/@Djmainodaplug/featured',
+      spotify: 'https://soundcloud.com/48-laws',
     },
-    releases: ['Finally Rich', 'Bang 3', 'Almighty So', 'Dirty表'],
+    releases: ['48 Laws of Power Vol. 8', 'Plug Sessions Vol. 1', 'The Warm Up Mix'],
   },
   ph2: {
     _id: 'ph2',
-    name: 'Tadoe',
-    genre: 'Hip-Hop',
-    bio: 'Tadoe is a core member of Glo Gang, known for his high energy and aggressive delivery. Collaborating frequently with Chief Keef and other label mates, he brings the authentic Glo sound to the stage.',
+    name: 'Kid 48',
+    genre: 'Trap',
+    bio: 'Kid 48 is a rising talent under the 48 Laws Network. Managed by DJ Maino, his fast-paced flows and melodic trap hooks are defining the new sound of the underground.',
     socialLinks: {
-      instagram: 'https://instagram.com/tadoe_daglo',
-      twitter: 'https://twitter.com/tadoe',
+      instagram: 'https://instagram.com',
+      twitter: 'https://twitter.com',
     },
-    releases: ['The Golden One', 'Glory Boyz EP'],
+    releases: ['Underdog Story', '48 Laws Tape Feature'],
   },
   ph3: {
     _id: 'ph3',
-    name: 'Ballout',
+    name: 'Lex 808',
     genre: 'Drill',
-    bio: 'Ballout is a prominent Glo Gang member hailing from Chicago. With numerous mixtapes and a heavy flow, Ballout represents the raw energy and street aesthetic of Glo Gang Worldwide.',
+    bio: 'Lex 808 is a Chicago-born producer and rapper who brings the raw energy of drill beats to DJ Maino\'s projects and collaborative tapes.',
     socialLinks: {
-      instagram: 'https://instagram.com/ballout',
-      twitter: 'https://twitter.com/ballout',
+      instagram: 'https://instagram.com',
+      twitter: 'https://twitter.com',
     },
-    releases: ['Ballin No Democracy', 'GloBoss', 'Welcome 2 Glo Land'],
+    releases: ['Out of the Dark', 'Strictly Beats'],
   },
   ph4: {
     _id: 'ph4',
-    name: 'Fredo Santana',
-    genre: 'Trap',
-    bio: 'Fredo Santana (1990-2018) was a legendary figure in trap and drill music, co-CEO of Glory Boyz Entertainment. His raw storytelling and dark aesthetic left an indelible mark on Glo Gang and modern rap history.',
+    name: 'Plug Producer',
+    genre: 'Beats',
+    bio: 'A chief producer behind the 48 Laws of Power mixtape series. Known for crafting hard-hitting 808s and spacey synth lines featured on DJ Maino\'s live sets.',
     socialLinks: {
-      instagram: 'https://instagram.com/fredosantanassr',
-      youtube: 'https://youtube.com/FredoSantanaVEVO',
+      instagram: 'https://instagram.com',
+      youtube: 'https://youtube.com',
     },
-    releases: ['Trappin Ain\'t Easy', 'Fredo Kruger', 'Scary Site'],
+    releases: ['Drum Kit Vol. 1', 'Night Vision Instrumental'],
   },
   ph5: {
     _id: 'ph5',
-    name: 'SD',
-    genre: 'Drill',
-    bio: 'SD is an original member of the Glory Boyz crew, rising to prominence with his dark, atmospheric drill tracks and the critically acclaimed Life of a Savage mixtape series.',
+    name: 'Volt Rapper',
+    genre: 'Hip-Hop',
+    bio: 'With electric stage presence and high-octane delivery, Volt Rapper is a frequent collaborator on DJ Maino\'s club tours and festival appearances.',
     socialLinks: {
-      twitter: 'https://twitter.com/sd_gbesavage',
+      twitter: 'https://twitter.com',
     },
-    releases: ['Life of a Savage 1-4', 'Truly Blessed'],
+    releases: ['Live Energy EP', 'Static Flow'],
   },
   ph6: {
     _id: 'ph6',
-    name: 'Capo',
-    genre: 'Hip-Hop',
-    bio: 'Capo (1993-2015) was a beloved Glory Boyz member whose melodic delivery and street tales heavily influenced the melodic side of drill. His legacy lives on through his music and the Glo Gang family.',
+    name: 'Supa Bass',
+    genre: 'Electronic',
+    bio: 'Supa Bass provides the heavy electronic and bass elements that DJ Maino blends into his live sets. He is a primary contributor to the 48 Laws soundsystem.',
     socialLinks: {
-      instagram: 'https://instagram.com/capo_gbegloryboyz',
+      instagram: 'https://instagram.com',
     },
-    releases: ['G.L.O.N.L. 1 & 2'],
+    releases: ['Frequency Shift'],
   },
 }
 
 // Map slugs to placeholder keys for easy lookup
 const SLUG_TO_PLACEHOLDER: Record<string, string> = {
-  'chief-keef': 'ph1',
-  'tadoe': 'ph2',
-  'ballout': 'ph3',
-  'fredo-santana': 'ph4',
-  'sd': 'ph5',
-  'capo': 'ph6',
+  'dj-maino-da-plug': 'ph1',
+  'kid-48': 'ph2',
+  'lex-808': 'ph3',
+  'plug-producer': 'ph4',
+  'volt-rapper': 'ph5',
+  'supa-bass': 'ph6',
 }
 
 // ---------------------------------------------------------------------------
@@ -143,11 +143,11 @@ async function getArtist(slug: string): Promise<Artist | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const artist = await getArtist(slug)
-  if (!artist) return { title: 'Artist Not Found | Glo Gang' }
+  if (!artist) return { title: 'Artist Not Found | DJ Maino da Plug' }
 
   return {
-    title: `${artist.name} | Glo Gang Worldwide`,
-    description: artist.bio ? artist.bio.slice(0, 160) : `Explore ${artist.name}'s profile on Glo Gang.`,
+    title: `${artist.name} | 48 Laws Soundsystem`,
+    description: artist.bio ? artist.bio.slice(0, 160) : `Explore ${artist.name}'s profile.`,
   }
 }
 

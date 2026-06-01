@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { PlusCircle, ExternalLink, Star } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Manage Artists | Glo Gang Admin',
-  description: 'View and manage Glo Gang artist roster.',
+  title: 'Manage Artists | DJ Maino Admin',
+  description: 'View and manage DJ Maino artist roster.',
 }
 
 const sanity = createSanityClient({
@@ -26,12 +26,12 @@ interface Artist {
 }
 
 const PLACEHOLDER_ARTISTS: Artist[] = [
-  { _id: 'ph1', name: 'Chief Keef', genre: 'Drill', featured: true },
-  { _id: 'ph2', name: 'Tadoe', genre: 'Hip-Hop' },
-  { _id: 'ph3', name: 'Ballout', genre: 'Drill' },
-  { _id: 'ph4', name: 'Fredo Santana', genre: 'Trap' },
-  { _id: 'ph5', name: 'SD', genre: 'Drill' },
-  { _id: 'ph6', name: 'Capo', genre: 'Hip-Hop' },
+  { _id: 'ph1', name: 'DJ Maino da Plug', genre: 'DJ / Curator', featured: true },
+  { _id: 'ph2', name: 'Kid 48', genre: 'Trap' },
+  { _id: 'ph3', name: 'Lex 808', genre: 'Drill' },
+  { _id: 'ph4', name: 'Plug Producer', genre: 'Beats' },
+  { _id: 'ph5', name: 'Volt Rapper', genre: 'Hip-Hop' },
+  { _id: 'ph6', name: 'Supa Bass', genre: 'Electronic' },
 ]
 
 async function getArtists() {
@@ -85,7 +85,7 @@ export default async function AdminArtistsPage() {
             Manage Artists
           </h1>
           <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-            Artists and affiliates in the Glo Gang Roster. Sync is done automatically via Sanity Studio.
+            Artists and affiliates in the DJ Maino / 48 Laws Roster. Sync is done automatically via Sanity Studio.
           </p>
         </div>
 

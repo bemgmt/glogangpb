@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Kiosk — Glo Gang Photobooth',
+  title: 'Kiosk — DJ Maino Photobooth',
   description: 'In-store photobooth kiosk experience.',
 }
 
@@ -11,7 +11,7 @@ export default function KioskPage() {
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundImage: 'url(/glogangpb.svg)',
+        backgroundImage: 'url(/maino_bg.svg)',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
@@ -35,7 +35,7 @@ export default function KioskPage() {
             minHeight: 'clamp(48px, 8vmin, 90px)',
             borderRadius: 20,
             background: '#1a1a1a',
-            color: '#ffd100',
+            color: '#39ff14',
             fontWeight: 900,
             letterSpacing: '0.02em',
             textTransform: 'uppercase',

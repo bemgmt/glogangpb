@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { PlusCircle, ExternalLink, Calendar, Tag } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Manage News | Glo Gang Admin',
-  description: 'View and manage Glo Gang news articles.',
+  title: 'Manage News | DJ Maino Admin',
+  description: 'View and manage DJ Maino news articles.',
 }
 
 const sanity = createSanityClient({
@@ -28,28 +28,28 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: NewsPost[] = [
   {
     _id: 'np1',
-    title: 'Chief Keef Announces Almighty So 2 Tour Dates',
+    title: 'DJ Maino Announces 48 Laws Summer Tour Dates',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
     category: 'tour',
     featured: true,
   },
   {
     _id: 'np2',
-    title: 'New Drop: Glo Gang x Glory Boyz Premium Hoodies',
+    title: 'New Drop: 48 Laws Premium Sample & Drum Kit',
     publishedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
     category: 'community',
     featured: false,
   },
   {
     _id: 'np3',
-    title: 'Tadoe Releases New Album "Glory To Drill"',
+    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
     featured: false,
   },
   {
     _id: 'np4',
-    title: 'Inside the Glo Gang Physical Photobooth Experience',
+    title: 'Inside the 48 Laws Soundsystem Experience',
     publishedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
     category: 'general',
     featured: false,
