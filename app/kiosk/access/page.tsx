@@ -5,17 +5,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
-// ─── Approved QR codes stored in localStorage (same as original login.html) ──
-function getApprovedCodes(): string[] {
-  try {
-    return (localStorage.getItem('approved_codes') || '').split('\n').map(s => s.trim()).filter(Boolean)
-  } catch { return [] }
-}
-
-function isCodeApproved(code: string): boolean {
-  return getApprovedCodes().includes(code.trim())
-}
-
 export default function KioskAccessPage() {
   const router = useRouter()
   const [tab, setTab] = useState<'scan' | 'pay'>('scan')
@@ -70,28 +59,32 @@ export default function KioskAccessPage() {
     setScanResult('Camera stopped.')
   }
 
-  function handleCode(code: string) {
-    setScanResult(`Detected: ${code}`)
+  async function handleCode(code: string) {
+    setScanResult('Pass detected. Verifying…')
     stopScan()
-    if (isCodeApproved(code)) {
+    try {
+      const response = await fetch('/api/kiosk/redeem', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: code.trim() }),
+      })
+      const payload = await response.json()
+      if (!response.ok) throw new Error(payload.error || 'Pass not approved.')
       toast.success('QR Approved ✓')
       setTimeout(() => router.push('/kiosk/booth'), 700)
-    } else {
-      toast.error('QR not approved ✕')
+    } catch (error) {
+      setScanResult('Pass rejected.')
+      toast.error(error instanceof Error ? error.message : 'Pass not approved.')
     }
   }
 
   function verifyManual() {
     const code = manualCode.trim()
     if (!code) { toast.error('Enter a code'); return }
-    handleCode(code)
+    void handleCode(code)
     setManualCode('')
   }
 
-  function loadSamples() {
-    localStorage.setItem('approved_codes', 'GG-TEST-2025\nVIP-1234')
-    toast.success('Sample codes loaded to device.')
-  }
 
   function startFreeSession() {
     toast.success('Free session started ✓')
@@ -170,11 +163,6 @@ export default function KioskAccessPage() {
               </div>
             </div>
 
-            {/* Sample codes loader */}
-            <div className="gg-card">
-              <p style={{ fontWeight: 700, marginBottom: 6 }}>Sample codes: <span style={{ color: 'var(--text-muted)', fontWeight: 400 }}>GG-TEST-2025, VIP-1234</span></p>
-              <button onClick={loadSamples} className="gg-btn gg-btn--ghost gg-btn--sm">Load to Device</button>
-            </div>
           </div>
         )}
 

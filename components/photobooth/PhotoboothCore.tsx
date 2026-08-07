@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { createClient } from '@/lib/supabase/client'
-import { Camera, SwitchCamera, Trash2, Save, Share2, Home, Settings, LogOut, X } from 'lucide-react'
+import { Camera, SwitchCamera, Trash2, Save, Share2, Home, LogOut, X } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
@@ -40,7 +40,7 @@ interface Sticker {
 }
 
 interface PhotoboothCoreProps {
-  /** When true, saves go to localStorage only (kiosk mode) */
+  /** When true, saves remain in this browser session only (kiosk mode) */
   kioskMode?: boolean
   /** Supabase user ID for cloud saves */
   userId?: string
@@ -55,6 +55,7 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
   const stageRef   = useRef<HTMLDivElement>(null)
   const composeRef = useRef<HTMLCanvasElement>(null)
   const overlayRef = useRef<HTMLImageElement>(null)
+  const activeStreamRef = useRef<MediaStream | null>(null)
 
   // ─── Camera state ───────────────────────────────────────────────
   const [stream, setStream]         = useState<MediaStream | null>(null)
@@ -75,28 +76,25 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
 
   // ─── Camera control ─────────────────────────────────────────────
   const startCamera = useCallback(async (mode: 'user' | 'environment' = facingMode) => {
-    if (stream) stream.getTracks().forEach(t => t.stop())
+    activeStreamRef.current?.getTracks().forEach((track) => track.stop())
     try {
-      const s = await navigator.mediaDevices.getUserMedia({
+      const nextStream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: mode, width: { ideal: 1920 }, height: { ideal: 2560 } },
         audio: false,
       })
-      setStream(s)
+      activeStreamRef.current = nextStream
+      setStream(nextStream)
       if (videoRef.current) {
-        videoRef.current.srcObject = s
+        videoRef.current.srcObject = nextStream
         await videoRef.current.play()
       }
-    } catch (err) {
+    } catch {
       toast.error('Camera error. Ensure HTTPS and camera permissions are granted.')
     }
-  }, [facingMode, stream])
+  }, [facingMode])
 
-  useEffect(() => {
-    startCamera()
-    return () => {
-      if (stream) stream.getTracks().forEach(t => t.stop())
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => () => {
+    activeStreamRef.current?.getTracks().forEach((track) => track.stop())
   }, [])
 
   function switchCamera() {
@@ -199,11 +197,11 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
     setSaving(true)
 
     if (kioskMode || !userId) {
-      // localStorage save (kiosk)
+      // Browser-session save (kiosk)
       try {
-        const list = JSON.parse(localStorage.getItem('photos') || '[]')
+        const list = JSON.parse(sessionStorage.getItem('photos') || '[]')
         list.push({ id: crypto.randomUUID(), dataURL: previewUrl, createdAt: Date.now() })
-        localStorage.setItem('photos', JSON.stringify(list))
+        sessionStorage.setItem('photos', JSON.stringify(list))
         toast.success('Saved to device!')
       } catch {
         toast.error('Storage full — delete some photos first.')
@@ -220,8 +218,8 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
         })
         if (error) throw error
         toast.success('Photo saved to your gallery!')
-      } catch (err: any) {
-        toast.error(err?.message || 'Failed to save photo.')
+      } catch (error) {
+        toast.error(error instanceof Error ? error.message : 'Failed to save photo.')
       }
     }
 
@@ -381,6 +379,13 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
               touchAction: 'none',
             }}
           >
+            {!stream && (
+              <div style={{ position: 'absolute', inset: 0, zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 14, padding: 24, textAlign: 'center' }}>
+                <Camera size={32} />
+                <p>Camera access starts only after you choose Enable Camera. Photos stay on this device unless you explicitly save or share them.</p>
+                <button onClick={() => startCamera()} className="gg-btn gg-btn--primary">Enable Camera</button>
+              </div>
+            )}
             <video
               ref={videoRef}
               playsInline
@@ -451,10 +456,10 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
 
           {/* Capture controls */}
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap', alignItems: 'center' }}>
-            <button onClick={runCapture} disabled={countdown !== null} className="gg-btn gg-btn--primary">
+            <button onClick={runCapture} disabled={!stream || countdown !== null} className="gg-btn gg-btn--primary">
               <Camera size={16} /> Capture
             </button>
-            <button onClick={switchCamera} className="gg-btn gg-btn--secondary">
+            <button onClick={switchCamera} disabled={!stream} className="gg-btn gg-btn--secondary">
               <SwitchCamera size={16} /> Switch
             </button>
             <button onClick={() => setMirror(m => !m)} className="gg-btn gg-btn--ghost">
@@ -471,6 +476,7 @@ export function PhotoboothCore({ kioskMode = false, userId }: PhotoboothCoreProp
               <option value="9:16">9:16</option>
             </select>
           </div>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>Member saves go to a private Supabase folder. Kiosk saves last only for this browser session.</p>
         </div>
 
         {/* Right — Overlays & Props */}

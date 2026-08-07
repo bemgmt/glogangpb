@@ -5,6 +5,8 @@ import { GGFooter } from '@/components/GGFooter'
 import { Toaster } from 'sonner'
 import { Analytics } from '@vercel/analytics/react'
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://glogangworldwide.com'
+
 export const metadata: Metadata = {
   title: {
     default: 'DJ Maino da Plug — Official Fan Portal & VIP Community',
@@ -12,16 +14,15 @@ export const metadata: Metadata = {
   },
   description:
     'The official fan portal and VIP community for DJ Maino da Plug. Explore music releases, live shows, exclusive drops, and the interactive photobooth.',
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-  ),
+  metadataBase: new URL(SITE_URL),
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'http://localhost:3000',
+    url: SITE_URL,
     siteName: 'DJ Maino da Plug',
     title: 'DJ Maino da Plug — Official Fan Portal & VIP Community',
     description: 'Official fan community and member portal for DJ Maino da Plug.',
+    images: [{ url: '/img/maino_hero_bg.png', width: 1536, height: 1024, alt: 'DJ Maino da Plug' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -56,8 +57,9 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body>
+        <a className="skip-link" href="#main-content">Skip to content</a>
         <GGNavbar />
-        <main>{children}</main>
+        <main id="main-content">{children}</main>
         <GGFooter />
         <Toaster
           theme="dark"

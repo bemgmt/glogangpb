@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import type { Metadata } from 'next'
 import { Camera, Calendar, User, LayoutGrid } from 'lucide-react'
+import { KioskPassIssuer } from '@/components/admin/KioskPassIssuer'
 
 export const metadata: Metadata = {
   title: 'Photobooth Logs | Glo Gang Admin',
@@ -79,6 +80,8 @@ export default async function AdminPhotoboothPage() {
       </header>
 
       <hr className="gg-divider" style={{ marginBottom: '2.5rem' }} />
+
+      <KioskPassIssuer />
 
       {/* Grid Overview Cards */}
       <div className="gg-grid-3" style={{ marginBottom: '2rem' }}>

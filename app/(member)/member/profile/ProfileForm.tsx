@@ -36,7 +36,6 @@ export default function ProfileForm({ profile }: { profile: Profile }) {
           display_name: displayName.trim(),
           bio: bio.trim(),
           avatar_url: avatarUrl.trim(),
-          updated_at: new Date().toISOString(),
         })
         .eq('id', profile.id)
 

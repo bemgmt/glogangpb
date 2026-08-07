@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowRight, Camera, Star, Zap } from 'lucide-react'
 import { getUpcomingEvents, getFeaturedArtists } from '@/lib/sanity'
+import { TwitchEmbed } from '@/components/home/TwitchEmbed'
 
 export const metadata = {
   title: 'DJ Maino da Plug — Official Fan Portal',
@@ -134,13 +135,22 @@ export default async function HomePage() {
               flexWrap: 'wrap',
             }}
           >
-            <Link href="/register" className="gg-btn gg-btn--primary gg-btn--lg">
-              Join the Plug
-              <ArrowRight size={18} />
-            </Link>
-            <Link href="/artists" className="gg-btn gg-btn--ghost gg-btn--lg">
-              Explore Artists
-            </Link>
+            <a
+              href="https://soundcloud.com/48-laws"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gg-btn gg-btn--primary gg-btn--lg"
+            >
+              Listen Now <ArrowRight size={18} />
+            </a>
+            <a
+              href="https://www.twitch.tv/djmainodaplug"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gg-btn gg-btn--ghost gg-btn--lg"
+            >
+              Watch Live
+            </a>
           </div>
 
           {/* Stats strip */}
@@ -155,9 +165,9 @@ export default async function HomePage() {
             }}
           >
             {[
-              { label: 'Mixes', value: '10+' },
-              { label: 'Members', value: '5K+' },
-              { label: 'Gigs & Streams', value: '50+' },
+              { label: 'Mixtape Series', value: '48 Laws' },
+              { label: 'Broadcasts', value: 'Twitch' },
+              { label: 'Community', value: 'Worldwide' },
             ].map(({ label, value }) => (
               <div key={label} style={{ textAlign: 'center' }}>
                 <div style={{ fontWeight: 900, fontSize: '2rem', color: 'var(--accent)', lineHeight: 1 }}>
@@ -216,17 +226,7 @@ export default async function HomePage() {
             boxShadow: '0 20px 50px rgba(0,229,255,0.1)',
             background: 'var(--panel)'
           }}>
-            <iframe
-              src={`https://player.twitch.tv/?channel=djmainodaplug&parent=${
-                process.env.NEXT_PUBLIC_SITE_URL
-                  ? new URL(process.env.NEXT_PUBLIC_SITE_URL).hostname
-                  : 'localhost'
-              }&autoplay=false`}
-              height="450"
-              width="100%"
-              allowFullScreen
-              style={{ border: 'none', display: 'block' }}
-            ></iframe>
+            <TwitchEmbed />
           </div>
         </div>
       </section>
@@ -425,7 +425,9 @@ export default async function HomePage() {
           ) : (
             <div className="gg-card" style={{ textAlign: 'center', padding: 48, color: 'var(--text-muted)' }}>
               <p style={{ fontSize: 32, marginBottom: 12 }}>🎤</p>
-              <p>No upcoming shows or streams yet. Check back soon.</p>
+              <p style={{ marginBottom: 8 }}>New dates are being announced.</p>
+              <p style={{ fontSize: 14 }}>Watch the latest Twitch replay or follow DJ Maino for the next broadcast notice.</p>
+              <a href="https://www.twitch.tv/djmainodaplug/videos" target="_blank" rel="noopener noreferrer" className="gg-btn gg-btn--ghost gg-btn--sm" style={{ marginTop: 16 }}>Latest replays ↗</a>
             </div>
           )}
         </div>

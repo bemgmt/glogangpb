@@ -10,7 +10,9 @@
     "create-admin": "node scripts/create-admin.mjs",
     "run-migrations": "node scripts/run-migrations.mjs",
     "sync-embeddings": "node scripts/sync-embeddings.mjs",
-    "import-artists": "node scripts/import-artists.mjs"
+    "import-artists": "node scripts/import-artists.mjs",
+    "typecheck": "tsc --noEmit",
+    "test": "node tests/security-contracts.test.mjs"
   },
   "dependencies": {
     "@ai-sdk/openai": "^1.0.0",
@@ -59,12 +61,13 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
+    "@mediapipe/tasks-vision": "*",
     "@tailwindcss/postcss": "^4.2.0",
     "@types/node": "^22",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
-    "@mediapipe/tasks-vision": "*",
-    "eslint": "^10.0.2",
+    "eslint": "9.39.1",
+    "eslint-config-next": "16.2.6",
     "pg": "^8.20.0",
     "postcss": "^8.5",
     "sharp": "^0.34.5",

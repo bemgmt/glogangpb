@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, type FormEvent } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
 import { Compass, ShieldCheck, Mail, MapPin, Globe } from 'lucide-react'
 
@@ -9,9 +8,8 @@ export default function AboutPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  const [website, setWebsite] = useState('')
   const [loading, setLoading] = useState(false)
-
-  const supabase = createClient()
 
   const handleContactSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -28,24 +26,27 @@ export default function AboutPage() {
     setLoading(true)
 
     try {
-      const { error } = await supabase.from('contact_submissions').insert({
-        name: trimmedName,
-        email: trimmedEmail,
-        message: trimmedMessage,
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: trimmedName,
+          email: trimmedEmail,
+          message: trimmedMessage,
+          website,
+        }),
       })
+      const payload = await response.json()
+      if (!response.ok) throw new Error(payload.error || 'Failed to submit message.')
 
-      if (error) {
-        console.error('[contact-submit] DB Error:', error.message)
-        toast.error('Failed to submit message. Please try again.')
-      } else {
-        toast.success('Your message has been submitted. We will be in touch!')
-        setName('')
-        setEmail('')
-        setMessage('')
-      }
+      toast.success('Your message has been submitted. We will be in touch!')
+      setName('')
+      setEmail('')
+      setMessage('')
+      setWebsite('')
     } catch (err) {
       console.error('[contact-submit] Unexpected Error:', err)
-      toast.error('An unexpected error occurred.')
+      toast.error(err instanceof Error ? err.message : 'An unexpected error occurred.')
     } finally {
       setLoading(false)
     }
@@ -107,7 +108,7 @@ export default function AboutPage() {
         </section>
 
         {/* Contact Form Section */}
-        <section className="about-contact">
+        <section id="contact" className="about-contact">
           <div className="gg-card contact-form-card">
             <h2 style={{ fontFamily: 'var(--font-sans)', fontWeight: 900, textTransform: 'uppercase', fontSize: '1.5rem', color: 'var(--text)', letterSpacing: '0.02em', margin: '0 0 0.5rem' }}>
               Get In Touch
@@ -117,6 +118,16 @@ export default function AboutPage() {
             </p>
 
             <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+              <div className="contact-honeypot" aria-hidden="true">
+                <label htmlFor="contact-website">Website</label>
+                <input
+                  id="contact-website"
+                  value={website}
+                  onChange={(event) => setWebsite(event.target.value)}
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </div>
               <div>
                 <label htmlFor="contact-name" className="gg-label">Your Name</label>
                 <input
@@ -126,6 +137,7 @@ export default function AboutPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   className="gg-field"
+                  maxLength={100}
                   required
                 />
               </div>
@@ -139,6 +151,7 @@ export default function AboutPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="gg-field"
+                  maxLength={254}
                   required
                 />
               </div>
@@ -152,6 +165,8 @@ export default function AboutPage() {
                   onChange={(e) => setMessage(e.target.value)}
                   className="gg-field"
                   style={{ minHeight: 120, resize: 'vertical' }}
+                  minLength={10}
+                  maxLength={3000}
                   required
                 />
               </div>
@@ -186,6 +201,7 @@ export default function AboutPage() {
       </div>
 
       <style>{`
+        .contact-honeypot { position: absolute; left: -10000px; width: 1px; height: 1px; overflow: hidden; }
         .about-grid {
           display: grid;
           grid-template-columns: 1.2fr 1fr;

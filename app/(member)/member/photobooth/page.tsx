@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import { PhotoboothCore } from '@/components/photobooth/PhotoboothCore'
+import { PhotoPrivacyControls } from '@/components/photobooth/PhotoPrivacyControls'
 
 export const metadata = {
   title: 'Photobooth',
@@ -13,5 +14,10 @@ export default async function PhotoboothPage() {
 
   if (!user) redirect('/login?redirectTo=/member/photobooth')
 
-  return <PhotoboothCore userId={user.id} kioskMode={false} />
+  return (
+    <>
+      <PhotoboothCore userId={user.id} kioskMode={false} />
+      <PhotoPrivacyControls userId={user.id} />
+    </>
+  )
 }
