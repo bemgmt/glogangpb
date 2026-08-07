@@ -44,7 +44,7 @@ const FOOTER_LINKS = [
     links: [
       { label: 'About',      href: '/about' },
       { label: 'Links & Socials', href: '/links' },
-      { label: 'Contact',    href: '/contact' },
+      { label: 'Contact',    href: '/about#contact' },
     ],
   },
 ]

@@ -1,9 +1,8 @@
 'use client'
 
 import { useState, useMemo } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { toast } from 'sonner'
-import { Search, Shield, User, Award, CheckCircle } from 'lucide-react'
+import { Search, Shield, User } from 'lucide-react'
 
 interface Member {
   id: string
@@ -20,30 +19,26 @@ export default function MembersTable({ initialMembers }: { initialMembers: Membe
   const [search, setSearch] = useState('')
   const [updatingId, setUpdatingId] = useState<string | null>(null)
 
-  const supabase = createClient()
-
   const handleRoleChange = async (userId: string, currentRole: string) => {
     const newRole = currentRole === 'admin' ? 'user' : 'admin'
     setUpdatingId(userId)
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId)
+      const response = await fetch(`/api/admin/members/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ role: newRole }),
+      })
+      const payload = await response.json()
+      if (!response.ok) throw new Error(payload.error || 'Failed to change user role.')
 
-      if (error) {
-        console.error('[admin-role-change] Error:', error.message)
-        toast.error('Failed to change user role.')
-      } else {
-        setMembers((prev) =>
-          prev.map((m) => (m.id === userId ? { ...m, role: newRole } : m))
-        )
-        toast.success(`User role updated to ${newRole}!`)
-      }
+      setMembers((prev) =>
+        prev.map((member) => member.id === userId ? payload.member : member)
+      )
+      toast.success(`User role updated to ${newRole}!`)
     } catch (err) {
       console.error(err)
-      toast.error('An error occurred.')
+      toast.error(err instanceof Error ? err.message : 'An error occurred.')
     } finally {
       setUpdatingId(null)
     }
@@ -53,23 +48,21 @@ export default function MembersTable({ initialMembers }: { initialMembers: Membe
     setUpdatingId(userId)
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ membership_tier: newTier })
-        .eq('id', userId)
+      const response = await fetch(`/api/admin/members/${userId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ membership_tier: newTier }),
+      })
+      const payload = await response.json()
+      if (!response.ok) throw new Error(payload.error || 'Failed to change subscription tier.')
 
-      if (error) {
-        console.error('[admin-tier-change] Error:', error.message)
-        toast.error('Failed to change subscription tier.')
-      } else {
-        setMembers((prev) =>
-          prev.map((m) => (m.id === userId ? { ...m, membership_tier: newTier } : m))
-        )
-        toast.success(`User membership tier updated to ${newTier}!`)
-      }
+      setMembers((prev) =>
+        prev.map((member) => member.id === userId ? payload.member : member)
+      )
+      toast.success(`User membership tier updated to ${newTier}!`)
     } catch (err) {
       console.error(err)
-      toast.error('An error occurred.')
+      toast.error(err instanceof Error ? err.message : 'An error occurred.')
     } finally {
       setUpdatingId(null)
     }

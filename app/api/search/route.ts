@@ -1,43 +1,24 @@
 import { NextResponse } from 'next/server'
 import OpenAI from 'openai'
-import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
+import { consumeRateLimit, isSameOrigin } from '@/lib/security/server'
+import { createClient, createServiceClient } from '@/lib/supabase/server'
 
-// ---------------------------------------------------------------------------
-// Clients
-// ---------------------------------------------------------------------------
 let openaiInstance: OpenAI | null = null
-let supabaseInstance: ReturnType<typeof createClient> | null = null
 
 function getOpenAI(): OpenAI {
   if (!openaiInstance) {
     const key = process.env.OPENAI_API_KEY
-    if (!key) {
-      throw new Error('OPENAI_API_KEY is missing')
-    }
-    openaiInstance = new OpenAI({
-      apiKey: key,
-    })
+    if (!key) throw new Error('OPENAI_API_KEY is missing')
+    openaiInstance = new OpenAI({ apiKey: key })
   }
   return openaiInstance
 }
 
-function getSupabase() {
-  if (!supabaseInstance) {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL
-    const key = process.env.SUPABASE_SERVICE_ROLE_KEY
-    if (!url || !key) {
-      throw new Error('Supabase environment variables are missing')
-    }
-    supabaseInstance = createClient(url, key, {
-      auth: { persistSession: false },
-    })
-  }
-  return supabaseInstance
-}
+const searchSchema = z.object({
+  query: z.string().trim().min(2).max(500),
+}).strict()
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
 interface SearchResult {
   id: string
   content_type: string
@@ -46,118 +27,68 @@ interface SearchResult {
   similarity: number
 }
 
-// ---------------------------------------------------------------------------
-// POST /api/search
-// Body: { query: string }
-// ---------------------------------------------------------------------------
 export async function POST(request: Request) {
+  if (!isSameOrigin(request)) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
+  }
+
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    return NextResponse.json({ error: 'Authentication required.' }, { status: 401 })
+  }
+
+  const parsed = searchSchema.safeParse(await request.json().catch(() => null))
+  if (!parsed.success) {
+    return NextResponse.json({ error: 'Query must be between 2 and 500 characters.' }, { status: 400 })
+  }
+
+  const allowed = await consumeRateLimit({
+    request,
+    bucket: 'semantic-search',
+    identity: user.id,
+    limit: 30,
+    windowSeconds: 600,
+  })
+  if (!allowed) {
+    return NextResponse.json({ error: 'Search limit reached. Please try again later.' }, { status: 429 })
+  }
+
   try {
-    const body = await request.json()
-    const query: string = body?.query?.trim()
-
-    if (!query || query.length < 2) {
-      return NextResponse.json(
-        { error: 'Query must be at least 2 characters.' },
-        { status: 400 },
-      )
-    }
-
-    if (query.length > 500) {
-      return NextResponse.json(
-        { error: 'Query must be 500 characters or fewer.' },
-        { status: 400 },
-      )
-    }
-
-    // -----------------------------------------------------------------------
-    // 1. Embed the query with OpenAI
-    // -----------------------------------------------------------------------
     const embeddingResponse = await getOpenAI().embeddings.create({
       model: 'text-embedding-3-small',
-      input: query,
+      input: parsed.data.query,
     })
-
     const embedding = embeddingResponse.data[0]?.embedding
-
     if (!embedding) {
-      return NextResponse.json(
-        { error: 'Failed to generate embedding.' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'Search is temporarily unavailable.' }, { status: 503 })
     }
 
-    // -----------------------------------------------------------------------
-    // 2. Query Supabase with pgvector cosine similarity
-    // -----------------------------------------------------------------------
-    const { data: results, error: searchError } = await getSupabase().rpc(
-      'match_content_embeddings',
-      {
-        query_embedding: embedding,
-        match_threshold: 0.3,
-        match_count: 10,
-      } as any,
-    )
-
-    if (searchError) {
-      console.error('[search] pgvector RPC error:', searchError.message)
-      // Fall back to empty results rather than hard-failing
-    }
-
-    const searchResults: SearchResult[] = results ?? []
-
-    // -----------------------------------------------------------------------
-    // 3. Log the search query
-    // -----------------------------------------------------------------------
-    await getSupabase().from('search_logs').insert({
-      query,
-      results_count: searchResults.length,
-    } as any)
-
-    // -----------------------------------------------------------------------
-    // 4. Return results
-    // -----------------------------------------------------------------------
-    return NextResponse.json({
-      query,
-      results: searchResults.map((r) => ({
-        id: r.id,
-        type: r.content_type,
-        sanityId: r.sanity_id,
-        text: r.content_text,
-        score: Math.round(r.similarity * 1000) / 1000,
-      })),
-      total: searchResults.length,
+    const { data, error } = await createServiceClient().rpc('match_content_embeddings', {
+      query_embedding: embedding,
+      match_threshold: 0.3,
+      match_count: 10,
     })
-  } catch (err) {
-    console.error('[search] Unexpected error:', err)
-    return NextResponse.json(
-      { error: 'Internal server error.' },
-      { status: 500 },
-    )
+
+    if (error) {
+      console.error('[search] pgvector RPC error:', error.message)
+      return NextResponse.json({ error: 'Search is temporarily unavailable.' }, { status: 503 })
+    }
+
+    const results = (data ?? []) as SearchResult[]
+    return NextResponse.json({
+      query: parsed.data.query,
+      results: results.map((result) => ({
+        id: result.id,
+        type: result.content_type,
+        sanityId: result.sanity_id,
+        text: result.content_text,
+        score: Math.round(result.similarity * 1000) / 1000,
+      })),
+      total: results.length,
+    })
+  } catch (error) {
+    console.error('[search] unexpected error:', error instanceof Error ? error.message : 'unknown')
+    return NextResponse.json({ error: 'Search is temporarily unavailable.' }, { status: 503 })
   }
 }
-
-// ---------------------------------------------------------------------------
-// Supabase RPC helper (add this function to your DB):
-//
-// CREATE OR REPLACE FUNCTION match_content_embeddings(
-//   query_embedding vector(1536),
-//   match_threshold float,
-//   match_count int
-// )
-// RETURNS TABLE (
-//   id uuid,
-//   content_type text,
-//   sanity_id text,
-//   content_text text,
-//   similarity float
-// )
-// LANGUAGE sql STABLE AS $$
-//   SELECT
-//     id, content_type, sanity_id, content_text,
-//     1 - (embedding <=> query_embedding) AS similarity
-//   FROM content_embeddings
-//   WHERE 1 - (embedding <=> query_embedding) > match_threshold
-//   ORDER BY similarity DESC
-//   LIMIT match_count;
-// $$;
-// ---------------------------------------------------------------------------

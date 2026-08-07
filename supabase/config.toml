@@ -1,0 +1,13 @@
+# Local Supabase CLI configuration. Production credentials remain environment-backed.
+project_id = "glogangpb"
+
+[db]
+major_version = 17
+
+[db.migrations]
+enabled = true
+schema_paths = []
+
+[db.seed]
+enabled = false
+sql_paths = []
