@@ -162,6 +162,7 @@ export function GGNavbar() {
               <>
                 <Link
                   href="/member/photobooth"
+                  aria-label="Photobooth"
                   className="gg-btn gg-btn--ghost gg-btn--sm"
                   style={{ display: 'flex', alignItems: 'center', gap: 6 }}
                 >
@@ -174,7 +175,7 @@ export function GGNavbar() {
               </>
             ) : (
               <>
-                <Link href="/login" className="gg-btn gg-btn--ghost gg-btn--sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Link href="/login" aria-label="Log in" className="gg-btn gg-btn--ghost gg-btn--sm" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <LogIn size={14} />
                   <span className="nav-desktop-label">Log In</span>
                 </Link>

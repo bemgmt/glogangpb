@@ -65,7 +65,7 @@ export default async function AdminArtistsPage() {
   const artists = sanityArtists.length > 0 ? sanityArtists : PLACEHOLDER_ARTISTS
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem' }}>
       <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
         <div>
           <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -187,6 +187,6 @@ export default async function AdminArtistsPage() {
           color: var(--accent);
         }
       `}</style>
-    </main>
+    </div>
   )
 }

@@ -170,7 +170,7 @@ export default async function ArtistProfilePage({ params }: { params: Promise<{ 
     .toUpperCase()
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       {/* Back Button */}
       <Link href="/artists" className="gg-btn gg-btn--ghost gg-btn--sm" style={{ marginBottom: '2rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem' }}>
         <ArrowLeft size={16} />
@@ -386,6 +386,6 @@ export default async function ArtistProfilePage({ params }: { params: Promise<{ 
           margin: 0.25rem 0 0;
         }
       `}</style>
-    </main>
+    </div>
   )
 }

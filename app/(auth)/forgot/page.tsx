@@ -52,7 +52,7 @@ export default function ForgotPasswordPage() {
   // ---------------------------------------------------------------------------
   if (state === 'success') {
     return (
-      <main className="auth-page">
+      <div className="auth-page">
         <div className="auth-card gg-card">
           <div className="auth-card__success-icon" aria-hidden="true">
             <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -83,7 +83,7 @@ export default function ForgotPasswordPage() {
           </Link>
         </div>
         <AuthPageStyles />
-      </main>
+      </div>
     )
   }
 
@@ -91,7 +91,7 @@ export default function ForgotPasswordPage() {
   // Form state
   // ---------------------------------------------------------------------------
   return (
-    <main className="auth-page">
+    <div className="auth-page">
       <div className="auth-card gg-card">
         {/* Logo / Brand */}
         <div className="auth-card__brand">
@@ -159,7 +159,7 @@ export default function ForgotPasswordPage() {
       </div>
 
       <AuthPageStyles />
-    </main>
+    </div>
   )
 }
 

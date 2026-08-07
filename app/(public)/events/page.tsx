@@ -168,7 +168,7 @@ export default async function EventsPage() {
   const past = data.filter((e) => new Date(e.eventDate) < new Date())
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '4rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '4rem' }}>
       {/* Header */}
       <header style={{ marginBottom: '2.5rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -316,6 +316,6 @@ export default async function EventsPage() {
           }
         }
       `}</style>
-    </main>
+    </div>
   )
 }

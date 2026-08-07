@@ -103,7 +103,7 @@ export default async function MemberEventsPage() {
   const events = sanityEvents.length > 0 ? sanityEvents : PLACEHOLDER_EVENTS
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       {/* Header */}
       <header style={{ marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -130,6 +130,6 @@ export default async function MemberEventsPage() {
       <hr className="gg-divider" style={{ marginBottom: '3rem' }} />
 
       <MemberEventsClient initialEvents={events} initialRsvps={Array.from(rsvpIds)} userId={user.id} />
-    </main>
+    </div>
   )
 }

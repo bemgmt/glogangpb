@@ -56,7 +56,7 @@ export default async function AdminPhotoboothPage() {
   }
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem' }}>
       <header style={{ marginBottom: '2.5rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
           PHOTO BOOTH
@@ -258,6 +258,6 @@ export default async function AdminPhotoboothPage() {
           margin: 0.15rem 0 0;
         }
       `}</style>
-    </main>
+    </div>
   )
 }

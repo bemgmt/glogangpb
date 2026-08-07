@@ -76,7 +76,7 @@ export default async function MemberMembershipPage() {
   ]
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       {/* Header */}
       <header style={{ marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -286,6 +286,6 @@ export default async function MemberMembershipPage() {
           margin-top: 0.1rem;
         }
       `}</style>
-    </main>
+    </div>
   )
 }

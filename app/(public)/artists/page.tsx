@@ -47,7 +47,7 @@ export default async function ArtistsPage() {
   const artists = await getArtists()
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '4rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '4rem' }}>
       {/* Header */}
       <header style={{ marginBottom: '2.5rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -149,6 +149,6 @@ export default async function ArtistsPage() {
           margin: 0;
         }
       `}</style>
-    </main>
+    </div>
   )
 }

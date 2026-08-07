@@ -53,7 +53,7 @@ export default function AboutPage() {
   }
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       {/* Header */}
       <header style={{ marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -277,6 +277,6 @@ export default function AboutPage() {
           color: var(--accent);
         }
       `}</style>
-    </main>
+    </div>
   )
 }
