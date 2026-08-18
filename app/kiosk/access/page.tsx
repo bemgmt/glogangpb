@@ -120,10 +120,10 @@ export default function KioskAccessPage() {
         </div>
       </header>
 
-      <div style={{ padding: 16, display: 'grid', gap: 16 }}>
+      <div style={{ padding: 16, display: 'grid', gap: 16, minWidth: 0 }}>
         {/* ── Scan tab ── */}
         {tab === 'scan' && (
-          <div className="gg-card">
+          <div className="gg-card" style={{ minWidth: 0 }}>
             <h2 style={{ marginBottom: 12, fontSize: '1.2rem' }}>Scan Approved QR</h2>
             {/* Video */}
             <div style={{ position: 'relative', borderRadius: 16, overflow: 'hidden', background: '#0b0f16', border: '1px solid var(--border)', marginBottom: 12 }}>
@@ -148,10 +148,10 @@ export default function KioskAccessPage() {
             </div>
 
             {/* Manual entry */}
-            <div className="gg-card" style={{ marginBottom: 12 }}>
+            <div className="gg-card" style={{ marginBottom: 12, minWidth: 0 }}>
               <p style={{ fontWeight: 700, marginBottom: 8, color: 'var(--text-muted)', fontSize: 13 }}>Manual entry (if camera fails):</p>
-              <div style={{ display: 'flex', gap: 10 }}>
-                <div className="gg-field" style={{ flex: 1 }}>
+              <div style={{ display: 'flex', gap: 10, minWidth: 0 }}>
+                <div className="gg-field" style={{ flex: 1, minWidth: 0 }}>
                   <input
                     value={manualCode}
                     onChange={e => setManualCode(e.target.value)}

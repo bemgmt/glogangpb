@@ -42,7 +42,7 @@ export default async function AdminMembersPage() {
   }
 
   return (
-    <main style={{ padding: '2rem' }}>
+    <div style={{ padding: '2rem' }}>
       <header style={{ marginBottom: '2.5rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
           CONTROL PANEL
@@ -68,6 +68,6 @@ export default async function AdminMembersPage() {
       <hr className="gg-divider" style={{ marginBottom: '2.5rem' }} />
 
       <MembersTable initialMembers={members || []} />
-    </main>
+    </div>
   )
 }

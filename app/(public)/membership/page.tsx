@@ -160,7 +160,7 @@ function TierCard({ tier }: { tier: Tier }) {
 // ---------------------------------------------------------------------------
 export default function MembershipPage() {
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       {/* Header */}
       <header style={{ textAlign: 'center', marginBottom: '3rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
@@ -319,6 +319,6 @@ export default function MembershipPage() {
           margin: 0.5rem 0 0;
         }
       `}</style>
-    </main>
+    </div>
   )
 }

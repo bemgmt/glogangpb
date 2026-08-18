@@ -49,15 +49,15 @@ export default async function ProfilePage() {
     }
 
     return (
-      <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+      <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
         <ProfileForm profile={newProfile} />
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
+    <div className="gg-container" style={{ paddingTop: '2.5rem', paddingBottom: '5rem' }}>
       <ProfileForm profile={profile} />
-    </main>
+    </div>
   )
 }
