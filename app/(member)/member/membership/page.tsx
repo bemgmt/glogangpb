@@ -4,8 +4,8 @@ import type { Metadata } from 'next'
 import { ShieldCheck, Award, Zap, ArrowRight, CreditCard, Sparkles } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'My Membership | DJ Maino',
-  description: 'Manage your DJ Maino membership tier and billing.',
+  title: 'My Membership | Maino da Plug',
+  description: 'Manage your Maino da Plug membership tier and billing.',
 }
 
 export default async function MemberMembershipPage() {

@@ -19,16 +19,16 @@ import {
 export const metadata: Metadata = {
   title: 'Electronic Press Kit',
   description:
-    'Official 2026 electronic press kit for DJ Maino Da Plug, including biography, tour credits, audience statistics, press, and booking contact.',
+    'Official 2026 electronic press kit for Maino da Plug, including biography, tour credits, audience statistics, press, and booking contact.',
   openGraph: {
-    title: 'DJ Maino Da Plug - 2026 Electronic Press Kit',
+    title: 'Maino da Plug - 2026 Electronic Press Kit',
     description: 'Tour DJ, Glo Streams host, music curator, and cultural connector.',
     images: [
       {
         url: '/img/epk/dj-maino-epk-cover.jpg',
         width: 1440,
         height: 810,
-        alt: 'DJ Maino Da Plug 2026 Electronic Press Kit',
+        alt: 'Maino da Plug 2026 Electronic Press Kit',
       },
     ],
   },
@@ -41,7 +41,7 @@ export default function EpkPage() {
         <div className="gg-container epk-page__hero-grid">
           <div>
             <p className="maino-kicker">Official 2026 Electronic Press Kit</p>
-            <h1>DJ Maino Da Plug</h1>
+            <h1>Maino da Plug</h1>
             <p className="epk-page__intro">
               Underground music curator, tour DJ, livestream host, and cultural
               tastemaker working at the center of rap and rage culture.
@@ -51,7 +51,7 @@ export default function EpkPage() {
                 Download PDF <Download size={18} />
               </a>
               <a
-                href={`mailto:${BOOKING_EMAIL}?subject=DJ%20Maino%20Booking%20Inquiry`}
+                href={`mailto:${BOOKING_EMAIL}?subject=Maino%20da%20Plug%20Booking%20Inquiry`}
                 className="gg-btn gg-btn--ghost gg-btn--lg"
               >
                 Booking inquiry <Mail size={18} />
@@ -62,7 +62,7 @@ export default function EpkPage() {
           <div className="epk-page__cover">
             <Image
               src="/img/epk/dj-maino-epk-cover.jpg"
-              alt="DJ Maino Da Plug 2026 Electronic Press Kit cover"
+              alt="Maino da Plug 2026 Electronic Press Kit cover"
               fill
               priority
               sizes="(max-width: 900px) 100vw, 46vw"
@@ -98,12 +98,12 @@ export default function EpkPage() {
           </div>
           <div className="epk-page__bio-copy">
             <p>
-              DJ Maino Da Plug is an underground music curator, tour DJ, livestream
+              Maino da Plug is an underground music curator, tour DJ, livestream
               host, and cultural tastemaker known for authentic artist-driven moments
               and a sharp ear for emerging talent.
             </p>
             <p>
-              Operating out of Chief Keef&apos;s Glo Shop, Maino hosts Glo Streams, where
+              Operating out of Chief Keef&apos;s Glo Shop, Maino da Plug hosts Glo Streams, where
               independent and signed artists share music, tell stories, and connect
               directly with fans. The platform blends discovery, interviews, live
               commentary, and unfiltered conversation for today&apos;s internet-driven rap
@@ -111,7 +111,7 @@ export default function EpkPage() {
             </p>
             <p>
               As the official DJ for Bear1Boss and a close collaborator of
-              UnoTheActivist, Maino helps amplify rage, plugg, and alternative
+              UnoTheActivist, Maino da Plug helps amplify rage, plugg, and alternative
               underground sounds across live and digital audiences.
             </p>
           </div>
@@ -183,14 +183,14 @@ export default function EpkPage() {
         <div className="gg-container epk-page__booking">
           <div>
             <p className="maino-kicker">Management & Booking</p>
-            <h2>Bring DJ Maino to the room</h2>
+            <h2>Bring Maino da Plug to the room</h2>
             <p>
               For touring, event hosting, livestream appearances, media, and brand
               opportunities, contact management directly.
             </p>
           </div>
           <a
-            href={`mailto:${BOOKING_EMAIL}?subject=DJ%20Maino%20Booking%20Inquiry`}
+            href={`mailto:${BOOKING_EMAIL}?subject=Maino%20da%20Plug%20Booking%20Inquiry`}
             className="epk-page__email"
           >
             {BOOKING_EMAIL} <ArrowRight size={22} />

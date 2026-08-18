@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { PlusCircle, ExternalLink, Star } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Manage Artists | DJ Maino Admin',
-  description: 'View and manage DJ Maino artist roster.',
+  title: 'Manage Artists | Maino da Plug Admin',
+  description: 'View and manage the Maino da Plug artist roster.',
 }
 
 const sanity = createSanityClient({
@@ -26,7 +26,7 @@ interface Artist {
 }
 
 const PLACEHOLDER_ARTISTS: Artist[] = [
-  { _id: 'ph1', name: 'DJ Maino da Plug', genre: 'DJ / Curator', featured: true },
+  { _id: 'ph1', name: 'Maino da Plug', genre: 'DJ / Curator', featured: true },
   { _id: 'ph2', name: 'Kid 48', genre: 'Trap' },
   { _id: 'ph3', name: 'Lex 808', genre: 'Drill' },
   { _id: 'ph4', name: 'Plug Producer', genre: 'Beats' },
@@ -85,7 +85,7 @@ export default async function AdminArtistsPage() {
             Manage Artists
           </h1>
           <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>
-            Artists and affiliates in the DJ Maino / 48 Laws Roster. Sync is done automatically via Sanity Studio.
+            Artists and affiliates in the Maino da Plug / 48 Laws roster. Sync is done automatically via Sanity Studio.
           </p>
         </div>
 

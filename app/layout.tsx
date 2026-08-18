@@ -9,25 +9,25 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://glogangworldwide.c
 
 export const metadata: Metadata = {
   title: {
-    default: 'DJ Maino Da Plug - Tour DJ, Livestream Host & Music Curator',
-    template: '%s | DJ Maino da Plug',
+    default: 'Maino da Plug - Tour DJ, Livestream Host & Music Curator',
+    template: '%s | Maino da Plug',
   },
   description:
-    'Official site for DJ Maino Da Plug: tour DJ, Glo Streams host, underground music curator, events, press, and booking.',
+    'Official site for Maino da Plug: tour DJ, Glo Streams host, underground music curator, events, press, and booking.',
   metadataBase: new URL(SITE_URL),
   openGraph: {
     type: 'website',
     locale: 'en_US',
     url: SITE_URL,
-    siteName: 'DJ Maino da Plug',
-    title: 'DJ Maino Da Plug - Tour DJ, Livestream Host & Music Curator',
+    siteName: 'Maino da Plug',
+    title: 'Maino da Plug - Tour DJ, Livestream Host & Music Curator',
     description: 'Tour DJ, Glo Streams host, underground music curator, and cultural connector.',
-    images: [{ url: '/img/epk/dj-maino-epk-cover.jpg', width: 1440, height: 810, alt: 'DJ Maino Da Plug 2026 Electronic Press Kit' }],
+    images: [{ url: '/img/epk/dj-maino-epk-cover.jpg', width: 1440, height: 810, alt: 'Maino da Plug 2026 Electronic Press Kit' }],
   },
   twitter: {
     card: 'summary_large_image',
     site: '@mainodaplug',
-    title: 'DJ Maino da Plug',
+    title: 'Maino da Plug',
   },
   robots: {
     index: true,

@@ -6,8 +6,8 @@ import Link from 'next/link'
 import { PlusCircle, ExternalLink, Calendar, Tag } from 'lucide-react'
 
 export const metadata: Metadata = {
-  title: 'Manage News | DJ Maino Admin',
-  description: 'View and manage DJ Maino news articles.',
+  title: 'Manage News | Maino da Plug Admin',
+  description: 'View and manage Maino da Plug news articles.',
 }
 
 const sanity = createSanityClient({
@@ -28,7 +28,7 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: NewsPost[] = [
   {
     _id: 'np1',
-    title: 'DJ Maino Announces 48 Laws Summer Tour Dates',
+    title: 'Maino da Plug Announces 48 Laws Summer Tour Dates',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
     category: 'tour',
     featured: true,
@@ -42,7 +42,7 @@ const PLACEHOLDER_POSTS: NewsPost[] = [
   },
   {
     _id: 'np3',
-    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
+    title: 'Maino da Plug Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
     featured: false,

@@ -25,7 +25,7 @@ export function TwitchEmbed() {
     <>
       <iframe
         src={playerUrl.toString()}
-        title="DJ Maino Twitch broadcast"
+        title="Maino da Plug Twitch broadcast"
         height="450"
         width="100%"
         allowFullScreen

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { Camera, Calendar, User, Star, ArrowRight, Lock, Key, Flame } from 'lucide-react'
 
 export const metadata = {
-  title: 'Dashboard | DJ Maino da Plug',
-  description: 'Your DJ Maino VIP fan member dashboard and digital locker.',
+  title: 'Dashboard | Maino da Plug',
+  description: 'Your Maino da Plug VIP fan member dashboard and digital locker.',
 }
 
 export default async function DashboardPage() {
@@ -75,7 +75,7 @@ export default async function DashboardPage() {
                   Welcome, {displayName}
                 </h1>
               </div>
-              <p>Your DJ Maino VIP member portal.</p>
+              <p>Your Maino da Plug VIP member portal.</p>
             </div>
             
             {/* Gamified Passport Card */}

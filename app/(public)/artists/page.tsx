@@ -6,12 +6,12 @@ import ArtistsClient from './ArtistsClient'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Artists & Affiliates | DJ Maino da Plug',
+  title: 'Artists & Affiliates | Maino da Plug',
   description:
-    'Explore the full roster of DJ Maino da Plug collaborators and artists. Discover music, bios, and upcoming shows.',
+    'Explore the full roster of Maino da Plug collaborators and artists. Discover music, bios, and upcoming shows.',
   openGraph: {
-    title: 'Artists & Affiliates | DJ Maino da Plug',
-    description: 'Explore the full roster of DJ Maino da Plug collaborators and artists.',
+    title: 'Artists & Affiliates | Maino da Plug',
+    description: 'Explore the full roster of Maino da Plug collaborators and artists.',
   },
 }
 

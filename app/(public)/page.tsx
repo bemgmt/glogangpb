@@ -24,9 +24,9 @@ import {
 import { getFeaturedArtists, getUpcomingEvents } from '@/lib/sanity'
 
 export const metadata = {
-  title: 'DJ Maino Da Plug - Tour DJ, Livestream Host & Music Curator',
+  title: 'Maino da Plug - Tour DJ, Livestream Host & Music Curator',
   description:
-    'Official site for DJ Maino Da Plug: tour DJ, Glo Streams host, underground music curator, events, press, and booking.',
+    'Official site for Maino da Plug: tour DJ, Glo Streams host, underground music curator, events, press, and booking.',
 }
 
 export const revalidate = 60
@@ -88,7 +88,7 @@ export default async function HomePage() {
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'Person',
-    name: 'DJ Maino Da Plug',
+    name: 'Maino da Plug',
     url: 'https://glogangworldwide.com',
     jobTitle: 'Tour DJ, Livestream Host and Music Curator',
     sameAs: [
@@ -110,7 +110,7 @@ export default async function HomePage() {
       <section className="maino-hero">
         <Image
           src="/img/epk/dj-maino-live-collage.jpg"
-          alt="DJ Maino Da Plug performing and connecting with fans"
+          alt="Maino da Plug performing and connecting with fans"
           fill
           priority
           sizes="100vw"
@@ -125,12 +125,12 @@ export default async function HomePage() {
               Tour DJ <span>×</span> Livestream Host <span>×</span> Cultural Curator
             </p>
             <h1 className="animate-fade-in delay-100">
-              DJ MAINO
+              MAINO
               <br />
               <span>DA PLUG</span>
             </h1>
             <p className="maino-hero__description animate-fade-in delay-200">
-              From tour stages to Glo Streams at the Glo Shop, Maino connects
+              From tour stages to Glo Streams at the Glo Shop, Maino da Plug connects
               underground rap and rage culture with the artists, stories, and moments
               pushing the scene forward.
             </p>
@@ -172,7 +172,7 @@ export default async function HomePage() {
               <h2>The bridge to what&apos;s next</h2>
             </div>
             <p>
-              Maino brings performance, discovery, conversation, and community into one
+              Maino da Plug brings performance, discovery, conversation, and community into one
               artist-driven platform.
             </p>
           </div>
@@ -338,7 +338,7 @@ export default async function HomePage() {
               <Mic2 size={28} aria-hidden />
               <div>
                 <h3>New dates are being announced</h3>
-                <p>Follow Maino for tour drops and the next Glo Streams broadcast.</p>
+                <p>Follow Maino da Plug for tour drops and the next Glo Streams broadcast.</p>
               </div>
             </div>
           )}
@@ -394,7 +394,7 @@ export default async function HomePage() {
             <h2>Step inside the movement</h2>
             <p>
               Free membership unlocks the Plug Photobooth, event RSVPs, and exclusive
-              DJ Maino content.
+              Maino da Plug content.
             </p>
           </div>
           <div className="maino-fan-cta__actions">

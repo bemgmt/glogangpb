@@ -54,10 +54,11 @@ export function GGNavbar() {
           transition: 'background 0.2s ease',
         }}
       >
-        <div className="gg-container" style={{ display: 'flex', alignItems: 'center', gap: 16, height: 64 }}>
+        <div className="gg-container nav-shell" style={{ display: 'flex', alignItems: 'center', gap: 16, height: 64 }}>
           {/* Logo */}
           <Link
             href="/"
+            className="nav-brand"
             style={{
               fontWeight: 900,
               fontSize: '1.15rem',
@@ -75,7 +76,7 @@ export function GGNavbar() {
               <path d="M12 2v8M18 10V6M6 10V6M12 18v4" />
               <rect x="5" y="10" width="14" height="8" rx="3" fill="var(--accent)" />
             </svg>
-            <span>DJ MAINO</span>
+            <span>MAINO DA PLUG</span>
           </Link>
 
           {/* Desktop nav */}
@@ -129,7 +130,7 @@ export function GGNavbar() {
           </nav>
 
           {/* Right side */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto', flexShrink: 0 }}>
+          <div className="nav-actions" style={{ display: 'flex', alignItems: 'center', gap: 10, marginLeft: 'auto', flexShrink: 0 }}>
             {user ? (
               <>
                 <Link
@@ -216,6 +217,23 @@ export function GGNavbar() {
           .nav-desktop { display: none !important; }
           .nav-mobile-btn { display: flex !important; }
           .nav-desktop-label { display: none; }
+        }
+        @media (max-width: 480px) {
+          .nav-shell {
+            gap: 8px !important;
+            padding-left: 12px !important;
+            padding-right: 12px !important;
+          }
+          .nav-brand {
+            font-size: 0.88rem !important;
+            letter-spacing: 0.06em !important;
+            gap: 4px !important;
+          }
+          .nav-brand svg {
+            width: 20px;
+            height: 20px;
+          }
+          .nav-actions { gap: 6px !important; }
         }
       `}</style>
     </>

@@ -7,7 +7,7 @@ import { schemaTypes } from './sanity/schemaTypes'
 
 export default defineConfig({
   name: 'mainodaplug',
-  title: 'DJ Maino da Plug Console',
+  title: 'Maino da Plug Console',
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET || 'production',
   plugins: [structureTool(), visionTool()],

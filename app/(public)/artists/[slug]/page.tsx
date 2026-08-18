@@ -37,10 +37,10 @@ interface Artist {
 const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
   ph1: {
     _id: 'ph1',
-    name: 'DJ Maino da Plug',
+    name: 'Maino da Plug',
     genre: 'DJ / Curator',
     featured: true,
-    bio: 'Renowned as a premier curator and host of the highly acclaimed 48 Laws mixtape series, DJ Maino da Plug has carved out a unique space in modern music culture. Spinning the freshest tracks, managing rising talent, and building a massive digital fan base, DJ Maino is the ultimate conduit for music discovery.',
+    bio: 'Renowned as a premier curator and host of the highly acclaimed 48 Laws mixtape series, Maino da Plug has carved out a unique space in modern music culture. Spinning the freshest tracks, managing rising talent, and building a massive digital fan base, Maino da Plug is the ultimate conduit for music discovery.',
     socialLinks: {
       instagram: 'https://www.instagram.com/mainodaplug/',
       twitter: 'https://x.com/mainodaplug',
@@ -53,7 +53,7 @@ const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
     _id: 'ph2',
     name: 'Kid 48',
     genre: 'Trap',
-    bio: 'Kid 48 is a rising talent under the 48 Laws Network. Managed by DJ Maino, his fast-paced flows and melodic trap hooks are defining the new sound of the underground.',
+    bio: 'Kid 48 is a rising talent under the 48 Laws Network. Managed by Maino da Plug, his fast-paced flows and melodic trap hooks are defining the new sound of the underground.',
     socialLinks: {
       instagram: 'https://instagram.com',
       twitter: 'https://twitter.com',
@@ -64,7 +64,7 @@ const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
     _id: 'ph3',
     name: 'Lex 808',
     genre: 'Drill',
-    bio: 'Lex 808 is a Chicago-born producer and rapper who brings the raw energy of drill beats to DJ Maino\'s projects and collaborative tapes.',
+    bio: 'Lex 808 is a Chicago-born producer and rapper who brings the raw energy of drill beats to Maino da Plug\'s projects and collaborative tapes.',
     socialLinks: {
       instagram: 'https://instagram.com',
       twitter: 'https://twitter.com',
@@ -75,7 +75,7 @@ const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
     _id: 'ph4',
     name: 'Plug Producer',
     genre: 'Beats',
-    bio: 'A chief producer behind the 48 Laws of Power mixtape series. Known for crafting hard-hitting 808s and spacey synth lines featured on DJ Maino\'s live sets.',
+    bio: 'A chief producer behind the 48 Laws of Power mixtape series. Known for crafting hard-hitting 808s and spacey synth lines featured on Maino da Plug\'s live sets.',
     socialLinks: {
       instagram: 'https://instagram.com',
       youtube: 'https://youtube.com',
@@ -86,7 +86,7 @@ const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
     _id: 'ph5',
     name: 'Volt Rapper',
     genre: 'Hip-Hop',
-    bio: 'With electric stage presence and high-octane delivery, Volt Rapper is a frequent collaborator on DJ Maino\'s club tours and festival appearances.',
+    bio: 'With electric stage presence and high-octane delivery, Volt Rapper is a frequent collaborator on Maino da Plug\'s club tours and festival appearances.',
     socialLinks: {
       twitter: 'https://twitter.com',
     },
@@ -96,7 +96,7 @@ const PLACEHOLDER_ARTISTS: Record<string, Artist> = {
     _id: 'ph6',
     name: 'Supa Bass',
     genre: 'Electronic',
-    bio: 'Supa Bass provides the heavy electronic and bass elements that DJ Maino blends into his live sets. He is a primary contributor to the 48 Laws soundsystem.',
+    bio: 'Supa Bass provides the heavy electronic and bass elements that Maino da Plug blends into his live sets. He is a primary contributor to the 48 Laws soundsystem.',
     socialLinks: {
       instagram: 'https://instagram.com',
     },
@@ -143,7 +143,7 @@ async function getArtist(slug: string): Promise<Artist | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const artist = await getArtist(slug)
-  if (!artist) return { title: 'Artist Not Found | DJ Maino da Plug' }
+  if (!artist) return { title: 'Artist Not Found | Maino da Plug' }
 
   return {
     title: `${artist.name} | 48 Laws Soundsystem`,
