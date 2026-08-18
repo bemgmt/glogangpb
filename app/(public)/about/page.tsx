@@ -73,7 +73,7 @@ export default function AboutPage() {
           DJ MAINO DA PLUG
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Mixtape curation, live Twitch broadcasting, and artist management. Connecting fans with the rawest sounds and exclusive sets.
+          Tour DJ, Glo Streams host, underground music curator, and cultural connector.
         </p>
       </header>
 
@@ -86,23 +86,23 @@ export default function AboutPage() {
             Our Movement
           </h2>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-            Renowned as a premier curator and host of the highly acclaimed <strong>48 Laws</strong> mixtape series, <strong>DJ Maino da Plug</strong> has carved out a unique space in modern music culture. Spinning the freshest tracks, managing rising talent, and building a massive digital fan base, DJ Maino is the ultimate conduit for music discovery.
+            <strong>DJ Maino Da Plug</strong> is an underground music curator, tour DJ, livestream host, and cultural tastemaker working at the center of rap and rage culture. His platform is built around authentic artist-driven moments, a sharp ear for emerging talent, and the energy to connect a room.
           </p>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)' }}>
-            Today, DJ Maino da Plug's platform is a digital hub for fans worldwide. By bridging the gap between underground artists and mainstream visibility, we host interactive live sets on Twitch, distribute exclusive mixtape drops, and run premium VIP experiences that connect the community directly to the movement.
+            Operating out of Chief Keef&apos;s Glo Shop, Maino hosts <strong>Glo Streams</strong>, where independent and signed artists share music, tell stories, and connect directly with fans. As the official DJ for Bear1Boss and a close collaborator of UnoTheActivist, he helps amplify the next wave through touring, livestreaming, event hosting, and artist collaboration.
           </p>
 
           {/* Pillars */}
           <div className="pillars-grid" style={{ marginTop: '3rem' }}>
             <div className="gg-card pillar-card">
               <div className="pillar-icon"><Compass size={20} /></div>
-              <h3 className="pillar-title">Curation</h3>
-              <p className="pillar-desc">Only the rawest tracks and mixtapes. We filter through the noise to bring you the certified hits.</p>
+              <h3 className="pillar-title">Discovery</h3>
+              <p className="pillar-desc">A sharp ear for emerging rap, rage, plugg, and alternative sounds before they break wider.</p>
             </div>
             <div className="gg-card pillar-card">
               <div className="pillar-icon"><ShieldCheck size={20} /></div>
-              <h3 className="pillar-title">High Energy</h3>
-              <p className="pillar-desc">High-voltage Twitch streams and club sets. We bring the electric vibe directly to you.</p>
+              <h3 className="pillar-title">Connection</h3>
+              <p className="pillar-desc">Tour stages, Glo Streams, and artist-led conversations that turn discovery into community.</p>
             </div>
           </div>
         </section>
@@ -114,7 +114,7 @@ export default function AboutPage() {
               Get In Touch
             </h2>
             <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', marginBottom: '2rem' }}>
-              Booking inquiries, mixtape submissions, or support. Send a message directly.
+              Booking, touring, media, brand opportunities, submissions, or support. Send a message directly.
             </p>
 
             <form onSubmit={handleContactSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
@@ -185,11 +185,11 @@ export default function AboutPage() {
             <div className="quick-info-strip" style={{ marginTop: '2.5rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
               <div className="info-item">
                 <MapPin size={16} className="info-icon" />
-                <span>Los Angeles, CA / Twitch Live</span>
+                <span>Touring / Glo Streams</span>
               </div>
               <div className="info-item">
                 <Mail size={16} className="info-icon" />
-                <span>booking@djmainodaplug.com</span>
+                <a href="mailto:contact@rainmgmts.com">contact@rainmgmts.com</a>
               </div>
               <div className="info-item">
                 <Globe size={16} className="info-icon" />

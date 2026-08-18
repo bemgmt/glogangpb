@@ -1,18 +1,76 @@
-import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowRight, Camera, Star, Zap } from 'lucide-react'
-import { getUpcomingEvents, getFeaturedArtists } from '@/lib/sanity'
+import Link from 'next/link'
+import {
+  ArrowRight,
+  Calendar,
+  Camera,
+  Download,
+  ExternalLink,
+  Headphones,
+  Mic2,
+  Radio,
+  Star,
+  Users,
+} from 'lucide-react'
 import { TwitchEmbed } from '@/components/home/TwitchEmbed'
+import {
+  EPK_DOWNLOAD_URL,
+  FADER_PRESS,
+  GLO_STREAM_GUESTS,
+  SELECTED_ARTISTS_AND_BRANDS,
+  SOCIAL_PROOF,
+  TOUR_CREDITS,
+} from '@/lib/epk'
+import { getFeaturedArtists, getUpcomingEvents } from '@/lib/sanity'
 
 export const metadata = {
-  title: 'DJ Maino da Plug — Official Fan Portal',
-  description: 'The official community & member portal for DJ Maino da Plug. Explore music releases, live sets, events, and the interactive photobooth.',
+  title: 'DJ Maino Da Plug - Tour DJ, Livestream Host & Music Curator',
+  description:
+    'Official site for DJ Maino Da Plug: tour DJ, Glo Streams host, underground music curator, events, press, and booking.',
 }
 
-// Revalidate every 60 seconds for ISR
 export const revalidate = 60
 
-async function getData() {
+const ROLES = [
+  {
+    title: 'Tour DJ',
+    description: 'High-energy sets built for tour stages, clubs, and artist-led live shows.',
+    Icon: Headphones,
+  },
+  {
+    title: 'Glo Streams Host',
+    description: 'Live music discovery, interviews, commentary, and unfiltered artist conversation.',
+    Icon: Radio,
+  },
+  {
+    title: 'Music Curator',
+    description: 'A sharp ear for the rap, rage, plugg, and alternative sounds moving next.',
+    Icon: Star,
+  },
+  {
+    title: 'Cultural Connector',
+    description: 'Connecting emerging talent, established artists, brands, and real audiences.',
+    Icon: Users,
+  },
+]
+
+type UpcomingEvent = {
+  _id: string
+  title: string
+  eventDate?: string
+  venue?: string
+  ticketUrl?: string
+}
+
+type FeaturedArtist = {
+  _id: string
+  name: string
+  slug?: { current?: string }
+  genre?: string
+  photo?: { asset?: { _ref?: string } }
+}
+
+async function getData(): Promise<{ events: UpcomingEvent[]; artists: FeaturedArtist[] }> {
   try {
     const [events, artists] = await Promise.all([
       getUpcomingEvents(4),
@@ -27,426 +85,329 @@ async function getData() {
 export default async function HomePage() {
   const { events, artists } = await getData()
 
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'DJ Maino Da Plug',
+    url: 'https://glogangworldwide.com',
+    jobTitle: 'Tour DJ, Livestream Host and Music Curator',
+    sameAs: [
+      'https://www.instagram.com/mainodaplug/',
+      'https://www.twitch.tv/djmainodaplug',
+      'https://www.youtube.com/@Djmainodaplug/featured',
+      'https://www.tiktok.com/@mainodaplug',
+      'https://x.com/mainodaplug',
+    ],
+  }
+
   return (
     <>
-      {/* ── Hero ─────────────────────────────────────────────────── */}
-      <section
-        style={{
-          position: 'relative',
-          minHeight: '100vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          overflow: 'hidden',
-          background: 'var(--bg)',
-        }}
-      >
-        {/* Background Image */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'url(/img/maino_hero_bg.png)',
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            backgroundRepeat: 'no-repeat',
-          }}
-          aria-hidden
-        />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
 
-        {/* Dark overlay for readability */}
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'linear-gradient(to bottom, rgba(10,10,10,0.3) 0%, rgba(10,10,10,0.85) 100%)',
-            pointerEvents: 'none',
-          }}
-          aria-hidden
+      <section className="maino-hero">
+        <Image
+          src="/img/epk/dj-maino-live-collage.jpg"
+          alt="DJ Maino Da Plug performing and connecting with fans"
+          fill
+          priority
+          sizes="100vw"
+          className="maino-hero__image"
         />
+        <div className="maino-hero__overlay" aria-hidden />
+        <div className="maino-hero__texture" aria-hidden />
 
-        {/* Volt Green glow radial */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '-20%',
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: '900px',
-            height: '600px',
-            background: 'radial-gradient(ellipse, rgba(57,255,20,0.1) 0%, transparent 70%)',
-            pointerEvents: 'none',
-          }}
-          aria-hidden
-        />
-
-        {/* Content */}
-        <div
-          className="gg-container"
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            textAlign: 'center',
-            padding: '80px 20px',
-          }}
-        >
-          {/* Badge */}
-          <div className="animate-fade-in" style={{ marginBottom: 24 }}>
-            <span className="gg-pill gg-pill--gold" style={{ fontSize: 12 }}>
-              <Zap size={10} />
-              Official Fan Portal
-            </span>
+        <div className="gg-container maino-hero__content">
+          <div className="maino-hero__copy">
+            <p className="maino-kicker animate-fade-in">
+              Tour DJ <span>×</span> Livestream Host <span>×</span> Cultural Curator
+            </p>
+            <h1 className="animate-fade-in delay-100">
+              DJ MAINO
+              <br />
+              <span>DA PLUG</span>
+            </h1>
+            <p className="maino-hero__description animate-fade-in delay-200">
+              From tour stages to Glo Streams at the Glo Shop, Maino connects
+              underground rap and rage culture with the artists, stories, and moments
+              pushing the scene forward.
+            </p>
+            <div className="maino-hero__actions animate-fade-in delay-300">
+              <a
+                href="https://www.twitch.tv/djmainodaplug"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="gg-btn gg-btn--primary gg-btn--lg"
+              >
+                Watch Glo Streams <ArrowRight size={18} />
+              </a>
+              <Link href="/epk" className="gg-btn gg-btn--secondary gg-btn--lg">
+                Booking & EPK
+              </Link>
+              <Link href="/events" className="gg-btn gg-btn--ghost gg-btn--lg">
+                Tour Dates
+              </Link>
+            </div>
           </div>
 
-          {/* Headline */}
-          <h1
-            className="animate-fade-in delay-100"
-            style={{
-              marginBottom: 24,
-              background: 'linear-gradient(135deg, #fff 30%, var(--accent) 70%, var(--accent-red) 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundClip: 'text',
-            }}
-          >
-            DJ MAINO<br />DA PLUG
-          </h1>
-
-          <p
-            className="animate-fade-in delay-200"
-            style={{
-              fontSize: 'clamp(1rem, 2vw, 1.25rem)',
-              maxWidth: 520,
-              margin: '0 auto 40px',
-              color: 'var(--text-muted)',
-              lineHeight: 1.7,
-            }}
-          >
-            Official fan community and member portal for DJ Maino. Explore SoundCloud mixes, Twitch live sets, shows, and exclusive VIP drops.
-          </p>
-
-          {/* CTAs */}
-          <div
-            className="animate-fade-in delay-300"
-            style={{
-              display: 'flex',
-              gap: 14,
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-            }}
-          >
-            <a
-              href="https://soundcloud.com/48-laws"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gg-btn gg-btn--primary gg-btn--lg"
-            >
-              Listen Now <ArrowRight size={18} />
-            </a>
-            <a
-              href="https://www.twitch.tv/djmainodaplug"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="gg-btn gg-btn--ghost gg-btn--lg"
-            >
-              Watch Live
-            </a>
-          </div>
-
-          {/* Stats strip */}
-          <div
-            className="animate-fade-in delay-400"
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-              gap: 40,
-              marginTop: 60,
-              flexWrap: 'wrap',
-            }}
-          >
-            {[
-              { label: 'Mixtape Series', value: '48 Laws' },
-              { label: 'Broadcasts', value: 'Twitch' },
-              { label: 'Community', value: 'Worldwide' },
-            ].map(({ label, value }) => (
-              <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{ fontWeight: 900, fontSize: '2rem', color: 'var(--accent)', lineHeight: 1 }}>
-                  {value}
-                </div>
-                <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'var(--text-muted)', marginTop: 4 }}>
-                  {label}
-                </div>
+          <div className="maino-proof-grid animate-fade-in delay-400">
+            {SOCIAL_PROOF.map(({ label, value }) => (
+              <div key={label} className="maino-proof">
+                <strong>{value}</strong>
+                <span>{label}</span>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Scroll indicator */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: 32,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 6,
-          }}
-          aria-hidden
-        >
-          <div style={{
-            width: 1,
-            height: 48,
-            background: 'linear-gradient(to bottom, var(--border-accent), transparent)',
-          }} />
+          <p className="maino-as-of">Audience figures supplied in the 2026 EPK.</p>
         </div>
       </section>
 
-      {/* ── Twitch Live Section ───────────────────────────────────── */}
-      <section style={{ padding: '60px 0 20px' }}>
+      <section className="maino-section maino-section--tight">
         <div className="gg-container">
-          <div style={{ textAlign: 'center', marginBottom: 32 }}>
-            <span className="gg-pill gg-pill--gold" style={{ marginBottom: 12 }}>
-              🔴 Twitch Broadcast
-            </span>
-            <h2>Tune In Live</h2>
-            <p style={{ maxWidth: 520, margin: '8px auto 0', color: 'var(--text-muted)' }}>
-              Watch DJ Maino spin live sets directly. Turn up the volume and join the chat on Twitch!
+          <div className="maino-section-heading">
+            <div>
+              <p className="maino-kicker">More Than The Set</p>
+              <h2>The bridge to what&apos;s next</h2>
+            </div>
+            <p>
+              Maino brings performance, discovery, conversation, and community into one
+              artist-driven platform.
             </p>
           </div>
+          <div className="maino-role-grid">
+            {ROLES.map(({ title, description, Icon }) => (
+              <article key={title} className="maino-role-card">
+                <Icon size={24} aria-hidden />
+                <h3>{title}</h3>
+                <p>{description}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
 
-          <div style={{
-            maxWidth: 800,
-            margin: '0 auto',
-            position: 'relative',
-            borderRadius: 18,
-            overflow: 'hidden',
-            border: '1px solid var(--border-accent)',
-            boxShadow: '0 20px 50px rgba(0,229,255,0.1)',
-            background: 'var(--panel)'
-          }}>
+      <section id="glo-streams" className="maino-section maino-section--panel">
+        <div className="gg-container maino-split">
+          <div>
+            <p className="maino-kicker">Live From The Glo Shop</p>
+            <h2>Glo Streams</h2>
+            <p className="maino-lede">
+              A trusted room for independent and signed artists to share music, tell
+              stories, joke freely, and connect directly with fans in real time.
+            </p>
+            <div className="maino-chip-list" role="list" aria-label="Selected Glo Streams guests">
+              {GLO_STREAM_GUESTS.slice(0, 8).map((guest) => (
+                <span key={guest} role="listitem">{guest}</span>
+              ))}
+            </div>
+            <a
+              href="https://www.twitch.tv/djmainodaplug/videos"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="gg-btn gg-btn--ghost"
+            >
+              Watch the archive <ExternalLink size={15} />
+            </a>
+          </div>
+
+          <div className="maino-stream-frame">
             <TwitchEmbed />
           </div>
         </div>
       </section>
 
-      {/* ── Photobooth CTA ────────────────────────────────────────── */}
-      <section style={{ padding: '80px 0' }}>
-        <div className="gg-container">
-          <div
-            className="gg-card gg-card--accent animate-fade-in"
-            style={{
-              background: 'linear-gradient(135deg, rgba(0,229,255,0.07) 0%, rgba(57,255,20,0.04) 100%)',
-              display: 'flex',
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              gap: 32,
-              flexWrap: 'wrap',
-              padding: '40px 48px',
-            }}
-          >
-            <div style={{ flex: 1, minWidth: 260 }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 16 }}>
-                <div style={{
-                  width: 48,
-                  height: 48,
-                  background: 'var(--accent)',
-                  borderRadius: 14,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}>
-                  <Camera size={24} color="var(--ink)" />
-                </div>
-                <span className="gg-pill gg-pill--gold">Member Experience</span>
-              </div>
-              <h2 style={{ marginBottom: 12, fontSize: 'clamp(1.6rem, 3vw, 2.4rem)' }}>
-                PLUG PHOTOBOOTH
-              </h2>
-              <p style={{ maxWidth: 440, lineHeight: 1.7 }}>
-                Strike a pose with exclusive DJ Maino overlays, custom turntable stickers,
-                and glowing headphones. Members only — sign up free.
-              </p>
-            </div>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <Link href="/register" className="gg-btn gg-btn--primary">
-                Sign Up Free
-                <ArrowRight size={16} />
-              </Link>
-              <Link href="/login" className="gg-btn gg-btn--ghost">
-                Log In
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Featured Artists ──────────────────────────────────────── */}
-      <section style={{ padding: '24px 0 80px' }}>
-        <div className="gg-container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
-            <div>
-              <p className="gg-pill gg-pill--gold" style={{ display: 'inline-flex', marginBottom: 12 }}>
-                <Star size={10} />
-                The Roster
-              </p>
-              <h2>Featured Artists</h2>
-            </div>
-            <Link href="/artists" className="gg-btn gg-btn--ghost gg-btn--sm">
-              View All <ArrowRight size={13} />
+      <section className="maino-section">
+        <div className="gg-container maino-split maino-split--tour">
+          <div>
+            <p className="maino-kicker">Selected Touring</p>
+            <h2>Built for live rooms</h2>
+            <p className="maino-lede">
+              Verified tour experience across legacy R&B stages and the new underground,
+              with the energy to connect both artists and audiences.
+            </p>
+            <Link href="/events" className="gg-btn gg-btn--primary">
+              Upcoming dates <Calendar size={16} />
             </Link>
           </div>
 
-          {artists.length > 0 ? (
-            <div className="gg-grid-3">
-              {artists.map((artist: any, i: number) => (
-                <Link
-                  key={artist._id}
-                  href={`/artists/${artist.slug?.current}`}
-                  className={`gg-card animate-fade-in delay-${Math.min(i * 100, 500)}`}
-                  style={{ display: 'block', overflow: 'hidden' }}
-                >
-                  <div style={{
-                    height: 200,
-                    background: 'var(--surface)',
-                    borderRadius: 12,
-                    marginBottom: 14,
-                    overflow: 'hidden',
-                    position: 'relative',
-                  }}>
-                    {artist.photo && (
-                      <Image
-                        src={`https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${artist.photo.asset._ref.replace('image-', '').replace('-jpg', '.jpg').replace('-png', '.png').replace('-webp', '.webp')}`}
-                        alt={artist.name}
-                        fill
-                        style={{ objectFit: 'cover' }}
-                      />
-                    )}
-                  </div>
-                  <h4 style={{ marginBottom: 4 }}>{artist.name}</h4>
-                  {artist.genre && (
-                    <span className="gg-pill" style={{ fontSize: 10 }}>{artist.genre}</span>
-                  )}
-                </Link>
-              ))}
-            </div>
-          ) : (
-            /* Placeholder cards while Sanity is being populated */
-            <div className="gg-grid-3">
-              {['DJ Maino da Plug', '48 Laws Network', 'Plug Affiliates'].map((name, i) => (
-                <div
-                  key={name}
-                  className={`gg-card animate-fade-in delay-${i * 100}`}
-                >
-                  <div style={{
-                    height: 200,
-                    borderRadius: 12,
-                    marginBottom: 14,
-                    background: 'linear-gradient(135deg, var(--surface) 0%, var(--panel-hover) 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 48,
-                  }}>🔌</div>
-                  <h4 style={{ marginBottom: 4 }}>{name}</h4>
-                  <span className="gg-pill" style={{ fontSize: 10 }}>Plug Network</span>
-                </div>
-              ))}
-            </div>
-          )}
+          <ol className="maino-tour-list">
+            {TOUR_CREDITS.map(({ year, title }) => (
+              <li key={`${year}-${title}`}>
+                <span>{year}</span>
+                <strong>{title}</strong>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div className="gg-container maino-name-wall">
+          <p>Selected artist, stage & brand work</p>
+          <div>
+            {SELECTED_ARTISTS_AND_BRANDS.map((name) => (
+              <span key={name}>{name}</span>
+            ))}
+          </div>
         </div>
       </section>
 
-      {/* ── Upcoming Events ───────────────────────────────────────── */}
-      <section style={{ padding: '24px 0 80px', background: 'var(--bg-alt)' }}>
-        <div className="gg-container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 32 }}>
+      <section className="maino-section maino-section--press">
+        <div className="gg-container maino-press-grid">
+          <article className="maino-press-card">
+            <p className="maino-kicker">Press</p>
+            <p className="maino-press-card__publication">{FADER_PRESS.publication}</p>
+            <h2>{FADER_PRESS.title}</h2>
+            <p>{FADER_PRESS.description}</p>
+            <div className="maino-press-card__meta">
+              <span>{FADER_PRESS.date}</span>
+              <a
+                href={FADER_PRESS.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Read on The FADER <ExternalLink size={14} />
+              </a>
+            </div>
+          </article>
+
+          <article className="maino-epk-card">
             <div>
-              <p className="gg-pill gg-pill--red" style={{ display: 'inline-flex', marginBottom: 12 }}>🔥 Live & Upcoming</p>
-              <h2>Events & Shows</h2>
+              <p className="maino-kicker">2026 Electronic Press Kit</p>
+              <h2>Press-ready assets & verified credits</h2>
+              <p>
+                Biography, touring history, Glo Streams guests, audience proof, press,
+                and management contact in one place.
+              </p>
+            </div>
+            <div className="maino-epk-card__actions">
+              <Link href="/epk" className="gg-btn gg-btn--primary">
+                Open web EPK <ArrowRight size={16} />
+              </Link>
+              <a href={EPK_DOWNLOAD_URL} download className="gg-btn gg-btn--ghost">
+                Download PDF <Download size={16} />
+              </a>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section className="maino-section maino-section--panel">
+        <div className="gg-container">
+          <div className="maino-section-heading">
+            <div>
+              <p className="maino-kicker">Live & Upcoming</p>
+              <h2>Events & shows</h2>
             </div>
             <Link href="/events" className="gg-btn gg-btn--ghost gg-btn--sm">
-              All Events <ArrowRight size={13} />
+              All events <ArrowRight size={13} />
             </Link>
           </div>
 
           {events.length > 0 ? (
             <div className="gg-grid-2">
-              {events.map((event: any, i: number) => (
-                <div
-                  key={event._id}
-                  className={`gg-card animate-fade-in delay-${i * 100}`}
-                  style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}
-                >
-                  <div style={{
-                    minWidth: 56,
-                    height: 56,
-                    background: 'rgba(57,255,20,0.15)',
-                    border: '1px solid rgba(57,255,20,0.3)',
-                    borderRadius: 12,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: 11,
-                    fontWeight: 900,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.05em',
-                    color: '#39ff14',
-                  }}>
+              {events.map((event) => (
+                <article key={event._id} className="gg-card maino-event-card">
+                  <div className="maino-event-date">
                     {event.eventDate
-                      ? new Date(event.eventDate).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }).split(' ').map((p: string, idx: number) => (
-                          <span key={idx} style={{ lineHeight: 1.2 }}>{p}</span>
-                        ))
-                      : '—'}
+                      ? new Date(event.eventDate)
+                          .toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
+                          .split(' ')
+                          .map((part: string) => <span key={part}>{part}</span>)
+                      : 'TBA'}
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <h4 style={{ marginBottom: 4 }}>{event.title}</h4>
-                    {event.venue && (
-                      <p style={{ fontSize: 13 }}>{event.venue}</p>
-                    )}
+                  <div>
+                    <h3>{event.title}</h3>
+                    {event.venue && <p>{event.venue}</p>}
                     {event.ticketUrl && (
                       <a
                         href={event.ticketUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="gg-btn gg-btn--danger gg-btn--sm"
-                        style={{ marginTop: 10 }}
+                        className="gg-btn gg-btn--primary gg-btn--sm"
                       >
-                        Get Tickets
+                        Get tickets
                       </a>
                     )}
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           ) : (
-            <div className="gg-card" style={{ textAlign: 'center', padding: 48, color: 'var(--text-muted)' }}>
-              <p style={{ fontSize: 32, marginBottom: 12 }}>🎤</p>
-              <p style={{ marginBottom: 8 }}>New dates are being announced.</p>
-              <p style={{ fontSize: 14 }}>Watch the latest Twitch replay or follow DJ Maino for the next broadcast notice.</p>
-              <a href="https://www.twitch.tv/djmainodaplug/videos" target="_blank" rel="noopener noreferrer" className="gg-btn gg-btn--ghost gg-btn--sm" style={{ marginTop: 16 }}>Latest replays ↗</a>
+            <div className="gg-card maino-empty-state">
+              <Mic2 size={28} aria-hidden />
+              <div>
+                <h3>New dates are being announced</h3>
+                <p>Follow Maino for tour drops and the next Glo Streams broadcast.</p>
+              </div>
             </div>
           )}
         </div>
       </section>
 
-      {/* ── Join CTA ─────────────────────────────────────────────── */}
-      <section style={{ padding: '80px 0' }}>
-        <div className="gg-container" style={{ textAlign: 'center' }}>
-          <span className="gg-pill gg-pill--gold" style={{ marginBottom: 20, display: 'inline-flex' }}>
-            Free to Join
-          </span>
-          <h2 style={{ marginBottom: 16 }}>Become a Plug Fan</h2>
-          <p style={{ maxWidth: 440, margin: '0 auto 36px', lineHeight: 1.7 }}>
-            Free member accounts unlock the photobooth, event RSVPs, and
-            exclusive DJ Maino content. VIP tiers unlock even more.
-          </p>
-          <Link href="/register" className="gg-btn gg-btn--primary gg-btn--lg">
-            Join Free <ArrowRight size={18} />
-          </Link>
+      {artists.length > 0 && (
+        <section className="maino-section">
+          <div className="gg-container">
+            <div className="maino-section-heading">
+              <div>
+                <p className="maino-kicker">Artists & Collaborators</p>
+                <h2>Inside the movement</h2>
+              </div>
+              <Link href="/artists" className="gg-btn gg-btn--ghost gg-btn--sm">
+                View all <ArrowRight size={13} />
+              </Link>
+            </div>
+            <div className="gg-grid-3">
+              {artists.map((artist) => (
+                <Link
+                  key={artist._id}
+                  href={`/artists/${artist.slug?.current}`}
+                  className="gg-card maino-artist-card"
+                >
+                  <div>
+                    {artist.photo?.asset?._ref && (
+                      <Image
+                        src={`https://cdn.sanity.io/images/${process.env.NEXT_PUBLIC_SANITY_PROJECT_ID}/${process.env.NEXT_PUBLIC_SANITY_DATASET}/${artist.photo.asset._ref
+                          .replace('image-', '')
+                          .replace('-jpg', '.jpg')
+                          .replace('-png', '.png')
+                          .replace('-webp', '.webp')}`}
+                        alt={artist.name}
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                      />
+                    )}
+                  </div>
+                  <h3>{artist.name}</h3>
+                  {artist.genre && <p>{artist.genre}</p>}
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="maino-section maino-fan-cta">
+        <div className="gg-container maino-fan-cta__inner">
+          <div>
+            <p className="maino-kicker">For The Community</p>
+            <h2>Step inside the movement</h2>
+            <p>
+              Free membership unlocks the Plug Photobooth, event RSVPs, and exclusive
+              DJ Maino content.
+            </p>
+          </div>
+          <div className="maino-fan-cta__actions">
+            <Link href="/register" className="gg-btn gg-btn--primary">
+              Join free <ArrowRight size={16} />
+            </Link>
+            <Link href="/membership" className="gg-btn gg-btn--ghost">
+              Membership
+            </Link>
+            <Link href="/login" className="gg-btn gg-btn--ghost" aria-label="Open the member photobooth">
+              <Camera size={16} /> Photobooth
+            </Link>
+          </div>
         </div>
       </section>
     </>

@@ -1,8 +1,24 @@
 'use client'
 
-import { Twitch, Instagram, Music, Youtube, Twitter } from 'lucide-react'
+import { Twitch, Instagram, Music, Youtube, Twitter, FileText, Mail } from 'lucide-react'
 
 const LINKS = [
+  {
+    name: 'Official EPK',
+    description: 'Biography, tour credits, press, audience proof, and downloadable PDF',
+    url: '/epk',
+    icon: FileText,
+    color: '#39d126',
+    glowColor: 'rgba(57, 209, 38, 0.35)',
+  },
+  {
+    name: 'Booking & Management',
+    description: 'Touring, hosting, media, and brand opportunities',
+    url: 'mailto:contact@rainmgmts.com',
+    icon: Mail,
+    color: '#f5bd28',
+    glowColor: 'rgba(245, 189, 40, 0.3)',
+  },
   {
     name: 'Live on Twitch',
     description: 'Catch live sets, DJ mixes, and streams',
@@ -78,7 +94,7 @@ export default function LinksPage() {
           top: '-10%',
           width: '600px',
           height: '400px',
-          background: 'radial-gradient(ellipse, rgba(0, 229, 255, 0.15) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse, rgba(57, 209, 38, 0.15) 0%, transparent 70%)',
           pointerEvents: 'none',
         }}
         aria-hidden
@@ -140,7 +156,7 @@ export default function LinksPage() {
             fontWeight: 500,
           }}
         >
-          Connect with the Plug. Music, streams, and social updates.
+          Booking, Glo Streams, music, press, and social updates.
         </p>
 
         {/* Link Items */}

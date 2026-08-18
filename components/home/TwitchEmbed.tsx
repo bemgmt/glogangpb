@@ -13,7 +13,7 @@ export function TwitchEmbed() {
   )
 
   if (!hostname) {
-    return <div style={{ minHeight: 450 }} aria-label="Loading Twitch player" />
+    return <div role="status" style={{ minHeight: 450 }} aria-label="Loading Twitch player" />
   }
 
   const playerUrl = new URL('https://player.twitch.tv/')

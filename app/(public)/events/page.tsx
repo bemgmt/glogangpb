@@ -188,7 +188,7 @@ export default async function EventsPage() {
           Shows &amp; Events
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Catch DJ Maino live or tune in to Twitch stream sessions.
+          Catch DJ Maino on tour, at live events, or hosting the next Glo Streams session.
         </p>
       </header>
 
