@@ -5,12 +5,12 @@ import { createClient } from 'next-sanity'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Events | DJ Maino da Plug',
+  title: 'Events | Maino da Plug',
   description:
-    'Browse upcoming DJ Maino shows, club sets, and live stream sessions. Get tickets and RSVP.',
+    'Browse upcoming Maino da Plug shows, club sets, and live stream sessions. Get tickets and RSVP.',
   openGraph: {
-    title: 'Events | DJ Maino da Plug',
-    description: 'Browse upcoming DJ Maino shows, club sets, and live stream sessions.',
+    title: 'Events | Maino da Plug',
+    description: 'Browse upcoming Maino da Plug shows, club sets, and live stream sessions.',
   },
 }
 
@@ -45,12 +45,12 @@ const sanity = createClient({
 const PLACEHOLDER_EVENTS: SanityEvent[] = [
   {
     _id: 'ph1',
-    title: 'DJ Maino Live Set – LA',
+    title: 'Maino da Plug Live Set – LA',
     eventDate: new Date(Date.now() + 14 * 86400000).toISOString(),
     venue: 'Exchange LA',
     city: 'Los Angeles, CA',
     featured: true,
-    description: 'DJ Maino spinning the absolute finest electronic and hip-hop sets live.',
+    description: 'Maino da Plug spinning the absolute finest electronic and hip-hop sets live.',
   },
   {
     _id: 'ph2',
@@ -58,7 +58,7 @@ const PLACEHOLDER_EVENTS: SanityEvent[] = [
     eventDate: new Date(Date.now() + 30 * 86400000).toISOString(),
     venue: 'Believe Music Hall',
     city: 'Atlanta, GA',
-    description: 'Mixtape drop party with DJ Maino on the decks.',
+    description: 'Mixtape drop party with Maino da Plug on the decks.',
   },
   {
     _id: 'ph3',
@@ -188,7 +188,7 @@ export default async function EventsPage() {
           Shows &amp; Events
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Catch DJ Maino on tour, at live events, or hosting the next Glo Streams session.
+          Catch Maino da Plug on tour, at live events, or hosting the next Glo Streams session.
         </p>
       </header>
 

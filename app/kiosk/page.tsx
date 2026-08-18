@@ -1,7 +1,7 @@
 import Link from 'next/link'
 
 export const metadata = {
-  title: 'Kiosk — DJ Maino Photobooth',
+  title: 'Kiosk — Maino da Plug Photobooth',
   description: 'In-store photobooth kiosk experience.',
 }
 

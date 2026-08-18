@@ -70,7 +70,7 @@ export default function AboutPage() {
             margin: 0,
           }}
         >
-          DJ MAINO DA PLUG
+          MAINO DA PLUG
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
           Tour DJ, Glo Streams host, underground music curator, and cultural connector.
@@ -86,10 +86,10 @@ export default function AboutPage() {
             Our Movement
           </h2>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)', marginBottom: '1.5rem' }}>
-            <strong>DJ Maino Da Plug</strong> is an underground music curator, tour DJ, livestream host, and cultural tastemaker working at the center of rap and rage culture. His platform is built around authentic artist-driven moments, a sharp ear for emerging talent, and the energy to connect a room.
+            <strong>Maino da Plug</strong> is an underground music curator, tour DJ, livestream host, and cultural tastemaker working at the center of rap and rage culture. His platform is built around authentic artist-driven moments, a sharp ear for emerging talent, and the energy to connect a room.
           </p>
           <p style={{ fontSize: '1.1rem', lineHeight: '1.8', color: 'var(--text-muted)' }}>
-            Operating out of Chief Keef&apos;s Glo Shop, Maino hosts <strong>Glo Streams</strong>, where independent and signed artists share music, tell stories, and connect directly with fans. As the official DJ for Bear1Boss and a close collaborator of UnoTheActivist, he helps amplify the next wave through touring, livestreaming, event hosting, and artist collaboration.
+            Operating out of Chief Keef&apos;s Glo Shop, Maino da Plug hosts <strong>Glo Streams</strong>, where independent and signed artists share music, tell stories, and connect directly with fans. As the official DJ for Bear1Boss and a close collaborator of UnoTheActivist, he helps amplify the next wave through touring, livestreaming, event hosting, and artist collaboration.
           </p>
 
           {/* Pillars */}

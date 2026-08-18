@@ -109,7 +109,7 @@ export function GGFooter() {
                 <path d="M12 2v8M18 10V6M6 10V6M12 18v4" />
                 <rect x="5" y="10" width="14" height="8" rx="3" fill="var(--accent)" />
               </svg>
-              DJ MAINO
+              MAINO DA PLUG
             </Link>
             <p style={{ fontSize: 14, maxWidth: 260, lineHeight: 1.7 }}>
               Tour DJ, Glo Streams host, underground music curator, and cultural connector.
@@ -218,7 +218,7 @@ export function GGFooter() {
           }}
         >
           <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
-            © {new Date().getFullYear()} DJ Maino da Plug. All rights reserved.
+            © {new Date().getFullYear()} Maino da Plug. All rights reserved.
           </p>
           <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
             The Plug Worldwide

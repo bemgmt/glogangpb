@@ -5,7 +5,7 @@ import { createClient as createSanityClient } from 'next-sanity'
 import MemberEventsClient from './MemberEventsClient'
 
 export const metadata: Metadata = {
-  title: 'Member Events & RSVPs | DJ Maino',
+  title: 'Member Events & RSVPs | Maino da Plug',
   description: 'Manage your event RSVPs, listening parties, and exclusive drop invitations.',
 }
 
@@ -37,12 +37,12 @@ interface SanityEvent {
 const PLACEHOLDER_EVENTS: SanityEvent[] = [
   {
     _id: 'ph1',
-    title: 'DJ Maino Live – Los Angeles',
+    title: 'Maino da Plug Live – Los Angeles',
     eventDate: new Date(Date.now() + 14 * 86400000).toISOString(),
     venue: 'Exchange LA',
     city: 'Los Angeles, CA',
     featured: true,
-    description: 'DJ Maino and the 48 Laws affiliates live set.',
+    description: 'Maino da Plug and the 48 Laws affiliates live set.',
   },
   {
     _id: 'ph2',

@@ -145,7 +145,7 @@ export default function LinksPage() {
             color: 'var(--text)',
           }}
         >
-          DJ MAINO
+          MAINO DA PLUG
         </h1>
         <p
           className="animate-fade-in delay-200"

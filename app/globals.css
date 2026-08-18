@@ -398,7 +398,7 @@ a { color: inherit; text-decoration: none; }
 @media (max-width: 768px)  { .gg-grid-3 { grid-template-columns: 1fr 1fr; } .gg-grid-4 { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 600px)  { .gg-grid-2, .gg-grid-3, .gg-grid-4 { grid-template-columns: 1fr; } }
 
-/* ─── DJ Maino EPK Direction ───────────────────────────────────── */
+/* ─── Maino da Plug EPK Direction ──────────────────────────────── */
 .maino-hero {
   position: relative;
   min-height: calc(100vh - 64px);

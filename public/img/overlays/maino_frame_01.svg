@@ -21,7 +21,7 @@
     <!-- Dark glass-like banner back plate -->
     <path d="M 40,0 L 1040,0 C 1040,0 1040,120 1040,120 C 1040,140 1020,160 1000,160 L 80,160 C 60,160 40,140 40,120 Z" fill="#07080a" opacity="0.9" stroke="rgba(0, 229, 255, 0.3)" stroke-width="2" />
     
-    <text x="540" y="70" font-family="'Outfit', sans-serif" font-size="44" font-weight="900" fill="#00e5ff" text-anchor="middle" letter-spacing="8">DJ MAINO DA PLUG</text>
+    <text x="540" y="70" font-family="'Outfit', sans-serif" font-size="44" font-weight="900" fill="#00e5ff" text-anchor="middle" letter-spacing="8">MAINO DA PLUG</text>
     <text x="540" y="115" font-family="'Space Grotesk', sans-serif" font-size="22" font-weight="600" fill="#39ff14" text-anchor="middle" letter-spacing="4">THE PLUG WORLDWIDE</text>
   </g>
 </svg>

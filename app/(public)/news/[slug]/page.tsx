@@ -33,15 +33,15 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: Record<string, NewsPost> = {
   np1: {
     _id: 'np1',
-    title: 'DJ Maino Announces New Twitch Stream Calendar',
+    title: 'Maino da Plug Announces New Twitch Stream Calendar',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
     category: 'stream',
-    excerpt: 'DJ Maino is taking his sets live on Twitch and announcing his weekly broadcast schedules.',
-    content: `DJ Maino has officially announced a massive Twitch broadcasting calendar. The streams are slated to start next week, visiting virtual rooms and clubs with guest appearances and community giveaways.
+    excerpt: 'Maino da Plug is taking his sets live on Twitch and announcing his weekly broadcast schedules.',
+    content: `Maino da Plug has officially announced a massive Twitch broadcasting calendar. The streams are slated to start next week, visiting virtual rooms and clubs with guest appearances and community giveaways.
 
 Mixtape collaborators and guests will join the streams, promising an unforgettable high-energy experience.
     
-Verified DJ Maino VIP Portal members holding a "Plug VIP" or "Super Plug" tier status will receive exclusive track lists and sound files.`,
+Verified Maino da Plug VIP Portal members holding a "Plug VIP" or "Super Plug" tier status will receive exclusive track lists and sound files.`,
   },
   np2: {
     _id: 'np2',
@@ -49,19 +49,19 @@ Verified DJ Maino VIP Portal members holding a "Plug VIP" or "Super Plug" tier s
     publishedAt: new Date(Date.now() - 5 * 86400000).toISOString(),
     category: 'release',
     excerpt: 'Featuring custom drums, processed loops, and high-fidelity sound presets, the latest kit is available now.',
-    content: `DJ Maino da Plug is proud to present the latest drum kit and loop pack featuring his signature sounds. This drop showcases high-density WAV files, custom-built drum loops, and synth presets.
+    content: `Maino da Plug is proud to present the latest drum kit and loop pack featuring his signature sounds. This drop showcases high-density WAV files, custom-built drum loops, and synth presets.
     
-Each sample is designed to punch through your mix and bring the authentic DJ Maino energy to your productions.
+Each sample is designed to punch through your mix and bring the authentic Maino da Plug energy to your productions.
     
 Available for download now. The collection is live in our VIP portal. VIP members can access an exclusive download code under their profile page.`,
   },
   np3: {
     _id: 'np3',
-    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
+    title: 'Maino da Plug Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
-    excerpt: 'DJ Maino drops a brand new 60-minute high-energy mix.',
-    content: `DJ Maino's new mix "48 Laws of Power Vol. 8" has finally hit SoundCloud and Twitch. Jam-packed with high energy, heavy basslines, and exclusive edits, the mix serves as a testament to his curation.
+    excerpt: 'Maino da Plug drops a brand new 60-minute high-energy mix.',
+    content: `Maino da Plug's new mix "48 Laws of Power Vol. 8" has finally hit SoundCloud and Twitch. Jam-packed with high energy, heavy basslines, and exclusive edits, the mix serves as a testament to his curation.
     
 The mix features standout edits from electronic and hip-hop producers, alongside exclusive verses.
     
@@ -69,11 +69,11 @@ Stream the mix now on SoundCloud. Digital sound packs are shipped to VIP members
   },
   np4: {
     _id: 'np4',
-    title: 'Inside the DJ Maino Member Photobooth',
+    title: 'Inside the Maino da Plug Member Photobooth',
     publishedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
     category: 'general',
     excerpt: 'Learn how to use the member dashboard photobooth with custom overlays.',
-    content: `Our online VIP member portal has officially unveiled its brand-new custom interactive photobooth. The booth lets fans step in and snap high-resolution captures using the exclusive DJ Maino overlays and custom props.
+    content: `Our online VIP member portal has officially unveiled its brand-new custom interactive photobooth. The booth lets fans step in and snap high-resolution captures using the exclusive Maino da Plug overlays and custom props.
     
 Step inside and choose from classic sticker graphics, headphones, and neon elements.
     
@@ -116,11 +116,11 @@ async function getPost(slug: string): Promise<NewsPost | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params
   const post = await getPost(slug)
-  if (!post) return { title: 'Post Not Found | DJ Maino' }
+  if (!post) return { title: 'Post Not Found | Maino da Plug' }
 
   return {
-    title: `${post.title} | News | DJ Maino da Plug`,
-    description: post.excerpt || `Read the latest news from DJ Maino.`,
+    title: `${post.title} | News | Maino da Plug`,
+    description: post.excerpt || `Read the latest news from Maino da Plug.`,
   }
 }
 

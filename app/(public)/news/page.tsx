@@ -7,8 +7,8 @@ import { Calendar, Tag, ArrowRight } from 'lucide-react'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'News & Releases | DJ Maino da Plug',
-  description: 'Stay updated with the latest music releases, sets, and announcements from DJ Maino.',
+  title: 'News & Releases | Maino da Plug',
+  description: 'Stay updated with the latest music releases, sets, and announcements from Maino da Plug.',
 }
 
 // ---------------------------------------------------------------------------
@@ -38,11 +38,11 @@ interface NewsPost {
 const PLACEHOLDER_POSTS: NewsPost[] = [
   {
     _id: 'np1',
-    title: 'DJ Maino Announces New Twitch Stream Calendar',
+    title: 'Maino da Plug Announces New Twitch Stream Calendar',
     publishedAt: new Date(Date.now() - 2 * 86400000).toISOString(),
     category: 'stream',
     featured: true,
-    excerpt: 'DJ Maino is taking his sets live on Twitch and announcing his weekly broadcast schedules. Get the full calendar inside.',
+    excerpt: 'Maino da Plug is taking his sets live on Twitch and announcing his weekly broadcast schedules. Get the full calendar inside.',
   },
   {
     _id: 'np2',
@@ -53,14 +53,14 @@ const PLACEHOLDER_POSTS: NewsPost[] = [
   },
   {
     _id: 'np3',
-    title: 'DJ Maino Releases New Mix "48 Laws of Power Vol. 8"',
+    title: 'Maino da Plug Releases New Mix "48 Laws of Power Vol. 8"',
     publishedAt: new Date(Date.now() - 10 * 86400000).toISOString(),
     category: 'release',
-    excerpt: 'DJ Maino drops a brand new 60-minute high-energy mix featuring the hottest underground rap, electronic, and drill sounds.',
+    excerpt: 'Maino da Plug drops a brand new 60-minute high-energy mix featuring the hottest underground rap, electronic, and drill sounds.',
   },
   {
     _id: 'np4',
-    title: 'Inside the DJ Maino Member Photobooth',
+    title: 'Inside the Maino da Plug Member Photobooth',
     publishedAt: new Date(Date.now() - 15 * 86400000).toISOString(),
     category: 'general',
     excerpt: 'Learn how to use the member dashboard photobooth with custom headphones, turntable overlays, and neon frames.',
@@ -122,7 +122,7 @@ export default async function NewsPage() {
           News & Releases
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          Stay updated with DJ Maino announcements, mix releases, sound kit drops, and events.
+          Stay updated with Maino da Plug announcements, mix releases, sound kit drops, and events.
         </p>
       </header>
 

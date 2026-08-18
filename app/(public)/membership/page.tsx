@@ -4,12 +4,12 @@ import type { Metadata } from 'next'
 // SEO
 // ---------------------------------------------------------------------------
 export const metadata: Metadata = {
-  title: 'Membership | DJ Maino da Plug',
+  title: 'Membership | Maino da Plug',
   description:
-    'Join the DJ Maino da Plug VIP community. Unlock exclusive mix downloads, soundpacks, and early ticket access.',
+    'Join the Maino da Plug VIP community. Unlock exclusive mix downloads, soundpacks, and early ticket access.',
   openGraph: {
-    title: 'Membership | DJ Maino da Plug',
-    description: 'Join the DJ Maino da Plug community with a Fan or VIP membership.',
+    title: 'Membership | Maino da Plug',
+    description: 'Join the Maino da Plug community with a Fan or VIP membership.',
   },
 }
 
@@ -76,7 +76,7 @@ const TIERS: Tier[] = [
       'Stream guest & chat badges',
       'Exclusive digital audio tokens',
       'Priority booking support',
-      'Direct messaging with DJ Maino',
+      'Direct messaging with Maino da Plug',
       'Mixtape shout-outs & mentions',
     ],
   },
