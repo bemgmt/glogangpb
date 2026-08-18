@@ -3,22 +3,24 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import { Menu, X, Camera, Music, Calendar, Newspaper, Star, LogIn } from 'lucide-react'
+import { Menu, X, Camera, Music, Calendar, Radio, FileText, UserRound, LogIn } from 'lucide-react'
+import type { User } from '@supabase/supabase-js'
 import { createClient } from '@/lib/supabase/client'
 
 const NAV_LINKS = [
-  { href: '/artists',    label: 'Artists',    icon: Music },
-  { href: '/events',     label: 'Events',     icon: Calendar },
-  { href: '/news',       label: 'News',       icon: Newspaper },
-  { href: '/membership', label: 'Membership', icon: Star },
+  { href: '/#glo-streams', label: 'Glo Streams', icon: Radio },
+  { href: '/events',       label: 'Live',        icon: Calendar },
+  { href: '/artists',      label: 'Artists',     icon: Music },
+  { href: '/epk',          label: 'EPK',         icon: FileText },
+  { href: '/about',        label: 'About',       icon: UserRound },
 ]
 
 export function GGNavbar() {
   const pathname = usePathname()
   const [open, setOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
-  const [user, setUser] = useState<any>(null)
-  const supabase = createClient()
+  const [user, setUser] = useState<User | null>(null)
+  const [supabase] = useState(createClient)
 
   useEffect(() => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
@@ -32,9 +34,6 @@ export function GGNavbar() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  // Close mobile menu on route change
-  useEffect(() => { setOpen(false) }, [pathname])
 
   // Skip navbar on kiosk routes — they're standalone
   if (pathname.startsWith('/kiosk')) return null
@@ -91,11 +90,13 @@ export function GGNavbar() {
             className="nav-desktop"
           >
             {NAV_LINKS.map(({ href, label }) => {
-              const active = pathname === href || pathname.startsWith(href + '/')
+              const basePath = href.split('#')[0]
+              const active = !href.includes('#') && (pathname === basePath || pathname.startsWith(basePath + '/'))
               return (
                 <Link
                   key={href}
                   href={href}
+                  onClick={() => setOpen(false)}
                   style={{
                     padding: '7px 14px',
                     borderRadius: 'var(--radius-md)',
@@ -104,7 +105,7 @@ export function GGNavbar() {
                     letterSpacing: '0.05em',
                     textTransform: 'uppercase',
                     color: active ? 'var(--accent)' : 'var(--text-muted)',
-                    background: active ? 'rgba(0,229,255,0.10)' : 'transparent',
+                    background: active ? 'rgba(57,209,38,0.10)' : 'transparent',
                     transition: 'color 0.15s, background 0.15s',
                   }}
                   onMouseEnter={e => {
@@ -125,35 +126,6 @@ export function GGNavbar() {
               )
             })}
 
-            {/* Links — Connect page */}
-            <Link
-              href="/links"
-              style={{
-                padding: '7px 14px',
-                borderRadius: 'var(--radius-md)',
-                fontWeight: 700,
-                fontSize: 13,
-                letterSpacing: '0.05em',
-                textTransform: 'uppercase',
-                color: pathname === '/links' ? 'var(--accent)' : 'var(--text-muted)',
-                background: pathname === '/links' ? 'rgba(0,229,255,0.10)' : 'transparent',
-                transition: 'color 0.15s, background 0.15s',
-              }}
-              onMouseEnter={e => {
-                if (pathname !== '/links') {
-                  (e.currentTarget as HTMLElement).style.color = 'var(--text)'
-                  ;(e.currentTarget as HTMLElement).style.background = 'var(--surface)'
-                }
-              }}
-              onMouseLeave={e => {
-                if (pathname !== '/links') {
-                  (e.currentTarget as HTMLElement).style.color = 'var(--text-muted)'
-                  ;(e.currentTarget as HTMLElement).style.background = 'transparent'
-                }
-              }}
-            >
-              Connect 🔌
-            </Link>
           </nav>
 
           {/* Right side */}
@@ -207,8 +179,9 @@ export function GGNavbar() {
               padding: '12px 20px 20px',
             }}
           >
-            {[...NAV_LINKS, { href: '/links', label: 'Connect', icon: Star }].map(({ href, label, icon: Icon }) => {
-              const active = pathname === href
+            {NAV_LINKS.map(({ href, label, icon: Icon }) => {
+              const basePath = href.split('#')[0]
+              const active = !href.includes('#') && pathname === basePath
               return (
                 <Link
                   key={href}

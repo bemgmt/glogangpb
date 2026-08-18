@@ -7,6 +7,7 @@ const PUBLIC_ROUTES = [
   '/about',
   '/artists',
   '/events',
+  '/epk',
   '/links',
   '/membership',
   '/news',

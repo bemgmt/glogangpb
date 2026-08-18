@@ -51,7 +51,7 @@ export default async function ArtistsPage() {
       {/* Header */}
       <header style={{ marginBottom: '2.5rem' }}>
         <p className="gg-pill gg-pill--gold" style={{ marginBottom: '0.75rem' }}>
-          THE ROSTER
+          ARTISTS & COLLABORATORS
         </p>
         <h1
           style={{
@@ -67,7 +67,7 @@ export default async function ArtistsPage() {
           Collaborators & Affiliates
         </h1>
         <p style={{ color: 'var(--text-muted)', marginTop: '0.75rem', maxWidth: 560 }}>
-          48 Laws Network. Discover the talent and producers behind the movement.
+          Discover the artists, Glo Streams guests, producers, and creative affiliates connected to the movement.
         </p>
       </header>
 

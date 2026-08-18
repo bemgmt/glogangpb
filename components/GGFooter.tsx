@@ -2,9 +2,10 @@
 
 import Link from 'next/link'
 import { Instagram, Twitter, Youtube, Twitch, Music } from 'lucide-react'
+import type { SVGProps } from 'react'
 
 // Custom TikTok icon component
-const TiktokIcon = ({ size = 16, ...props }: { size?: number; [key: string]: any }) => (
+const TiktokIcon = ({ size = 16, ...props }: SVGProps<SVGSVGElement> & { size?: number }) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
@@ -20,14 +21,20 @@ const TiktokIcon = ({ size = 16, ...props }: { size?: number; [key: string]: any
   </svg>
 )
 
-const FOOTER_LINKS = [
+type FooterLink = {
+  label: string
+  href: string
+  external?: boolean
+}
+
+const FOOTER_LINKS: { heading: string; links: FooterLink[] }[] = [
   {
     heading: 'Explore',
     links: [
+      { label: 'Glo Streams', href: '/#glo-streams' },
       { label: 'Artists',    href: '/artists' },
-      { label: 'Events',     href: '/events' },
-      { label: 'News',       href: '/news' },
-      { label: 'Membership', href: '/membership' },
+      { label: 'Live',       href: '/events' },
+      { label: 'Press & EPK', href: '/epk' },
     ],
   },
   {
@@ -44,7 +51,8 @@ const FOOTER_LINKS = [
     links: [
       { label: 'About',      href: '/about' },
       { label: 'Links & Socials', href: '/links' },
-      { label: 'Contact',    href: '/about#contact' },
+      { label: 'Booking',    href: 'mailto:contact@rainmgmts.com', external: true },
+      { label: 'Membership', href: '/membership' },
     ],
   },
 ]
@@ -104,8 +112,14 @@ export function GGFooter() {
               DJ MAINO
             </Link>
             <p style={{ fontSize: 14, maxWidth: 260, lineHeight: 1.7 }}>
-              The official fan portal and VIP community for DJ Maino da Plug.
+              Tour DJ, Glo Streams host, underground music curator, and cultural connector.
             </p>
+            <a
+              href="mailto:contact@rainmgmts.com"
+              style={{ display: 'inline-block', marginTop: 12, color: 'var(--accent)', fontSize: 13, fontWeight: 800 }}
+            >
+              contact@rainmgmts.com
+            </a>
 
             {/* Social */}
             <div style={{ display: 'flex', gap: 10, marginTop: 20, flexWrap: 'wrap' }}>
@@ -161,7 +175,7 @@ export function GGFooter() {
                 {heading}
               </p>
               <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 10 }}>
-                {links.map(({ label, href, external }: any) => (
+                {links.map(({ label, href, external }) => (
                   <li key={label}>
                     {external ? (
                       <a
@@ -203,10 +217,10 @@ export function GGFooter() {
             gap: 12,
           }}
         >
-          <p style={{ fontSize: 12, color: 'var(--text-faint)' }}>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
             © {new Date().getFullYear()} DJ Maino da Plug. All rights reserved.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--text-faint)' }}>
+          <p style={{ fontSize: 12, color: 'var(--text-muted)' }}>
             The Plug Worldwide
           </p>
         </div>
